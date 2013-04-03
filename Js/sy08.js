@@ -2,57 +2,124 @@ var backgound = new Kinetic.Layer();
 var layer1 = new Kinetic.Layer();
 var layer2 = new Kinetic.Layer();
 var layer3 = new Kinetic.Layer();
-var model = {
-		places : [
-		          {
-		        	  coordx : 50,
-		        	  coordy :50,
-		          },
-		          {
-		        	  coordx : 300,
-		        	  coordy :50,
-		          }
-				],
-
-		transitions : [
-						 {
-							 coordx : 150,
-							 coordy : 150,
-						 },
-						 {
-							 coordx : 300,
-							 coordy : 150,
-						 },
-						 {
-							 coordx : 300,
-							 coordy : 300,
-						 }
-					],
-
-		 arcs : [
-				 {
-					 source : 0,
-					 dest : 0,
-					 place2transition : 1
-				 },
-				 {
-					 source : 0,
-					 dest : 1,
-					 place2transition : 0
-				 },
-				 {
-					 source : 1,
-					 dest : 2,
-					 place2transition : 1
-				 },
-				 {
-					 source : 1,
-					 dest : 1,
-					 place2transition : 1
-				 }
-				],
-
-
+var model = 
+{
+    "places": [
+        {
+            "coordx": 350,
+            "coordy": 200
+        },
+        {
+            "coordx": 200,
+            "coordy": 235
+        },
+        {
+            "coordx": 250,
+            "coordy": 300
+        },
+        {
+            "coordx": 150,
+            "coordy": 200
+        },
+        {
+            "coordx": 280,
+            "coordy": 200
+        }
+    ],
+    "transitions": [
+        {
+            "coordx": 350,
+            "coordy": 60
+        },
+        {
+            "coordx": 250,
+            "coordy": 100
+        },
+        {
+            "coordx": 200,
+            "coordy": 150
+        },
+        {
+            "coordx": 130,
+            "coordy": 50
+        },
+        {
+            "coordx": 250,
+            "coordy": 60
+        }
+    ],
+    "arcs": [
+        {
+            "place2trans": "1",
+            "source": "0",
+            "dest": "0"
+        },
+        {
+            "place2trans": "1",
+            "source": "0",
+            "dest": "2"
+        },
+        {
+            "place2trans": "1",
+            "source": "3",
+            "dest": "0"
+        },
+        {
+            "place2trans": "0",
+            "source": "0",
+            "dest": "1"
+        },
+        {
+            "place2trans": "1",
+            "source": "1",
+            "dest": "1"
+        },
+        {
+            "place2trans": "0",
+            "source": "1",
+            "dest": "3"
+        },
+        {
+            "place2trans": "0",
+            "source": "2",
+            "dest": "2"
+        },
+        {
+            "place2trans": "1",
+            "source": "2",
+            "dest": "3"
+        },
+        {
+            "place2trans": "0",
+            "source": "3",
+            "dest": "4"
+        },
+        {
+            "place2trans": "1",
+            "source": "4",
+            "dest": "4"
+        },
+        {
+            "place2trans": "0",
+            "source": "4",
+            "dest": "0"
+        },
+        {
+            "place2trans": "0",
+            "source": "1",
+            "dest": "2"
+        },
+        {
+            "place2trans": "0",
+            "source": "2",
+            "dest": "3"
+        },
+        {
+            "place2trans": "1",
+            "source": "3",
+            "dest": "3"
+        }
+    ]
 }
 
 
@@ -60,9 +127,9 @@ function detectArc(i,j) // i = place, j = transition. Retourne -1 si il y a un a
 {
 	for(var z=0;z<model.arcs.length;z++)
 	{
-		if(model.arcs[z].source==i && model.arcs[z].dest==j && model.arcs[z].place2transition==1)
+		if(model.arcs[z].source==i && model.arcs[z].dest==j && model.arcs[z].place2trans==1)
 			return -1;
-		else if(model.arcs[z].source==j && model.arcs[z].dest==i && model.arcs[z].place2transition==0)
+		else if(model.arcs[z].source==j && model.arcs[z].dest==i && model.arcs[z].place2trans==0)
 		{
 
 			return 1;
@@ -206,7 +273,7 @@ function drawTransition(layer, i)
 function drawLine(layer, i)
 {
 	var pts = new Array();
-	if(model.arcs[i].place2transition==1)
+	if(model.arcs[i].place2trans==1)
 	{
 
 		pts.push(model.places[model.arcs[i].source].coordx);
