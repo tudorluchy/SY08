@@ -1,18 +1,23 @@
 <!DOCTYPE HTML>
 <html>
-  <head>
-  <script src="Js/kinetic.js"></script>
-  <script src="Js/jquery.js"></script>
-  <script src="Js/sy08.js"></script>
-  <style>
-      body {
-        margin: 0px;
-        padding: 0px;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="container"></div>
+	<head>
+	<script src="Js/kinetic.js"></script>
+	<script src="Js/jquery.js"></script>
+	<script src="Js/sy08.js"></script>
+	<style>
+			body {
+				margin: 0px;
+				padding: 0px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id='button_group'>
+			<input type='button' value='Ajout Place' name='add_place' onClick='activateAddPlace()' />
+			<input type='button' value='Ajout Transition' name='add_transition' onClick='activateAddTransition()' />
+			<input type='button' value='Ajout Arc' name='add_arc' onClick='activateAddArc()' />
+		</div>
+		<div id="container"></div>
 	<div id="results"></div>
-  </body>
+	</body>
 </html>

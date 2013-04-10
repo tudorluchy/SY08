@@ -2,6 +2,7 @@ var backgound = new Kinetic.Layer();
 var layer1 = new Kinetic.Layer();
 var layer2 = new Kinetic.Layer();
 var layer3 = new Kinetic.Layer();
+var stage;
 var model = 
 {
     "places": [
@@ -355,7 +356,6 @@ function refreshLines()
 }
 
 $(window).load(function(){
-
 	omega();
 	for(var i=0;i<model.places.length;i++)
 	{
@@ -370,12 +370,13 @@ $(window).load(function(){
 
 
 
-	var stage = new Kinetic.Stage({
+	stage = new Kinetic.Stage({
 		container: 'container',
 		width: 600,
 		height: 400
 	});
 
+	mouseEventCallBack();
 
 	stage.add(backgound);
 	stage.add(layer1); // les places
@@ -383,3 +384,47 @@ $(window).load(function(){
 	stage.add(layer3); // les arcs
 
 })
+
+
+
+var kindOfAdd = -1;
+function activateAddPlace() {
+	kindOfAdd = 0;
+}
+
+function activateAddTransition() {
+	kindOfAdd = 1;
+}
+
+function activateAddArc() {
+	kindOfAdd = 2;
+}
+
+function mouseEventCallBack() {
+	document.getElementById('container').addEventListener ('click', 
+			function(event) {
+				if(kindOfAdd == 0){
+					model.places.push({"coordx": event.pageX,"coordy": event.pageY-20})
+					for(var i=0;i<model.places.length;i++)
+					{
+						drawPlace(layer1,i);
+					}
+				}
+				else if(kindOfAdd == 1) {
+					model.transitions.push({"coordx": event.pageX,"coordy": event.pageY-20})
+					for(var i=0;i<model.transitions.length;i++)
+					{
+						drawTransition(layer2,i);
+					}
+				}
+				refreshLines();
+
+				stage.clear();
+				stage.add(backgound);
+				stage.add(layer1); // les places
+				stage.add(layer2); // les transitions
+				stage.add(layer3); // les arcs
+
+			}, false
+		);
+}
