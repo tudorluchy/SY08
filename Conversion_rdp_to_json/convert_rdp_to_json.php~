@@ -82,13 +82,18 @@
         return $prop;
     }
     
+    
     // fichier RDP
-    $file = '.RDP';
+    $file = 'TESTWEB.RDP';
+    
+    // max
+    $MAX_X = 540;
+    $MAX_Y = 340;
     
     // parse RDP
     $array = parse_ini_file($file, true);
     // afficher RDP
-   // var_dump($array);
+    //var_dump($array);
     
     // propriétés valides = PLACE
     $valid_prop_place = array();
@@ -105,6 +110,54 @@
     $valid_prop_arc[] = 'SOURCE';
     $valid_prop_arc[] = 'DEST';
     $valid_prop_arc[] = 'PLACE2TRANS';
+    
+    // recherche extreme Y
+    $extreme_y = 9999;
+    while ($element = current($array)) {
+        $key = key($array);
+        // parcours prop
+        if ($key[0] == 'P' || $key[0] == 'T' || $key[0] == 'A') { 
+            if (count($element) > 0) {
+                foreach ($element as $prop=>$val) {
+                    if (in_array($prop, $valid_prop_place)) {
+                        if ($prop == 'POSITION.Y') {
+                            if ($val < $extreme_y) {
+                                $extreme_y = $val;
+                            }
+                        }
+                    }
+                }
+            }
+        }     
+        next($array);  
+    }
+    reset($array);
+    // ratio y
+    $ratio_y = $MAX_Y/abs($extreme_y);
+        
+    // recherche extreme x
+    $extreme_x = -9999;
+    while ($element = current($array)) {
+        $key = key($array);
+        // parcours prop
+        if ($key[0] == 'P' || $key[0] == 'T' || $key[0] == 'A') { 
+            if (count($element) > 0) {
+                foreach ($element as $prop=>$val) {
+                    if (in_array($prop, $valid_prop_place)) {
+                        if ($prop == 'POSITION.X') {
+                            if ($val > $extreme_x) {
+                                $extreme_x = $val;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        next($array);       
+    }
+    reset($array);
+    // ratio y
+    $ratio_x = $MAX_X/abs($extreme_x);
     
     // tableau de résultats
     $good_array = array();
@@ -124,17 +177,9 @@
                     if (in_array($prop, $valid_prop_place)) {
                         $prop_good = convert_prop_to_another($prop);
                         if ($prop_good == 'coordx') {
-                            if ($val < 0) {
-                                $val = 100;
-                            } else if ($val > 600) {
-                                $val = 500;
-                            }
+                            $val = $val * $ratio_x;
                         } else if ($prop_good == 'coordy') {
-                            if ($val < 0) {
-                                $val = 100;
-                            } else if ($val > 400) {
-                                $val = 300;
-                            }
+                            $val = (abs($extreme_y) + $val) * $ratio_y;
                         }
                         $good_array['places'][$i][$prop_good] = $val;
                         $b = true;
@@ -150,17 +195,9 @@
                     if (in_array($prop, $valid_prop_trans)) {
                         $prop_good = convert_prop_to_another($prop);
                         if ($prop_good == 'coordx') {
-                            if ($val < 0) {
-                                $val = 100;
-                            } else if ($val > 600) {
-                                $val = 500;
-                            }
+                            $val = $val * $ratio_x;
                         } else if ($prop_good == 'coordy') {
-                            if ($val < 0) {
-                                $val = 100;
-                            } else if ($val > 400) {
-                                $val = 300;
-                            }
+                            $val = (abs($extreme_y) + $val) * $ratio_y;
                         }
                         $good_array['transitions'][$j][$prop_good] = $val;
                         $b = true;
@@ -176,17 +213,9 @@
                     if (in_array($prop, $valid_prop_arc)) {
                         $prop_good = convert_prop_to_another($prop);
                         if ($prop_good == 'coordx') {
-                            if ($val < 0) {
-                                $val = 100;
-                            } else if ($val > 600) {
-                                $val = 600;
-                            }
+                            $val = $val * $ratio_x;
                         } else if ($prop_good == 'coordy') {
-                            if ($val < 0) {
-                                $val = 100;
-                            } else if ($val > 400) {
-                                $val = 400;
-                            }
+                            $val = (abs($extreme_y) + $val) * $ratio_y;
                         }
                         $good_array['arcs'][$k][$prop_good] = $val;
                         $b = true;
@@ -199,6 +228,7 @@
         }
         next($array);
     }
+    reset($array);
     
     // affichage tableau résultats
     // var_dump($good_array);    

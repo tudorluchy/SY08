@@ -14,122 +14,122 @@ var source = -1;
 
 var model = 
 {
-    "places": [
-        /*{
-            "coordx": 350,
-            "coordy": 200
-        },
-        {
-            "coordx": 200,
-            "coordy": 235
-        },
-        {
-            "coordx": 250,
-            "coordy": 300
-        },
-        {
-            "coordx": 150,
-            "coordy": 200
-        },
-        {
-            "coordx": 280,
-            "coordy": 200
-        }*/
-    ],
-    "transitions": [
-        /*{
-            "coordx": 350,
-            "coordy": 60
-        },
-        {
-            "coordx": 250,
-            "coordy": 100
-        },
-        {
-            "coordx": 200,
-            "coordy": 150
-        },
-        {
-            "coordx": 130,
-            "coordy": 50
-        },
-        {
-            "coordx": 250,
-            "coordy": 60
-        }*/
-    ],
-    "arcs": [
-       /* {
-            "place2trans": "1",
-            "source": "0",
-            "dest": "0"
-        },
-        {
-            "place2trans": "1",
-            "source": "0",
-            "dest": "2"
-        },
-        {
-            "place2trans": "1",
-            "source": "3",
-            "dest": "0"
-        },
-        {
-            "place2trans": "0",
-            "source": "0",
-            "dest": "1"
-        },
-        {
-            "place2trans": "1",
-            "source": "1",
-            "dest": "1"
-        },
-        {
-            "place2trans": "0",
-            "source": "1",
-            "dest": "3"
-        },
-        {
-            "place2trans": "0",
-            "source": "2",
-            "dest": "2"
-        },
-        {
-            "place2trans": "1",
-            "source": "2",
-            "dest": "3"
-        },
-        {
-            "place2trans": "0",
-            "source": "3",
-            "dest": "4"
-        },
-        {
-            "place2trans": "1",
-            "source": "4",
-            "dest": "4"
-        },
-        {
-            "place2trans": "0",
-            "source": "4",
-            "dest": "0"
-        },
-        {
-            "place2trans": "0",
-            "source": "1",
-            "dest": "2"
-        },
-        {
-            "place2trans": "0",
-            "source": "2",
-            "dest": "3"
-        },
-        {
-            "place2trans": "1",
-            "source": "3",
-            "dest": "3"
-        }*/
-    ]
+	places: [
+		{
+			coordx: 355.60975609756,
+			coordy: 220.54054054054
+		},
+		{
+			coordx: 460.9756097561,
+			coordy: 128.64864864865
+		},
+		{
+			coordx: 250.24390243902,
+			coordy: 128.64864864865
+		},
+		{
+			coordx: 540,
+			coordy: 257.2972972973
+		},
+		{
+			coordx: 250.24390243902,
+			coordy: 36.756756756757
+		}
+	],
+	transitions: [
+		{
+			coordx: 460.9756097561,
+			coordy: 202.16216216216
+		},
+		{
+			coordx: 460.9756097561,
+			coordy: 73.513513513514
+		},
+		{
+			coordx: 302.92682926829,
+			coordy: 183.78378378378
+		},
+		{
+			coordx: 250.24390243902,
+			coordy: 73.513513513514
+		},
+		{
+			coordx: 250.24390243902,
+			coordy: 0
+		}
+	],
+	arcs: [
+		{
+			place2trans: 1,
+			source: 0,
+			dest: 0
+		},
+		{
+			place2trans: 1,
+			source: 0,
+			dest: 2
+		},
+		{
+			place2trans: 1,
+			source: 3,
+			dest: 0
+		},
+		{
+			place2trans: 0,
+			source: 0,
+			dest: 1
+		},
+		{
+			place2trans: 1,
+			source: 1,
+			dest: 1
+		},
+		{
+			place2trans: 0,
+			source: 1,
+			dest: 3
+		},
+		{
+			place2trans: 0,
+			source: 2,
+			dest: 2
+		},
+		{
+			place2trans: 1,
+			source: 2,
+			dest: 3
+		},
+		{
+			place2trans: 0,
+			source: 3,
+			dest: 4
+		},
+		{
+			place2trans: 1,
+			source: 4,
+			dest: 4
+		},
+		{
+			place2trans: 0,
+			source: 4,
+			dest: 0
+		},
+		{
+			place2trans: 0,
+			source: 1,
+			dest: 2
+		},
+		{
+			place2trans: 0,
+			source: 2,
+			dest: 3
+		},
+		{
+			place2trans: 1,
+			source: 3,
+			dest: 3
+		}
+	]
 }
 
 
