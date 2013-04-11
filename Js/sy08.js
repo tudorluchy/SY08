@@ -3,10 +3,19 @@ var layer1 = new Kinetic.Layer();
 var layer2 = new Kinetic.Layer();
 var layer3 = new Kinetic.Layer();
 var stage;
+
+// Utiliser dans le cadre de l'ajout des différents composants dans le canvas
+// 0 place / 1 transitions / 2 arcs
+var kindOfAdd = -1;
+
+// Voici les différentes variables utilisées dans le cadre de l'ajout d'un arc.
+var place2transTEMP = -1;
+var source = -1;
+
 var model = 
 {
     "places": [
-        {
+        /*{
             "coordx": 350,
             "coordy": 200
         },
@@ -25,10 +34,10 @@ var model =
         {
             "coordx": 280,
             "coordy": 200
-        }
+        }*/
     ],
     "transitions": [
-        {
+        /*{
             "coordx": 350,
             "coordy": 60
         },
@@ -47,10 +56,10 @@ var model =
         {
             "coordx": 250,
             "coordy": 60
-        }
+        }*/
     ],
     "arcs": [
-        {
+       /* {
             "place2trans": "1",
             "source": "0",
             "dest": "0"
@@ -119,7 +128,7 @@ var model =
             "place2trans": "1",
             "source": "3",
             "dest": "3"
-        }
+        }*/
     ]
 }
 
@@ -153,27 +162,28 @@ function omega()
 
 		}
 	}
-	$('#results').html("&nbsp &nbsp &nbsp &nbsp");
-	for(var i=0; i<res[0].length; i++) 
-	{
-		$('#results').html($('#results').html()+"T"+(i+1)+"&nbsp");
-	}
-	$('#results').html($('#results').html()+"</br>");
 
-	for(var i=0; i<res.length; i++) {
-		$('#results').html($('#results').html()+"P"+(i+1)+"&nbsp &nbsp");
-		for(var j=0; j<res[i].length; j++) {
-
-			$('#results').html($('#results').html()+res[i][j]);
-			$('#results').html($('#results').html()+"&nbsp &nbsp");
-
+	if(res.length > 0) {
+		$('#results').html("&nbsp &nbsp &nbsp &nbsp");
+		for(var i=0; i<res[0].length; i++) 
+		{
+			$('#results').html($('#results').html()+"T"+(i+1)+"&nbsp");
 		}
-
-
 		$('#results').html($('#results').html()+"</br>");
+
+		for(var i=0; i<res.length; i++) {
+			$('#results').html($('#results').html()+"P"+(i+1)+"&nbsp &nbsp");
+			for(var j=0; j<res[i].length; j++) {
+
+				$('#results').html($('#results').html()+res[i][j]);
+				$('#results').html($('#results').html()+"&nbsp &nbsp");
+
+			}
+
+
+			$('#results').html($('#results').html()+"</br>");
+		}
 	}
-
-
 }
 
 function drawPlace(layer, i)
@@ -193,6 +203,7 @@ function drawPlace(layer, i)
 		name : i,
 		fillText: "P" + i 
 	});
+
 
 	var label = new Kinetic.Text({
 		x: model.places[i].coordx,
@@ -214,8 +225,34 @@ function drawPlace(layer, i)
 		model.places[cercle.getName()].coordx = cercle.getAbsolutePosition().x; 
 		model.places[cercle.getName()].coordy = cercle.getAbsolutePosition().y; 
 		refreshLines();
-
 	});
+
+
+	group.on('click', function() {
+		if(kindOfAdd == 2) {
+			// On défini le cercle comme l'élement premier de l'arc
+			if(place2transTEMP == -1) {
+				source = i;
+				place2transTEMP = 1;
+			}
+			else if(place2transTEMP == 0){
+				// on insère dans le JSON
+				model.arcs.push({"place2trans": 0,"source": source, "dest": i});
+				refreshLines();
+				omega();
+
+				place2transTEMP = -1;
+				source = -1;
+			}
+		}
+		else {
+			// Sinon on affiche les caractéristiques de l'éléments (à voir si on le fait ou pas)
+		}
+
+		}, false
+	);
+
+
 	layer.add(group);
 
 
@@ -234,6 +271,8 @@ function drawTransition(layer, i)
 
 		name : i
 	});
+
+	
 
 	var group = new Kinetic.Group({
 		draggable : true
@@ -264,9 +303,31 @@ function drawTransition(layer, i)
 		model.transitions[rec.getName()].coordx = rec.getAbsolutePosition().x; 
 		model.transitions[rec.getName()].coordy = rec.getAbsolutePosition().y; 
 		refreshLines();
-
-
 	});
+
+	group.on('click', function() {
+		if(kindOfAdd == 2) {
+			// On défini le cercle comme l'élement premier de l'arc
+			if(place2transTEMP == -1) {
+				source = i;
+				place2transTEMP = 0;
+			}
+			else if(place2transTEMP == 1){
+				// on insère dans le JSON
+				model.arcs.push({"place2trans": 1,"source": source, "dest": i});
+				refreshLines();
+				omega();
+				place2transTEMP = -1;
+				source = -1;
+			}
+		}
+		else {
+			// Sinon on affiche les caractéristiques de l'éléments (à voir si on le fait ou pas)
+		}
+
+		}, false
+	);
+
 	layer.add(group);
 
 }
@@ -387,7 +448,6 @@ $(window).load(function(){
 
 
 
-var kindOfAdd = -1;
 function activateAddPlace() {
 	kindOfAdd = 0;
 }
@@ -401,6 +461,8 @@ function activateAddArc() {
 }
 
 function mouseEventCallBack() {
+	var previousPositionX;
+	var previousPositionY;
 	document.getElementById('container').addEventListener ('click', 
 			function(event) {
 				if(kindOfAdd == 0){
@@ -418,6 +480,7 @@ function mouseEventCallBack() {
 					}
 				}
 				refreshLines();
+				omega();
 
 				stage.clear();
 				stage.add(backgound);
@@ -427,4 +490,4 @@ function mouseEventCallBack() {
 
 			}, false
 		);
-}
+	}
