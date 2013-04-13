@@ -1,5 +1,5 @@
 LO18
-=====
+====
 
 Auteurs: Sebastien FRADCOURT, Nicolas LELEU, Tudor LUCHIANCENCO 
 
