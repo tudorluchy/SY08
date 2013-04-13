@@ -179,7 +179,7 @@
                         if ($prop_good == 'coordx') {
                             $val = $val * $ratio_x;
                         } else if ($prop_good == 'coordy') {
-                            $val = (abs($extreme_y) + $val) * $ratio_y;
+                            $val = abs($val) * $ratio_y;
                         }
                         $good_array['places'][$i][$prop_good] = $val;
                         $b = true;
@@ -197,7 +197,7 @@
                         if ($prop_good == 'coordx') {
                             $val = $val * $ratio_x;
                         } else if ($prop_good == 'coordy') {
-                            $val = (abs($extreme_y) + $val) * $ratio_y;
+                            $val = abs($val) * $ratio_y;
                         }
                         $good_array['transitions'][$j][$prop_good] = $val;
                         $b = true;
@@ -215,7 +215,7 @@
                         if ($prop_good == 'coordx') {
                             $val = $val * $ratio_x;
                         } else if ($prop_good == 'coordy') {
-                            $val = (abs($extreme_y) + $val) * $ratio_y;
+                            $val = abs($val) * $ratio_y;
                         }
                         $good_array['arcs'][$k][$prop_good] = $val;
                         $b = true;
