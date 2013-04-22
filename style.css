@@ -19,14 +19,46 @@ body
 	width : 600px;
 }
 
+#titre_exos {
+	text-align : center;
+}
+
 .exo {
+	margin : 10px;
+}
+
+.exo_selection {
+	background-color:lightsteelblue;
+	border : 1px solid #1a1056;
+	margin : 30px;
+	 /*Coin arrondi*/
+	-moz-border-radius : 5px 5px;			
+	-webkit-border-radius: 5px 5px; 
+	border-radius: 5px 5px;        
+	-webkit-border-top-left-radius: 5px; /* pour Chrome */ 
+	-webkit-border-top-right-radius: 5px; /* pour Chrome */
+}
+
+.exo_titre {
 	background-color:#ffffff;
+}
+
+.exo_titre_bis {
+	font-size : 1.2em;
+	font-weight : bold;
+}
+
+.exo_enonce {
+	text-align: justify;
 }
 
 .valider {
 	float : right;
 }
 
+.start {
+	float : right;
+}
 
 .fieldset_ajout_exercice input,textarea
 {
@@ -81,7 +113,7 @@ fieldset.fieldset_ajout_exercice
 
 #corps_form_ajout, #corps_modif
 {
-	border : 1px solid #1a1056;
+   border : 1px solid #1a1056;
    margin-bottom: 20px; 
    padding : 15px;
    background-color:lightsteelblue;
