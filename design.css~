@@ -1,0 +1,72 @@
+body {
+	margin: 0px;
+	padding: 0px;
+}
+			
+.fieldset_form_inscription input,textarea
+{
+   font-family:Times, serif; /* On modifie la police du texte tapé l'intérieur des champs */;
+}
+ 
+input:focus,textarea:focus.fieldset_form_inscription  /* Quand le curseur est sur un champ */
+{
+   background-color : #acb7c9;
+} 
+
+.fieldset_form_inscription label
+{
+	display:block;
+	width:135px;
+	float:left;
+}
+
+.bloc_inscrip
+{
+	margin-bottom : 2px;
+}
+
+fieldset.fieldset_form_inscription
+{
+	border : 1px solid #1a1056;
+	padding : 10px;
+	font-family : Times,serif;
+	
+	 /*Coin arrondi*/
+	-moz-border-radius : 5px 5px;			
+	-webkit-border-radius: 5px 5px; 
+	border-radius: 5px 5px;        
+	-webkit-border-top-left-radius: 5px; /* pour Chrome */ 
+	-webkit-border-top-right-radius: 5px; /* pour Chrome */
+}
+
+.fieldset_form_inscription legend 	/*Le titre*/
+{
+	background-color:#a1ccfc;
+	border:1px solid black;
+	font-family: Arial, "Arial Black", Georgia, "Times New Roman", Times, serif;
+	font-size : 1.1em;
+	font-weight : bold;
+	color : #1a1056;
+	
+	 /*Coin arrondi*/
+	-moz-border-radius : 5px 5px;			
+	-webkit-border-radius: 5px 5px; 
+	border-radius: 5px 5px;        
+	-webkit-border-top-left-radius: 5px; /* pour Chrome */ 
+	-webkit-border-top-right-radius: 5px; /* pour Chrome */
+}
+
+#corps_form_inscription
+{
+   margin-left: 190px; 
+   margin-bottom: 20px; 
+   background-color : #b6c1d4;
+   padding : 15px;
+   
+    /*Coin arrondi*/
+	-moz-border-radius : 5px 5px;			
+	-webkit-border-radius: 5px 5px; 
+	border-radius: 5px 5px;        
+	-webkit-border-top-left-radius: 5px; /* pour Chrome */ 
+	-webkit-border-top-right-radius: 5px; /* pour Chrome */
+}

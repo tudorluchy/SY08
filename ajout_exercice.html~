@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+	<script src="Js/kinetic.js"></script>
+	<script src="Js/jquery.js"></script>
+	<script src="Js/sy08.js"></script>
+	</head>
+	<body>		
+	<form name="ajout_exercice" method="GET" action="#">
+		<fieldset>
+			<legend>Ajout d'un exercice</legend>
+			<label>Intitule de l'énonce :</label><input type='text' name='intitule' title='Intitule'/><br />
+			<label>L'énoncé :</label><input type='textarea' name='enonce' title='Enonce' rows="4" cols="50"><br />
+			<label>Niveau de difficulté</label>
+			<select>
+				<option value="+++">+++</option>
+				<option value="++">++</option>
+				<option value="+">+</option>
+			</select>
+			<input type="hidden" name="MAX_FILE_SIZE" value="2097152">     
+			<input type="file" name="image_exo">
+			<br/ >
+			
+			<b>Resolution du graphe :</b><br/ ><br/ >
+			
+			<div id='button_group'>
+				<input type='button' value='Ajout Place' name='add_place' onClick='activateAddPlace()' />
+				<input type='button' value='Ajout Transition' name='add_transition' onClick='activateAddTransition()' />
+				<input type='button' value='Ajout Arc' name='add_arc' onClick='activateAddArc()' />
+				<input type="hidden" name="MAX_FILE_SIZE" value="2097152">     
+				<input type="file" name="fichier_rdp">
+			<br/ >
+			
+			</div>
+			<div id="container" style="border-width: 1px; border-style: solid; border-color: #000000; margin-top:10px;"></div>
+			<div id="results"></div>
+			
+			<input type='submit' value='Valider'>
+		</fieldset>  
+	</form>
+	</body>
+</html>

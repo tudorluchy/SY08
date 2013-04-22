@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<script src="Js/kinetic.js"></script>
+		<script src="Js/jquery.js"></script>
+		<script src="Js/sy08.js"></script>
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>		
+	<div id="corps_form_ajout">
+		<form name="ajout_exercice" method="GET" action="#">
+			<fieldset class="fieldset_ajout_exercice">
+				<legend>Ajout d'un exercice</legend>
+				<label>Intitule de l'énonce :</label><input type='text' name='intitule' title='Intitule'/><br />
+				<label>L'énoncé :</label><textarea name='enonce' title='Enonce' rows="4" cols="50"></textarea><br />
+				<label>Importer une image</label>
+				<input type="hidden" name="MAX_FILE_SIZE" value="2097152">     
+				<input type="file" name="image_exo"> <br/>
+				<label>Niveau de difficulté</label>
+				<select>
+					<option value="+++">+++</option>
+					<option value="++">++</option>
+					<option value="+">+</option>
+				</select><br/ ><br/ >
+				<b>Resolution du graphe :</b><br/ >
+				<div id='button_group'>
+					<input type='button' value='Ajout Place' name='add_place' onClick='activateAddPlace()' />
+					<input type='button' value='Ajout Transition' name='add_transition' onClick='activateAddTransition()' />
+					<input type='button' value='Ajout Arc' name='add_arc' onClick='activateAddArc()' />
+					<span class="lab_rdp">
+						<label>Importer un fichier RDP</label>
+						<input type="hidden" name="MAX_FILE_SIZE" value="2097152">     
+						<input type="file" name="fichier_rdp">
+					</span>
+				</div>
+				<div id="container"></div>
+				<div id="results"></div>
+				<input class="valider" type='submit' value='Valider'>
+			</fieldset>	
+		</form>
+	</div>
+	</body>
+</html>

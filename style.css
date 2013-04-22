@@ -1,0 +1,87 @@
+body {
+	margin: 0px;
+	padding: 0px;
+}
+
+#container {
+	background-color : #ffffff;
+	border-width: 1px; 
+	border-style: solid; 
+	border-color: #000000; 
+	margin-top:20px;
+	margin-bottom:20px;
+	width : 600px;
+}
+
+#results {
+}
+
+.valider {
+	float : right;
+}
+
+
+.fieldset_ajout_exercice input,textarea
+{
+   font-family:Times, serif; /* On modifie la police du texte tapé l'intérieur des champs */;
+}
+ 
+.lab_rdp {
+	float : right;
+}
+
+.fieldset_ajout_exercice {
+	width : 900px;
+}
+
+.fieldset_ajout_exercice label
+{
+	display:block;
+	width:160px;
+	float:left;
+}
+
+fieldset.fieldset_ajout_exercice
+{
+	border : 1px solid #1a1056;
+	padding : 10px;
+	font-family : Times,serif;
+	background-color:lightsteelblue;
+	
+	 /*Coin arrondi*/
+	-moz-border-radius : 5px 5px;			
+	-webkit-border-radius: 5px 5px; 
+	border-radius: 5px 5px;        
+	-webkit-border-top-left-radius: 5px; /* pour Chrome */ 
+	-webkit-border-top-right-radius: 5px; /* pour Chrome */
+}
+
+.fieldset_ajout_exercice legend 	/*Le titre*/
+{
+	background-color:#a1ccfc;
+	border:1px solid black;
+	font-family: Arial, "Arial Black", Georgia, "Times New Roman", Times, serif;
+	font-size : 1.1em;
+	font-weight : bold;
+	color : #1a1056;
+	
+	 /*Coin arrondi*/
+	-moz-border-radius : 5px 5px;			
+	-webkit-border-radius: 5px 5px; 
+	border-radius: 5px 5px;        
+	-webkit-border-top-left-radius: 5px; /* pour Chrome */ 
+	-webkit-border-top-right-radius: 5px; /* pour Chrome */
+}
+
+#corps_form_ajout
+{
+   margin-bottom: 20px; 
+   padding : 15px;
+   
+    /*Coin arrondi*/
+	-moz-border-radius : 5px 5px;			
+	-webkit-border-radius: 5px 5px; 
+	border-radius: 5px 5px;        
+	-webkit-border-top-left-radius: 5px; /* pour Chrome */ 
+	-webkit-border-top-right-radius: 5px; /* pour Chrome */
+}
