@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<script src="js/kinetic.js"></script>
+		<script src="js/jquery.js"></script>
+		<script src="js/sy08.js"></script>
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>		
+	<div id="corps_modif">
+		<h3>Modification des exercices</h3>
+		<b>Voici la liste des énoncés qui sont disponible actuellement</b>
+		<div>
+			<span class="exo">Exercice 1 : Intitulé de l'exercice</span> <a href="#"><img src='img/edit.png' title='Modifier cet exercice'/></a> <a href="#>"><img src='img/delete.png' title='Supprimer cet exercice'/></a>
+		</div>
+		<div>
+			<span class="exo">Exercice 2 : Intitulé de l'exercice</span> <a href="#>"><img src='img/edit.png' title='Modifier cet exercice'/></a> <a href="#>"><img src='img/delete.png' title='Supprimer cet exercice'/></a>
+		</div>
+	</div>
+	<div id="corps_form_ajout">
+		<h3>Ajout d'un exercice</h3>
+		<form name="ajout_exercice" method="GET" action="#">
+			<fieldset class="fieldset_ajout_exercice">
+				<label>Intitule de l'énonce :</label><input type='text' name='intitule' title='Intitule'/><br />
+				<label>L'énoncé :</label><textarea name='enonce' title='Enonce' rows="4" cols="50"></textarea><br />
+				<label>Importer une image</label>
+				<input type="hidden" name="MAX_FILE_SIZE" value="2097152">     
+				<input type="file" name="image_exo"> <br/>
+				<label>Niveau de difficulté</label>
+				<select>
+					<option value="+++">+++</option>
+					<option value="++">++</option>
+					<option value="+">+</option>
+				</select><br/ ><br/ >
+				<b>Resolution du graphe :</b><br/ >
+				<div id='button_group'>
+					<input type='button' value='Ajout Place' name='add_place' onClick='activateAddPlace()' />
+					<input type='button' value='Ajout Transition' name='add_transition' onClick='activateAddTransition()' />
+					<input type='button' value='Ajout Arc' name='add_arc' onClick='activateAddArc()' />
+					<span class="lab_rdp">
+						<label>Importer un fichier RDP</label>
+						<input type="hidden" name="MAX_FILE_SIZE" value="2097152">     
+						<input type="file" name="fichier_rdp">
+					</span>
+				</div>
+				<div id="container"></div>
+				<div id="results"></div>
+				<input class="valider" type='submit' value='Valider'>
+			</fieldset>	
+		</form>
+	</div>
+	</body>
+</html>

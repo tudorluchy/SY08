@@ -1,6 +1,12 @@
-body {
-	margin: 0px;
-	padding: 0px;
+body
+{
+   width: 1000px;
+   margin : auto; /* centre la page */
+   margin-top: 20px; /* Pour éviter de coller avec le haut de la fenêtre du navigateur. */
+   margin-bottom: 20px;    /* Idem pour le bas du navigateur */
+   background-repeat : repeat-x;
+   background : #c6c6c6;
+   background-attachment : scroll;
 }
 
 #container {
@@ -13,7 +19,8 @@ body {
 	width : 600px;
 }
 
-#results {
+.exo {
+	background-color:#ffffff;
 }
 
 .valider {
@@ -43,10 +50,9 @@ body {
 
 fieldset.fieldset_ajout_exercice
 {
-	border : 1px solid #1a1056;
+	border : 0px solid #1a1056;
 	padding : 10px;
 	font-family : Times,serif;
-	background-color:lightsteelblue;
 	
 	 /*Coin arrondi*/
 	-moz-border-radius : 5px 5px;			
@@ -73,10 +79,12 @@ fieldset.fieldset_ajout_exercice
 	-webkit-border-top-right-radius: 5px; /* pour Chrome */
 }
 
-#corps_form_ajout
+#corps_form_ajout, #corps_modif
 {
+	border : 1px solid #1a1056;
    margin-bottom: 20px; 
    padding : 15px;
+   background-color:lightsteelblue;
    
     /*Coin arrondi*/
 	-moz-border-radius : 5px 5px;			
@@ -85,3 +93,4 @@ fieldset.fieldset_ajout_exercice
 	-webkit-border-top-left-radius: 5px; /* pour Chrome */ 
 	-webkit-border-top-right-radius: 5px; /* pour Chrome */
 }
+
