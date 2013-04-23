@@ -56,6 +56,11 @@ body
 	float : right;
 }
 
+ul.upload_info {
+	border : 1px solid #000000;
+	width : 400px;
+}
+
 .start {
 	float : right;
 }
