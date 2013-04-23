@@ -39,7 +39,7 @@ body
 	-webkit-border-top-right-radius: 5px; /* pour Chrome */
 }
 
-.exo_titre {
+.exo .exo_titre {
 	background-color:#ffffff;
 }
 

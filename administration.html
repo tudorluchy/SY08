@@ -7,10 +7,18 @@
 		<script type="text/javascript" src="js/sy08.js"></script>
 		<link rel="stylesheet" type="text/css" href="style.css">
 		<script language="JavaScript" type="text/javascript">
+			// suppresion element id
+			function removeElement(id) {
+				var element = document.getElementById(id);
+				element.parentNode.removeChild(element);
+			}
+
 			// suppresion exercice
-			function goto_confirm(url) {
+			function goto_confirm(url, exo) {
 			  if (confirm("Etes-vous sur de vouloir supprimer cet exercice ?")) {
-				  document.location.href = url;
+				 // document.location.href = url;
+				 exo = '.'+exo;
+				 $(exo).remove();
 			  }
 			  return false; //pour ne pas revenir au début de la page
 			}
@@ -73,10 +81,10 @@
 		<h3>Modification des exercices</h3>
 		<b>Voici la liste des énoncés qui sont disponible actuellement</b>
 		<div class="exo">
-			<span class="exo_titre">Exercice 1 : Intitulé de l'exercice</span> <a href="#"><img src='img/edit.png' title='Modifier cet exercice'/></a> <a href="#>" onclick="return goto_confirm('#');"><img src='img/delete.png' title='Supprimer cet exercice'/></a>
+			<span class="exo_titre exo_remove1">Exercice 1 : Intitulé de l'exercice</span> <a class="exo_remove1" href="#"><img class="exo_remove1" src='img/edit.png' title='Modifier cet exercice'/></a> <a class="exo_remove1" href="#>" onclick="return goto_confirm('#', 'exo_remove1');"><img class="exo_remove1" src='img/delete.png' title='Supprimer cet exercice'/></a>
 		</div>
 		<div class="exo">
-			<span class="exo_titre">Exercice 2 : Intitulé de l'exercice</span> <a href="#>"><img src='img/edit.png' title='Modifier cet exercice'/></a> <a href="#>" onclick="return goto_confirm('#');"><img src='img/delete.png' title='Supprimer cet exercice'/></a>
+			<span class="exo_titre exo_remove2">Exercice 2 : Intitulé de l'exercice</span> <a class="exo_remove2" href="#>"><img class="exo_remove2" src='img/edit.png' title='Modifier cet exercice'/></a> <a class="exo_remove2" href="#>" onclick="return goto_confirm('#', 'exo_remove2');"><img class="exo_remove2" src='img/delete.png' title='Supprimer cet exercice'/></a>
 		</div>
 	</div>
 	<div id="corps_form_ajout">
