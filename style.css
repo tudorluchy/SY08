@@ -58,11 +58,12 @@ body
 
 ul.upload_info {
 	border : 1px solid #000000;
-	width : 400px;
+	width : 500px;
 }
 
-.start {
+.go {
 	float : right;
+	margin-right : 30px;
 }
 
 .fieldset_ajout_exercice input,textarea
