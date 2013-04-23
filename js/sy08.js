@@ -444,6 +444,7 @@ $(window).load(function(){
 	stage.add(layer2); // les transitions
 	stage.add(layer3); // les arcs
 
+	generateEveryMatrixInput();
 })
 
 
@@ -488,6 +489,67 @@ function mouseEventCallBack() {
 				stage.add(layer2); // les transitions
 				stage.add(layer3); // les arcs
 
+				generateEveryMatrixInput();
 			}, false
 		);
 	}
+	
+function generateEveryMatrixInput() {
+	for(var i=0; i < 3; i++) {
+		generateMatrixInput(i);
+	}
+	//Calcul de l'invariant et determination du nombre de Pt
+	generateInvariantInput(3/*nbPt*/);
+}
+	
+function generateMatrixInput(statut) {
+	var which="";
+	if(statut == 0)
+		which = "matrice_w";
+	else if(statut == 1)
+		which = "matrice_wplus";
+	else if(statut == 2)
+		which = "matrice_wmoins";
+
+	var html = "<table id=\""+which+"\"><tr><td></td>";
+	var nbPlaces = model.places.length;
+	var nbTransitions = model.transitions.length;
+
+	for(var i=0;i<nbTransitions;i++) {
+		html += "<td>T"+(i+1)+"</td>";
+	}
+	html+= "</tr>";
+	for(var i=0;i<nbPlaces;i++) {
+		html += "<tr><td>P"+(i+1)+"</td>";
+		for(var j=0;j<nbTransitions;j++) {
+			html += "<td><input type=\"text\" style=\"width:30px;\" value=\"0\" name=\""+which+"_"+i+"_"+j+"\"/></td>";
+		}
+		html += "</tr>";
+	}
+	html += "</table>";
+	
+	if(document.getElementById(which) != null)
+		document.getElementById(which).innerHTML = html;
+}
+
+function generateInvariantInput(nbPt) {
+
+	var html = "<table id=\"invariant\"><tr><td></td>";
+	var nbPlaces = model.places.length;
+
+	for(var i=0;i<nbPlaces;i++) {
+		html += "<td>P"+(i+1)+"</td>";
+	}
+	html+= "</tr>";
+	for(var i=0;i<nbPt;i++) {
+		html += "<tr><td>Pt"+(i+1)+"</td>";
+		for(var j=0;j<nbPlaces;j++) {
+			html += "<td><input type=\"text\" style=\"width:30px;\" value=\"0\" name=\"invariant_"+i+"_"+j+"\"/></td>";
+		}
+		html += "</tr>";
+	}
+	html += "</table>";
+	
+	if(document.getElementById("invariant") != null)
+		document.getElementById("invariant").innerHTML = html;
+}
