@@ -76,7 +76,94 @@
 			}
 		</script>
 	</head>
-	<body>		
+	<body>	
+	<?php	
+		if (isset($_POST["intitule"])) {
+			// image exo
+			if (isset($_FILES["image_exo"]["name"]) && !empty($_FILES["image_exo"]["name"])) {
+				// Copie dans le repertoire du script avec un nom
+				// incluant l'heure a la seconde pres 
+				$repertoireDestination = "upload_images/";
+				$nomDestination = $_FILES["image_exo"]["name"];
+
+				$allowedExts = array("gif", "jpeg", "jpg", "png");
+				$extension = end(explode(".", $_FILES["image_exo"]["name"]));
+				echo "<ul class='upload_info'>";
+				if ((($_FILES["image_exo"]["type"] == "image/gif") 
+					|| ($_FILES["image_exo"]["type"] == "image/jpeg")
+					|| ($_FILES["image_exo"]["type"] == "image/jpg")
+					|| ($_FILES["image_exo"]["type"] == "image/pjpeg")
+					|| ($_FILES["image_exo"]["type"] == "image/x-png")
+					|| ($_FILES["image_exo"]["type"] == "image/png"))
+					&& ($_FILES["image_exo"]["size"] < 2097152)
+					&& in_array($extension, $allowedExts)) {
+						if ($_FILES["image_exo"]["error"] > 0) {
+							echo "<li>Return Code: " . $_FILES["image_exo"]["error"]. "</li>";
+						} else {
+							echo "<li>Upload: " . $_FILES["image_exo"]["name"] . "</li>";
+							echo "<li>Type: " . $_FILES["image_exo"]["type"] . "</li>";
+							echo "<li>Size: " . ($_FILES["image_exo"]["size"] / 1024) . " kB</li>";
+							echo "<li>Temp file: " . $_FILES["image_exo"]["tmp_name"] . "</li>";
+							
+							if (!is_dir($repertoireDestination)) {
+								if (!@mkdir($repertoireDestination, 0777)) {
+									$error = error_get_last();
+									// echo $error['message'];
+								}
+							}
+							if (file_exists($repertoireDestination.$nomDestination)){
+								echo "<li>".$nomDestination . " already exists.</li>";
+							} else {
+							  move_uploaded_file($_FILES["image_exo"]["tmp_name"], $repertoireDestination.$nomDestination);
+							  echo "<li>Stored in: " . $repertoireDestination.$nomDestination."</li>";
+							}
+						}
+					} else {
+						echo "<li>Invalid file</li>";
+					}
+					echo "</ul>";
+			}
+			
+			// fichier rdp
+			if (isset($_FILES["fichier_rdp"]["name"]) && !empty($_FILES["fichier_rdp"]["name"])) {
+				// Copie dans le repertoire du script avec un nom
+				// incluant l'heure a la seconde pres 
+				$repertoireDestination = "upload_fichiersRDP/";
+				$nomDestination = $_FILES["fichier_rdp"]["name"];
+
+				$allowedExts = array("rdp", "RDP");
+				$extension = end(explode(".", $_FILES["fichier_rdp"]["name"]));
+				echo "<ul class='upload_info'>";
+				if (($_FILES["fichier_rdp"]["size"] < 2097152)
+					&& in_array($extension, $allowedExts)) {
+						if ($_FILES["fichier_rdp"]["error"] > 0) {
+							echo "<li>Return Code: " . $_FILES["fichier_rdp"]["error"]. "</li>";
+						} else {
+							echo "<li>Upload: " . $_FILES["fichier_rdp"]["name"] . "</li>";
+							echo "<li>Type: " . $_FILES["fichier_rdp"]["type"] . "</li>";
+							echo "<li>Size: " . ($_FILES["fichier_rdp"]["size"] / 1024) . " kB</li>";
+							echo "<li>Temp file: " . $_FILES["fichier_rdp"]["tmp_name"] . "</li>";
+							
+							if (!is_dir($repertoireDestination)) {
+								if (!@mkdir($repertoireDestination, 0777)) {
+									$error = error_get_last();
+									// echo $error['message'];
+								}
+							}
+							if (file_exists($repertoireDestination.$nomDestination)){
+								echo "<li>".$nomDestination . " already exists.</li>";
+							} else {
+							  move_uploaded_file($_FILES["fichier_rdp"]["tmp_name"], $repertoireDestination.$nomDestination);
+							  echo "<li>Stored in: " . $repertoireDestination.$nomDestination."</li>";
+							}
+						}
+					} else {
+						echo "<li>Invalid file</li>";
+					}
+					echo "</ul>";
+			}
+		}
+	?>
 	<div id="corps_modif">
 		<h3>Modification des exercices</h3>
 		<b>Voici la liste des énoncés qui sont disponible actuellement</b>
@@ -89,13 +176,14 @@
 	</div>
 	<div id="corps_form_ajout">
 		<h3>Ajout d'un exercice</h3>
-		<form name="ajout_exercice" method="GET" action="#" onsubmit="return verifForm(this)">
+		<form name="ajout_exercice" method="POST" action="#" enctype="multipart/form-data" onsubmit="return verifForm(this)">
 			<fieldset class="fieldset_ajout_exercice">
 				<label>Intitule de l'énonce :</label><input type='text' name='intitule' title='Intitule' onblur="verifIntitule(this)"/><br />
 				<label>L'énoncé :</label><textarea name='enonce' title='Enonce' rows="8" cols="100" onblur="verifEnonce(this)"></textarea><br />
 				<label>Importer une image</label>
 				<input type="hidden" name="MAX_FILE_SIZE" value="2097152">     
 				<input type="file" name="image_exo"> <br/>
+				<span id="image_info"></span>
 				<label>Niveau de difficulté</label>
 				<select>
 					<option value="+++">+++</option>
