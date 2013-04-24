@@ -2,6 +2,8 @@ var backgound = new Kinetic.Layer();
 var layer1 = new Kinetic.Layer();
 var layer2 = new Kinetic.Layer();
 var layer3 = new Kinetic.Layer();
+var posx;
+var posy;
 var stage;
 
 // Utiliser dans le cadre de l'ajout des différents composants dans le canvas
@@ -151,18 +153,9 @@ function detectArc(i,j) // i = place, j = transition. Retourne -1 si il y a un a
 
 }
 
-
-function omega()
+function refreshOmega()
 {
-	var res = [];
-	for(var i=0; i<model.places.length; i++) {
-		res[i] = new Array(model.transitions.length);
-		for(var j=0; j<model.transitions.length; j++) {
-			res[i][j] = detectArc(i,j);
-
-		}
-	}
-
+	var res = omega();
 	if(res.length > 0) {
 		$('#results').html("&nbsp &nbsp &nbsp &nbsp");
 		for(var i=0; i<res[0].length; i++) 
@@ -184,6 +177,22 @@ function omega()
 			$('#results').html($('#results').html()+"</br>");
 		}
 	}
+}
+
+
+function omega()
+{
+	var res = [];
+	for(var i=0; i<model.places.length; i++) {
+		res[i] = new Array(model.transitions.length);
+		for(var j=0; j<model.transitions.length; j++) {
+			res[i][j] = detectArc(i,j);
+
+		}
+	}
+	return res;
+
+	
 }
 
 function drawPlace(layer, i)
@@ -239,7 +248,7 @@ function drawPlace(layer, i)
 				// on insère dans le JSON
 				model.arcs.push({"place2trans": 0,"source": source, "dest": i});
 				refreshLines();
-				omega();
+				refreshOmega();
 
 				place2transTEMP = -1;
 				source = -1;
@@ -316,7 +325,7 @@ function drawTransition(layer, i)
 				// on insère dans le JSON
 				model.arcs.push({"place2trans": 1,"source": source, "dest": i});
 				refreshLines();
-				omega();
+				refreshOmega();
 				place2transTEMP = -1;
 				source = -1;
 			}
@@ -417,7 +426,7 @@ function refreshLines()
 }
 
 $(window).load(function(){
-	omega();
+	refreshOmega();
 	for(var i=0;i<model.places.length;i++)
 	{
 		drawPlace(layer1,i);
@@ -436,9 +445,22 @@ $(window).load(function(){
 		width: 600,
 		height: 400
 	});
+	
+	posx=$('#container').findPos().x;
+	posy=$('#container').findPos().y;
 
 	mouseEventCallBack();
+	var test= new Array();
+	test[0]=[-1,1,0];
+	test[1]=[1,0,1];
+	console.log(Transpose(test));
+	//CalculP_T(test,2,1);
 
+	var test1= omega();
+	
+	console.log(CalculP_T(ConcatRight(test1,Identity(test1.length)),getNbRows(test1),getNbColumns(test1)));
+	
+	
 	stage.add(backgound);
 	stage.add(layer1); // les places
 	stage.add(layer2); // les transitions
@@ -466,21 +488,21 @@ function mouseEventCallBack() {
 	document.getElementById('container').addEventListener ('click', 
 			function(event) {
 				if(kindOfAdd == 0){
-					model.places.push({"coordx": event.pageX,"coordy": event.pageY-20})
+					model.places.push({"coordx": event.pageX-posx,"coordy": event.pageY-posy})
 					for(var i=0;i<model.places.length;i++)
 					{
 						drawPlace(layer1,i);
 					}
 				}
 				else if(kindOfAdd == 1) {
-					model.transitions.push({"coordx": event.pageX,"coordy": event.pageY-20})
+					model.transitions.push({"coordx": event.pageX-posx,"coordy": event.pageY-posy})
 					for(var i=0;i<model.transitions.length;i++)
 					{
 						drawTransition(layer2,i);
 					}
 				}
 				refreshLines();
-				omega();
+				refreshOmega();
 
 				stage.clear();
 				stage.add(backgound);
@@ -491,3 +513,16 @@ function mouseEventCallBack() {
 			}, false
 		);
 	}
+
+jQuery.fn.extend({
+   findPos : function() {
+       obj = jQuery(this).get(0);
+       var curleft = obj.offsetLeft || 0;
+       var curtop = obj.offsetTop || 0;
+       while (obj = obj.offsetParent) {
+                curleft += obj.offsetLeft
+                curtop += obj.offsetTop
+       }
+       return {x:curleft,y:curtop};
+   }
+});
