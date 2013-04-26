@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="js/truncatable/jquery.truncatable.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<script language="JavaScript" type="text/javascript">
@@ -12,7 +13,7 @@
 	 								less: true,
 	 								hideText: '[cacher]'
 	 							});
-			})
+			});
 		</script>
 	</head>
 	<body>		
