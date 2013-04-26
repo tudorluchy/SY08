@@ -195,6 +195,43 @@ function omega()
 	
 }
 
+function omegaMoins()
+{
+	var res = [];
+	for(var i=0; i<model.places.length; i++) {
+		res[i] = new Array(model.transitions.length);
+		for(var j=0; j<model.transitions.length; j++) {
+			var da = detectArc(i,j);
+			if(da==-1)
+				res[i][j] = 1;
+			else
+				res[i][j] = 0;
+
+		}
+	}
+	return res;	
+}
+
+
+function omegaPlus()
+{
+	var res = [];
+	for(var i=0; i<model.places.length; i++) {
+		res[i] = new Array(model.transitions.length);
+		for(var j=0; j<model.transitions.length; j++) {
+			var da = detectArc(i,j);
+			if(da==1)
+				res[i][j] = 1;
+			else
+				res[i][j] = 0;
+
+		}
+	}
+	return res;
+
+	
+}
+
 function drawPlace(layer, i)
 {
 
@@ -450,7 +487,10 @@ $(window).load(function(){
 	mouseEventCallBack();
 	
 	var test = omega();
-	console.log(CalculP_T(ConcatRight(test,Identity(getNbRows(test))),getNbRows(test),getNbColumns(test)));
+	//console.log(CalculP_T(ConcatRight(test,Identity(getNbRows(test))),getNbRows(test),getNbColumns(test)));
+	
+	console.log(omegaMoins());
+	console.log(omegaPlus());
 
 	stage.add(backgound);
 	stage.add(layer1); // les places
