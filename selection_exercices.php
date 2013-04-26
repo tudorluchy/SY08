@@ -2,11 +2,8 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-		<script type="text/javascript" src="js/kinetic.js"></script>
-		<script type="text/javascript" src="js/jquery.js"></script>
-		<script type="text/javascript" src="js/sy08.js"></script>
 		<script type="text/javascript" src="js/truncatable/jquery.truncatable.js"></script>
-		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<script language="JavaScript" type="text/javascript">
 			 $(function(){
 				$('.exo_enonce').truncatable({

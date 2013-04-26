@@ -5,7 +5,8 @@
 		<script type="text/javascript" src="js/kinetic.js"></script>
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="js/sy08.js"></script>
-		<link rel="stylesheet" type="text/css" href="style.css">
+		<script type="text/javascript" src="js/matrix.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<script language="JavaScript" type="text/javascript">
 			// suppresion element id
 			function removeElement(id) {
