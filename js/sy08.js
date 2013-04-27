@@ -486,11 +486,18 @@ $(window).load(function(){
 
 	mouseEventCallBack();
 	
-	var test = omega();
-	//console.log(CalculP_T(ConcatRight(test,Identity(getNbRows(test))),getNbRows(test),getNbColumns(test)));
+	var invP = omega();
+	var invT = Transpose(invP);
 	
-	console.log(omegaMoins());
-	console.log(omegaPlus());
+	//Calcul des P invariants :
+	console.log(CalculP_T(ConcatRight(invP,Identity(getNbRows(invP))),getNbRows(invP),getNbColumns(invP)));
+	
+	//Calcul des T invariants :
+	console.log(CalculP_T(ConcatRight(invT,Identity(getNbRows(invT))),getNbRows(invT),getNbColumns(invT)));
+	
+	
+	//console.log(omegaMoins());
+	//console.log(omegaPlus());
 
 	stage.add(backgound);
 	stage.add(layer1); // les places
