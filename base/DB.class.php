@@ -2,56 +2,58 @@
 
 define("DB_HOST","localhost");
 define("DB_USER","root");
-define("DB_PASS","");
+define("DB_PASS","pass");
 define("BASE","sy08");
 
-class DB{
+class DB {
  
 	public static $Base;
   
  	//tente la connexion sur le SGBD, en utilisant des constantes définies
 	function Init()
 	{
-		$connectionString="host=".DB_HOST." port=5432 dbname=".BASE." user=".DB_USER." password=".DB_PASS;
-		self::$Base=mysql_connect($connectionString);
-		if(mysql_last_error()>0)
+		self::$Base = mysql_connect(DB_HOST, DB_USER, DB_PASS);
+		mysql_select_db(BASE, self::$Base);
+		if (mysql_error()>0)
 		{
-			Site::message("Impossible d'ouvrir la base",ERREUR);
-			Site::message(mysql_error());
+			echo "Impossible d'ouvrir la base.";
+			echo mysql_error();
 		}
 	}
 
- 	//equiv. mysql_query, avec gestion d'erreur
 	function Sql($requete)
 	{
-		if(!self::$Base)
+		if (!self::$Base) {
 			self::Init();
+		}
  
 		@mysql_query("SET NAMES UTF8");
-		$resultat=@mysql_query($requete);
+		$resultat = @mysql_query($requete);
  
-		if(mysql_last_error()>0)
-			Site::message("Erreur".mysql_error()."'",ERREUR);
-		else
+		if (mysql_error()>0) {
+			echo mysql_error();
+		    return false;
+		} else {
 			return $resultat;
-		return FALSE;
+		}
 	}
 	
 	//retourne directement les enregistrements de la requete sous la forme d'un tableau asociatif
 	function SqlToArray($requete)
 	{
-		$res=self::Sql($requete);
-		$tab=array();
-		while($row=mysql_fetch_assoc($res))
+		$res = self::Sql($requete);
+		$tab = array();
+		while ($row = mysql_fetch_assoc($res))
 		{
-			$tab[]=str_replace("&quot;", "", $row);
+			//$tab[] = str_replace("&quot;", "", $row);
+		    $tab[] = $row;
 		}
 		return $tab;	
 	}
 
 	function ProtectData($data)
 	{
-		if(!self::$Base)
+		if (!self::$Base)
 			self::Init();
 		
 		@mysql_query("SET NAMES UTF8");
@@ -60,10 +62,11 @@ class DB{
 		
 		$resultat=@mysql_real_escape_string(strip_tags($data));
  
-		if(mysql_last_error()>0)
-			Site::message("Impossible d'executer la requète: '".mysql_error()."'",ERREUR);
-		else
+		if (mysql_error()>0) {
+			echo mysql_error();
+		} else {
 			return $resultat;
-		return FALSE;
+		}
+		return false;
 	}
 }

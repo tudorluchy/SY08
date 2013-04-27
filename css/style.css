@@ -27,6 +27,10 @@ body
 	margin : 10px;
 }
 
+.exo_date {
+	float:right;
+}
+
 .exo_selection {
 	background-color:lightsteelblue;
 	border : 1px solid #1a1056;
