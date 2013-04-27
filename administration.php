@@ -168,13 +168,32 @@
 	<div id="corps_modif">
 		<h3>Modification des exercices</h3>
 		<b>Voici la liste des énoncés qui sont disponible actuellement</b>
-		<div class="exo">
-			<span class="exo_titre exo_remove1">Exercice 1 : Intitulé de l'exercice</span> <a class="exo_remove1" href="#"><img class="exo_remove1" src='img/edit.png' title='Modifier cet exercice'/></a> <a class="exo_remove1" href="#>" onclick="return goto_confirm('#', 'exo_remove1');"><img class="exo_remove1" src='img/delete.png' title='Supprimer cet exercice'/></a>
-		</div>
-		<div class="exo">
-			<span class="exo_titre exo_remove2">Exercice 2 : Intitulé de l'exercice</span> <a class="exo_remove2" href="#>"><img class="exo_remove2" src='img/edit.png' title='Modifier cet exercice'/></a> <a class="exo_remove2" href="#>" onclick="return goto_confirm('#', 'exo_remove2');"><img class="exo_remove2" src='img/delete.png' title='Supprimer cet exercice'/></a>
-		</div>
-	</div>
+		<?php
+			ini_set('display_errors', 1);
+			require_once(dirname(__FILE__).'/base/DB.class.php');
+			DB::Init();
+			
+			// action GET
+			if (isset($_GET['action'])) {
+				// delete
+				if ($_GET['action'] == 'delete') {
+					$res = DB::Sql('DELETE FROM sy08_exercice WHERE id = '.$_GET['id']);
+				// edit
+				} else if ($_GET['action'] == 'edit') {
+					header('Location: edit.php?id='.$_GET['id']); 
+				}
+			} 
+			
+			// affichage exos
+			$res = DB::SqlToArray("SELECT * FROM sy08_exercice ORDER BY date DESC");
+			foreach($res as $ligne) {
+				echo '<div class="exo">';
+				echo '<span class="exo_titre">'; 
+				echo 'Exercice : '; echo $ligne['intitule'].' - '.date_format(date_create($ligne['date']), 'd/m/Y H:i').'</span>'; 
+				echo '<a href="edit.php?action=edit&id='.$ligne['id'].'"><img src="img/edit.png" title="Modifier cet exercice"/></a><a href="?action=delete&id='.$ligne['id'].'"><img src="img/delete.png" title="Supprimer cet exercice"/></a>';
+				echo '</div>';	
+			}
+		?>
 	<div id="corps_form_ajout">
 		<h3>Ajout d'un exercice</h3>
 		<form name="ajout_exercice" method="POST" action="#" enctype="multipart/form-data" onsubmit="return verifForm(this)">
@@ -186,7 +205,7 @@
 				<input type="file" name="image_exo"> <br/>
 				<span id="image_info"></span>
 				<label>Niveau de difficulté</label>
-				<select>
+				<select name='difficulte'>
 					<option value="+++">+++</option>
 					<option selected value="++">++</option>
 					<option value="+">+</option>
