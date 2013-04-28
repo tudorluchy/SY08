@@ -84,7 +84,7 @@
     
     
     // fichier RDP
-    $file = 'TD9.RDP';
+    $file = 'TESTWEB.RDP';
     
     // max
     $MAX_X = 540;

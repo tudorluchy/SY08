@@ -6,76 +6,8 @@
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="js/sy08.js"></script>
 		<script type="text/javascript" src="js/matrix.js"></script>
+		<script type="text/javascript" src="js/verification_form.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
-		<script language="JavaScript" type="text/javascript">
-			// suppresion element id
-			function removeElement(id) {
-				var element = document.getElementById(id);
-				element.parentNode.removeChild(element);
-			}
-
-			// suppresion exercice
-			function goto_confirm(url, exo) {
-			  if (confirm("Etes-vous sur de vouloir supprimer cet exercice ?")) {
-				 // document.location.href = url;
-				 exo = '.'+exo;
-				 $(exo).remove();
-			  }
-			  return false; //pour ne pas revenir au début de la page
-			}
-			
-			// surligne le champ d'un formulaire
-			function surligne(champ, erreur){
-			   if(erreur)
-				  champ.style.backgroundColor = "#fba";
-			   else
-				  champ.style.backgroundColor = "";
-			}
-			
-			// verification intitule
-			function verifIntitule(champ)
-			{
-			   if(champ.value.length < 2 || champ.value.length > 100)
-			   {
-				  surligne(champ, true);
-				  return false;
-			   }
-			   else
-			   {
-				  surligne(champ, false);
-				  return true;
-			   }
-			}
-			
-			// verification enonce
-			function verifEnonce(champ)
-			{
-			   if(champ.value.length < 2 || champ.value.length > 8000)
-			   {
-				  surligne(champ, true);
-				  return false;
-			   }
-			   else
-			   {
-				  surligne(champ, false);
-				  return true;
-			   }
-			}
-			
-			// submit form
-			function verifForm(f)
-			{
-			   var intituleOk = verifIntitule(f.intitule);
-			   var enonceOk = verifEnonce(f.enonce);
-				
-			   if (intituleOk && enonceOk) {
-				  return true;
-			   } else {
-				  alert("Veuillez remplir correctement tous les champs");
-				  return false;
-			   }
-			}
-		</script>
 	</head>
 	<body>	
 	<?php	
@@ -174,13 +106,18 @@
 			DB::Init();
 			
 			// action GET
-			if (isset($_GET['action'])) {
+			if (isset($_REQUEST['action'])) {
 				// delete
-				if ($_GET['action'] == 'delete') {
+				if ($_REQUEST['action'] == 'delete') {
 					$res = DB::Sql('DELETE FROM sy08_exercice WHERE id = '.$_GET['id']);
 				// edit
-				} else if ($_GET['action'] == 'edit') {
+				} else if ($_REQUEST['action'] == 'edit') {
 					header('Location: edit.php?id='.$_GET['id']); 
+				// save
+				} else if ($_REQUEST['action'] == 'save') {
+					$res = DB::Sql("INSERT INTO sy08_exercice (intitule, enonce, image, difficulte, json, rdp, date) 
+					VALUES ('".$_POST['intitule']."', '".$_POST['enonce']."', '', '".$_POST['difficulte']."', 
+					'', '', NOW())");
 				}
 			} 
 			
@@ -196,7 +133,7 @@
 		?>
 	<div id="corps_form_ajout">
 		<h3>Ajout d'un exercice</h3>
-		<form name="ajout_exercice" method="POST" action="#" enctype="multipart/form-data" onsubmit="return verifForm(this)">
+		<form name="ajout_exercice" method="POST" action="?action=save" enctype="multipart/form-data" onsubmit="return verifForm(this)">
 			<fieldset class="fieldset_ajout_exercice">
 				<label>Intitule de l'énonce :</label><input type='text' name='intitule' title='Intitule' onblur="verifIntitule(this)"/><br />
 				<label>L'énoncé :</label><textarea name='enonce' title='Enonce' rows="8" cols="100" onblur="verifEnonce(this)"></textarea><br />

@@ -29,6 +29,7 @@ body
 
 .exo_date {
 	float:right;
+	margin-right : 10px;
 }
 
 .exo_selection {
@@ -67,7 +68,7 @@ ul.upload_info {
 
 .go {
 	float : right;
-	margin-right : 30px;
+	margin-right : 10px;
 }
 
 .fieldset_ajout_exercice input,textarea
