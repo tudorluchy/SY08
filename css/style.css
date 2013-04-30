@@ -137,3 +137,35 @@ fieldset.fieldset_ajout_exercice
 	-webkit-border-top-right-radius: 5px; /* pour Chrome */
 }
 
+.matrices_input {
+	float: left;
+	width: 300px;
+}
+
+.control_button {
+    background-color: lightsteelblue;
+}
+
+.control_button_div {
+	float: left;
+	width: 199px;
+	padding-top: auto;
+	text-align:center;
+}
+.astuces {
+	float: right;
+	padding: 15px;
+	text-align: justify;
+	min-height: 100px;
+	width: 500px;
+	background-color: #119911;
+	border:1px solid black;
+
+    /*Coin arrondi*/
+	-moz-border-radius : 5px 5px;			
+	-webkit-border-radius: 5px 5px; 
+	border-radius: 5px 5px;        
+	-webkit-border-top-left-radius: 5px; /* pour Chrome */ 
+	-webkit-border-top-right-radius: 5px; /* pour Chrome */
+
+}

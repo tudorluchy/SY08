@@ -14,7 +14,12 @@ var kindOfAdd = -1;
 var place2transTEMP = -1;
 var source = -1;
 
-var model = '';
+var model = 
+{
+	places: [],
+	transitions: [],
+	arcs: []
+}
 
 function getXMLHttpRequest() {
         var xhr = null;
@@ -469,6 +474,8 @@ function mouseEventCallBack() {
 				refreshLines();
 				refreshOmega();
 
+				generateEveryMatrixInput();
+				
 				stage.clear();
 				stage.add(backgound);
 				stage.add(layer1); // les places
