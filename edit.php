@@ -6,6 +6,7 @@
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="js/matrix.js"></script>
 		<script type="text/javascript" src="js/sy08.js"></script>
+		<script type="text/javascript" src="js/JSON-js-master/json2.js"></script>
 		<script type="text/javascript" src="js/verification_form.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
@@ -21,7 +22,8 @@
 					$req = "UPDATE sy08_exercice 
 					SET intitule = '".$_REQUEST['intitule']."'
 					, enonce = '".$_REQUEST['enonce']."' 
-					, difficulte = '".$_REQUEST['difficulte']."' 
+					, difficulte = '".$_REQUEST['difficulte']."'
+					, json = '".$_REQUEST['json']."' 
 					WHERE id = ".$_REQUEST['id'];
 					DB::Sql($req);
 					
@@ -65,6 +67,7 @@
 						<input type="file" name="fichier_rdp">
 					</span>
 				</div>
+				<input type="hidden" id="json" name="json" value="">
 				<div id="container"></div>
 				<div id="results"></div>
 				<input class="valider" type='submit' value='Valider'>

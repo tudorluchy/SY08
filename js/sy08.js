@@ -21,6 +21,10 @@ var model =
 	arcs: []
 }
 
+/*
+ * 
+ * Si jamais on a besoin :
+ * 
 function getXMLHttpRequest() {
         var xhr = null;
   
@@ -59,11 +63,11 @@ function envoyerJson() {
 		  // tu peux mettre un message ou un gif de chargement par exemple
 	   }
 	}
-	xhr.open("POST", "page_de_traitement.php", true); // true pour asynchrone
+	xhr.open("POST", "traitement_ajout_exercice.php", true); // true pour asynchrone
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // seulement si t'as choisi la méthode POST !
 	xhr.send("var="+varJS); // éventuellement t'envois plusieurs variables séparées par un &
 }
- 
+*/
 
 
 

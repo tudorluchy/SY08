@@ -57,6 +57,9 @@ function verifForm(f)
 {
    var intituleOk = verifIntitule(f.intitule);
    var enonceOk = verifEnonce(f.enonce);
+
+	// init json dans le input caché
+	document.getElementById('json').value = JSON.stringify(model);
 	
    if (intituleOk && enonceOk) {
 	  return true;

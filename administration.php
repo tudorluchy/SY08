@@ -6,6 +6,7 @@
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="js/sy08.js"></script>
 		<script type="text/javascript" src="js/matrix.js"></script>
+		<script type="text/javascript" src="js/JSON-js-master/json2.js"></script>
 		<script type="text/javascript" src="js/verification_form.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
@@ -117,7 +118,7 @@
 				} else if ($_REQUEST['action'] == 'save') {
 					$res = DB::Sql("INSERT INTO sy08_exercice (intitule, enonce, image, difficulte, json, rdp, date) 
 					VALUES ('".$_POST['intitule']."', '".$_POST['enonce']."', '', '".$_POST['difficulte']."', 
-					'', '', NOW())");
+					'".$_POST['json']."', '', NOW())");
 				}
 			} 
 			
@@ -158,6 +159,7 @@
 						<input type="file" name="fichier_rdp">
 					</span>
 				</div>
+				<input type="hidden" id="json" name="json" value="">
 				<div id="container"></div>
 				<div id="results"></div>
 				<input class="valider" type='submit' value='Valider'>
