@@ -134,9 +134,9 @@
 					} else {
 						$json_final = $_POST['json'];
 					}
-					$res = DB::Sql("INSERT INTO sy08_exercice (intitule, enonce, image, difficulte, json, rdp, date) 
+					$res = DB::Sql("INSERT INTO sy08_exercice (intitule, enonce, image, difficulte, json, date) 
 					VALUES ('".$_POST['intitule']."', '".$_POST['enonce']."', '".$_FILES['image_exo']['name']."', '".$_POST['difficulte']."', 
-					'".$json_final."', '".$_FILES['fichier_rdp']['name']."', NOW())");
+					'".$json_final."', NOW())");
 				}
 			} 
 			// affichage exos
