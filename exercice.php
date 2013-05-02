@@ -35,6 +35,33 @@
 		<input type="hidden" id="json" name="json" value="">
 		<div id="container"></div>
 		<div id="results"></div>
+		
+		<table>
+			<tr><td><h3>Calculer W+</h3></td></tr>
+			<tr>
+				<td><div id="matrice_wplus" class="matrices_input"></div></td>
+				<td><div class="control_button_div"><input type="button" class="control_button" value="Controler" onClick="controler(1)" /></div></td>
+				<td><div id="matrice_wplus_astuces" class="astuces"></div></td>
+			</tr>		
+			<tr><td><h3>Calculer W-</h3></td></tr>
+			<tr>
+				<td><div id="matrice_wmoins" class="matrices_input"></div></td>
+				<td><div class="control_button_div"><input type="button" class="control_button" value="Controler" onClick="controler(2)" /></div></td>
+				<td><div id="matrice_wmoins_astuces" class="astuces"></div></td>
+			</tr>
+			<tr><td><h3>Calculer W</h3></td></tr>
+			<tr>
+				<td><div id="matrice_w" class="matrices_input"></div></td>
+				<td><div class="control_button_div"><input type="button" class="control_button" value="controler" onClick="controler(0)" /></div></td>
+				<td><div id="matrice_w_astuces" class="astuces"></div></td>
+			</tr>
+			<tr><td><h3>Calculer l'invariant</h3></td></tr>
+			<tr>
+				<td><div id="matrice_invariant" class="matrices_input"></div></td>
+				<td><div class="control_button_div"><input type="button" class="control_button" value="controler" onClick="" /></div></td>
+				<td><div id="matrice_invariant_astuces" class="astuces"></div></td>
+			</tr>
+		</table>
 	</div>
 	</body>
 </html>
