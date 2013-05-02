@@ -6,7 +6,6 @@
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="js/sy08.js"></script>
 		<script type="text/javascript" src="js/matrix.js"></script>
-		<script type="text/javascript" src="js/JSON-js-master/json2.js"></script>
 		<script type="text/javascript" src="js/verification_form.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
