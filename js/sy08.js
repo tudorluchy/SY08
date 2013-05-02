@@ -531,7 +531,7 @@ function generateMatrixInput(statut) {
 	for(var i=0;i<nbPlaces;i++) {
 		html += "<tr><td>P"+(i+1)+"</td>";
 		for(var j=0;j<nbTransitions;j++) {
-			html += "<td><input type=\"text\" style=\"width:30px;\" value=\"0\" name=\""+which+"_"+i+"_"+j+"\"/></td>";
+			html += "<td><input type=\"text\" style=\"width:30px;\" value=\"0\" id=\""+which+"_"+i+"_"+j+"\"/></td>";
 		}
 		html += "</tr>";
 	}
@@ -553,7 +553,7 @@ function generateInvariantInput(nbPt) {
 	for(var i=0;i<nbPt;i++) {
 		html += "<tr><td>Pt"+(i+1)+"</td>";
 		for(var j=0;j<nbPlaces;j++) {
-			html += "<td><input type=\"text\" style=\"width:30px;\" value=\"0\" name=\"invariant_"+i+"_"+j+"\"/></td>";
+			html += "<td><input type=\"text\" style=\"width:30px;\" value=\"0\" id=\"invariant_"+i+"_"+j+"\"/></td>";
 		}
 		html += "</tr>";
 	}
@@ -563,3 +563,58 @@ function generateInvariantInput(nbPt) {
 		document.getElementById("invariant").innerHTML = html;
 }
 
+function controler(status) {
+	var which = "";
+	var res;
+	// cas wplus
+	if(status == 0) {
+		which = "matrice_w";
+		res = omega();
+	}
+	else if(status == 1) {
+		which = "matrice_wplus";
+		res = omegaPlus();
+	}
+	else if(status == 2) {
+		which = "matrice_wmoins";
+		res = omegaMoins();
+	}
+
+	// Retrieve nbPlaces & nbTransitions
+	var nbPlaces = model.places.length;
+	var nbTransitions = model.transitions.length;
+
+	var identique = true;
+	var i=0;
+	while(i<nbPlaces && identique) {
+		var j =0;
+		while(j<nbTransitions && identique) {
+			if(document.getElementById(which+"_"+i+"_"+j) != null) {
+				var current = document.getElementById(which+"_"+i+"_"+j).value;
+				if(current != res[i][j])
+					identique = false;
+			}
+			j++;
+		}
+		i++;
+	}
+
+	var html ="";
+	if(identique == false) {
+		html = 'incorrect';
+		// en fonction de which, écrire le message d'erreur ou erreur correspondante + modifier css
+		if(document.getElementById(which+"_astuces") != null) {
+			document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
+			document.getElementById(which+"_astuces").innerHTML = html;
+		}
+	}
+	else if(identique == true) {
+		html = 'correct';
+		// Modification css pour etre sur que le background est vert
+		if(document.getElementById(which+"_astuces") != null) {
+			document.getElementById(which+"_astuces").style.backgroundColor = "#119911";
+			document.getElementById(which+"_astuces").innerHTML = html;
+		}
+	}
+
+}
