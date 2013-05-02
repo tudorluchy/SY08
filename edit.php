@@ -16,21 +16,21 @@
 			require_once(dirname(__FILE__).'/base/DB.class.php');
 			DB::Init();
 			// action GET
-			if (isset($_REQUEST['action'])) {
+			if (isset($_GET['action'])) {
 				// save
-				if ($_REQUEST['action'] == 'save') {
+				if ($_GET['action'] == 'save') {
 					$req = "UPDATE sy08_exercice 
-					SET intitule = '".$_REQUEST['intitule']."'
-					, enonce = '".$_REQUEST['enonce']."' 
-					, difficulte = '".$_REQUEST['difficulte']."'
-					, json = '".$_REQUEST['json']."' 
-					WHERE id = ".$_REQUEST['id'];
+					SET intitule = '".$_POST['intitule']."'
+					, enonce = '".$_POST['enonce']."' 
+					, difficulte = '".$_POST['difficulte']."'
+					, json = '".$_POST['json']."' 
+					WHERE id = ".$_GET['id'];
 					DB::Sql($req);
 					
-					$res = DB::SqlToArray('SELECT * FROM sy08_exercice WHERE id = '.$_REQUEST['id']);
+					$res = DB::SqlToArray('SELECT * FROM sy08_exercice WHERE id = '.$_GET['id']);
 				// edit
 				} else if ($_GET['action'] == 'edit') { 
-					$res = DB::SqlToArray('SELECT * FROM sy08_exercice WHERE id = '.$_REQUEST['id']);
+					$res = DB::SqlToArray('SELECT * FROM sy08_exercice WHERE id = '.$_GET['id']);
 					
 				}
 			} else {
@@ -42,19 +42,22 @@
 	</script>
 	<div id='corps_form_ajout'>
 		<h3>Modification de l' exercice : <?php echo $res[0]['intitule']; ?></h3>
-		<form name="ajout_exercice" method="POST" action="?action=save&id=<?php echo $_REQUEST['id'] ?>"enctype="multipart/form-data" onsubmit="return verifForm(this)">
+		<form name="ajout_exercice" method="POST" action="?action=save&id=<?php echo $_GET['id']; ?>"enctype="multipart/form-data" onsubmit="return verifForm(this)">
 			<fieldset class="fieldset_ajout_exercice">
 				<label>Intitule de l'énonce :</label><input type='text' name='intitule' title='Intitule' onblur="verifIntitule(this)" value="<?php echo $res[0]['intitule']; ?>"/><br />
 				<label>L'énoncé :</label><textarea name='enonce' title='Enonce' rows="8" cols="100" onblur="verifEnonce(this)"><?php echo $res[0]['enonce']; ?></textarea><br />
+				<?php if (!empty($res[0]['image'])) { ?>
+					<label>Image :</label><img title='' src='upload_images/<?php echo $res[0]['image']; ?>'/><br />
+				<?php } ?>
 				<label>Importer une image</label>
 				<input type="hidden" name="MAX_FILE_SIZE" value="2097152">     
 				<input type="file" name="image_exo"> <br/>
 				<span id="image_info"></span>
 				<label>Niveau de difficulté</label>
 				<select name='difficulte'>
-					<option <?php if ($res[0]['difficulte'] == '+++') echo 'selected '; ?> value="+++">+++</option>
-					<option <?php if ($res[0]['difficulte'] == '++') echo 'selected '; ?> value="++">++</option>
-					<option <?php if ($res[0]['difficulte'] == '+') echo 'selected '; ?> value="+">+</option>
+					<option <?php if ($res[0]['difficulte'] == '+++') echo 'selected'; ?> value="+++">+++</option>
+					<option <?php if ($res[0]['difficulte'] == '++') echo 'selected'; ?> value="++">++</option>
+					<option <?php if ($res[0]['difficulte'] == '+') echo 'selected'; ?> value="+">+</option>
 				</select><br/ ><br/ >
 				<b>Resolution du graphe :</b><br/ >
 				<div id='button_group'>

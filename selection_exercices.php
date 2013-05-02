@@ -31,7 +31,7 @@
 				echo '<span class="exo_titre_bis">Exercice : '; echo $ligne['intitule']; echo '</span>';
 				echo '<span class="exo_date">'; echo '<b>'; echo date_format(date_create($ligne['date']), 'd/m/Y H:i'); echo '</b>'; echo '</span> <br />';
 				echo '<span class="exo_enonce">'; echo $ligne['enonce']; echo '</span>';
-				echo '<a href="#>"><img class="go" src="img/go.png" title="Start exercice!"/></a> <br />';
+				echo '<a href="exercice.php?action=effectuer&id='; echo $ligne['id'].'"><img class="go" src="img/go.png" title="Start exercice!"/></a> <br />';
 				echo '<b>Niveau de difficulté : '; echo $ligne['difficulte'].'</b>';
 				echo '</div>';
 			}

@@ -13,6 +13,7 @@
 	<body>	
 	<?php	
 		if (isset($_POST["intitule"])) {
+			$save = true;
 			// image exo
 			if (isset($_FILES["image_exo"]["name"]) && !empty($_FILES["image_exo"]["name"])) {
 				// Copie dans le repertoire du script avec un nom
@@ -32,6 +33,7 @@
 					&& ($_FILES["image_exo"]["size"] < 2097152)
 					&& in_array($extension, $allowedExts)) {
 						if ($_FILES["image_exo"]["error"] > 0) {
+							$save = false;
 							echo "<li>Return Code: " . $_FILES["image_exo"]["error"]. "</li>";
 						} else {
 							echo "<li>Upload: " . $_FILES["image_exo"]["name"] . "</li>";
@@ -43,16 +45,18 @@
 								if (!@mkdir($repertoireDestination, 0777)) {
 									$error = error_get_last();
 									// echo $error['message'];
+									$save = false;
 								}
 							}
 							if (file_exists($repertoireDestination.$nomDestination)){
 								echo "<li>".$nomDestination . " already exists.</li>";
 							} else {
-							  move_uploaded_file($_FILES["image_exo"]["tmp_name"], $repertoireDestination.$nomDestination);
-							  echo "<li>Stored in: " . $repertoireDestination.$nomDestination."</li>";
+							    move_uploaded_file($_FILES["image_exo"]["tmp_name"], $repertoireDestination.$nomDestination);
+							    echo "<li>Stored in: " . $repertoireDestination.$nomDestination."</li>";
 							}
 						}
 					} else {
+						$save = false;
 						echo "<li>Invalid file</li>";
 					}
 					echo "</ul>";
@@ -71,6 +75,7 @@
 				if (($_FILES["fichier_rdp"]["size"] < 2097152)
 					&& in_array($extension, $allowedExts)) {
 						if ($_FILES["fichier_rdp"]["error"] > 0) {
+							$save = false;
 							echo "<li>Return Code: " . $_FILES["fichier_rdp"]["error"]. "</li>";
 						} else {
 							echo "<li>Upload: " . $_FILES["fichier_rdp"]["name"] . "</li>";
@@ -82,16 +87,18 @@
 								if (!@mkdir($repertoireDestination, 0777)) {
 									$error = error_get_last();
 									// echo $error['message'];
+									$save = false;
 								}
 							}
 							if (file_exists($repertoireDestination.$nomDestination)){
 								echo "<li>".$nomDestination . " already exists.</li>";
 							} else {
-							  move_uploaded_file($_FILES["fichier_rdp"]["tmp_name"], $repertoireDestination.$nomDestination);
-							  echo "<li>Stored in: " . $repertoireDestination.$nomDestination."</li>";
+							    move_uploaded_file($_FILES["fichier_rdp"]["tmp_name"], $repertoireDestination.$nomDestination);
+							    echo "<li>Stored in: " . $repertoireDestination.$nomDestination."</li>";
 							}
 						}
 					} else {
+						$save = false;
 						echo "<li>Invalid file</li>";
 					}
 					echo "</ul>";
@@ -109,19 +116,18 @@
 			// action GET
 			if (isset($_REQUEST['action'])) {
 				// delete
-				if ($_REQUEST['action'] == 'delete') {
+				if ($_GET['action'] == 'delete') {
 					$res = DB::Sql('DELETE FROM sy08_exercice WHERE id = '.$_GET['id']);
 				// edit
-				} else if ($_REQUEST['action'] == 'edit') {
+				} else if ($_GET['action'] == 'edit') {
 					header('Location: edit.php?id='.$_GET['id']); 
 				// save
-				} else if ($_REQUEST['action'] == 'save') {
+				} else if ($_GET['action'] == 'save' && $save == true) {
 					$res = DB::Sql("INSERT INTO sy08_exercice (intitule, enonce, image, difficulte, json, rdp, date) 
-					VALUES ('".$_POST['intitule']."', '".$_POST['enonce']."', '', '".$_POST['difficulte']."', 
-					'".$_POST['json']."', '', NOW())");
+					VALUES ('".$_POST['intitule']."', '".$_POST['enonce']."', '".$_FILES['image_exo']['name']."', '".$_POST['difficulte']."', 
+					'".$_POST['json']."', '".$_FILES['fichier_rdp']['name']."', NOW())");
 				}
 			} 
-			
 			// affichage exos
 			$res = DB::SqlToArray("SELECT * FROM sy08_exercice ORDER BY date DESC");
 			foreach($res as $ligne) {
@@ -136,8 +142,8 @@
 		<h3>Ajout d'un exercice</h3>
 		<form name="ajout_exercice" method="POST" action="?action=save" enctype="multipart/form-data" onsubmit="return verifForm(this)">
 			<fieldset class="fieldset_ajout_exercice">
-				<label>Intitule de l'énonce :</label><input type='text' name='intitule' title='Intitule' onblur="verifIntitule(this)"/><br />
-				<label>L'énoncé :</label><textarea name='enonce' title='Enonce' rows="8" cols="100" onblur="verifEnonce(this)"></textarea><br />
+				<label>Intitule de l'énonce :</label><input type='text' name='intitule' title='Intitule' onblur="verifIntitule(this)" value="<?php if(isset($_POST['intitule'])){echo $_POST['intitule'];}?>"><br />
+				<label>L'énoncé :</label><textarea name='enonce' title='Enonce' rows="8" cols="100" onblur="verifEnonce(this)"><?php if(isset($_POST['enonce'])){echo $_POST['enonce'];} ?></textarea><br />
 				<label>Importer une image</label>
 				<input type="hidden" name="MAX_FILE_SIZE" value="2097152">     
 				<input type="file" name="image_exo"> <br/>
