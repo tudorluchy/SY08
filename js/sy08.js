@@ -113,7 +113,49 @@ function refreshOmega()
 			$('#results').html($('#results').html()+"</br>");
 		}
 	}
+}
 
+function refreshEveryMatrixResults() {
+	for(var i=0; i < 3; i++) {
+		refreshMatrix(i);
+	}
+}
+
+function refreshMatrix(statut) {
+	var res;
+	var which;
+	if(statut == 0) {
+		res = omega();
+		which = "matrice_w_results";
+	}
+	else if(statut == 1) {
+		res = omegaPlus();
+		which = "matrice_wplus_results";
+	}
+	else if(statut == 2) {
+		res = omegaMoins();
+		which = "matrice_wmoins_results";
+	}
+
+	if(res.length > 0) {
+		var html = "<table style=\"text-align:right;\"><tr><td></td>";
+
+		for(var i=0;i<res[0].length;i++) {
+			html += "<td>T"+(i+1)+"</td>";
+		}
+		html+= "</tr>";
+
+		for(var i=0;i<res.length;i++) {
+			html += "<tr><td>P"+(i+1)+"</td>";
+			for(var j=0;j<res[i].length;j++) {
+				html += "<td>"+res[i][j]+"</td>";
+			}
+			html += "</tr>";
+		}
+		html += "</table>";
+		if(document.getElementById(which) != null)
+			document.getElementById(which).innerHTML = html;
+	}
 }
 
 function omega()
@@ -123,12 +165,9 @@ function omega()
 		res[i] = new Array(model.transitions.length);
 		for(var j=0; j<model.transitions.length; j++) {
 			res[i][j] = detectArc(i,j);
-
 		}
 	}
 	return res;
-
-	
 }
 
 function omegaMoins()
@@ -142,7 +181,6 @@ function omegaMoins()
 				res[i][j] = 1;
 			else
 				res[i][j] = 0;
-
 		}
 	}
 	return res;	
@@ -160,12 +198,9 @@ function omegaPlus()
 				res[i][j] = 1;
 			else
 				res[i][j] = 0;
-
 		}
 	}
 	return res;
-
-	
 }
 
 function drawPlace(layer, i)
@@ -476,7 +511,8 @@ function mouseEventCallBack() {
 					}
 				}
 				refreshLines();
-				refreshOmega();
+
+				refreshEveryMatrixResults();
 
 				generateEveryMatrixInput();
 				
@@ -563,10 +599,9 @@ function generateInvariantInput(nbPt) {
 		document.getElementById("invariant").innerHTML = html;
 }
 
-function controler(status) {
+function controlerMatrice(status) {
 	var which = "";
 	var res;
-	// cas wplus
 	if(status == 0) {
 		which = "matrice_w";
 		res = omega();
@@ -579,8 +614,6 @@ function controler(status) {
 		which = "matrice_wmoins";
 		res = omegaMoins();
 	}
-
-	// Retrieve nbPlaces & nbTransitions
 	var nbPlaces = model.places.length;
 	var nbTransitions = model.transitions.length;
 
@@ -598,23 +631,24 @@ function controler(status) {
 		}
 		i++;
 	}
-
-	var html ="";
 	if(identique == false) {
-		html = 'incorrect';
 		// en fonction de which, écrire le message d'erreur ou erreur correspondante + modifier css
 		if(document.getElementById(which+"_astuces") != null) {
+			var html = 'incorrect';
 			document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
 			document.getElementById(which+"_astuces").innerHTML = html;
 		}
 	}
 	else if(identique == true) {
-		html = 'correct';
 		// Modification css pour etre sur que le background est vert
 		if(document.getElementById(which+"_astuces") != null) {
+			var html = 'correct';
 			document.getElementById(which+"_astuces").style.backgroundColor = "#119911";
 			document.getElementById(which+"_astuces").innerHTML = html;
 		}
 	}
+}
 
+function controlerInvariant() {
+	
 }
