@@ -422,14 +422,13 @@ $(window).load(function(){
 
 	mouseEventCallBack();
 	
-	var invP = omega();
-	var invT = Transpose(invP);
+
 	
 	//Calcul des P invariants :
-	console.log(CalculP_T(ConcatRight(invP,Identity(getNbRows(invP))),getNbRows(invP),getNbColumns(invP)));
+	console.log(Pinvariants());
 	
 	//Calcul des T invariants :
-	console.log(CalculP_T(ConcatRight(invT,Identity(getNbRows(invT))),getNbRows(invT),getNbColumns(invT)));
+	console.log(Tinvariants());
 	
 	
 	//console.log(omegaMoins());
@@ -443,6 +442,24 @@ $(window).load(function(){
 })
 
 
+function Pinvariants()
+{
+	var invP = omega();
+	
+	//Calcul des P invariants :
+	return CalculP_T(ConcatRight(invP,Identity(getNbRows(invP))),getNbRows(invP),getNbColumns(invP));
+
+}
+
+
+function Tinvariants()
+{
+	var invT = Transpose(omega());
+	
+	//Calcul des P invariants :
+	return CalculP_T(ConcatRight(invT,Identity(getNbRows(invT))),getNbRows(invT),getNbColumns(invT));
+
+}
 
 function activateAddPlace() {
 	kindOfAdd = 0;
