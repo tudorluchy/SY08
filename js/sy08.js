@@ -138,17 +138,17 @@ function refreshMatrix(statut) {
 	}
 
 	if(res.length > 0) {
-		var html = "<table style=\"text-align:right;\"><tr><td></td>";
+		var html = "<table class=\"matrice_results\"><tr><td></td>";
 
 		for(var i=0;i<res[0].length;i++) {
-			html += "<td>T"+(i+1)+"</td>";
+			html += "<td class=\"matrice_results_1\">T"+(i+1)+"</td>";
 		}
 		html+= "</tr>";
 
 		for(var i=0;i<res.length;i++) {
-			html += "<tr><td>P"+(i+1)+"</td>";
+			html += "<tr><td class=\"matrice_results_1\">P"+(i+1)+"</td>";
 			for(var j=0;j<res[i].length;j++) {
-				html += "<td>"+res[i][j]+"</td>";
+				html += "<td class=\"matrice_results_2\">"+res[i][j]+"</td>";
 			}
 			html += "</tr>";
 		}
@@ -256,7 +256,7 @@ function drawPlace(layer, i)
 				// on insère dans le JSON
 				model.arcs.push({"place2trans": 0,"source": source, "dest": i});
 				refreshLines();
-				refreshOmega();
+				refreshEveryMatrixResults();
 
 				place2transTEMP = -1;
 				source = -1;
@@ -333,7 +333,7 @@ function drawTransition(layer, i)
 				// on insère dans le JSON
 				model.arcs.push({"place2trans": 1,"source": source, "dest": i});
 				refreshLines();
-				refreshOmega();
+				refreshEveryMatrixResults();
 				place2transTEMP = -1;
 				source = -1;
 			}
@@ -530,6 +530,10 @@ function mouseEventCallBack() {
 				refreshLines();
 
 				refreshEveryMatrixResults();
+	console.log(Pinvariants());
+	
+	//Calcul des T invariants :
+	console.log(Tinvariants());
 
 				generateEveryMatrixInput();
 				

@@ -178,7 +178,20 @@
 				</div>
 				<input type="hidden" id="json" name="json" value="">
 				<div id="container"></div>
-				<div id="results"></div>
+				<div id="results">
+					<div id="results_1">
+						<h3>Resultat W</h3>
+						<div id="matrice_w_results"></div>
+					</div>
+					<div id="results_2">
+					<h3>Resultat W+</h3>
+						<div id="matrice_wplus_results"></div>
+					</div>					
+					<div id="results_3">
+					<h3>Resultat W-</h3>
+						<div id="matrice_wmoins_results"></div>
+					</div>
+				</div>
 				<input class="valider" type='submit' value='Valider'>
 			</fieldset>	
 		</form>

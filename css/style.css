@@ -58,7 +58,8 @@ body
 }
 
 .valider {
-	float : right;
+	margin: 30px;
+	float:right;
 }
 
 ul.upload_info {
@@ -137,6 +138,10 @@ fieldset.fieldset_ajout_exercice
 	-webkit-border-top-right-radius: 5px; /* pour Chrome */
 }
 
+/****************************************************/
+/***Composants relatifs aux matrices dites "input"***/
+/****************************************************/
+
 .matrices_input {
 	float: left;
 	width: 400px;
@@ -167,5 +172,36 @@ fieldset.fieldset_ajout_exercice
 	border-radius: 5px 5px;        
 	-webkit-border-top-left-radius: 5px; /* pour Chrome */ 
 	-webkit-border-top-right-radius: 5px; /* pour Chrome */
+}
 
+/****************************************************/
+/*********Composants relatifs aux résultats**********/
+/****************************************************/
+
+.matrice_results {
+	text-align:center;
+}
+
+.matrice_results_1 {
+	width: 30px;
+	border-width: 1px;
+	border-style: solid;
+	background-color: lightsteelblue;
+}
+
+.matrice_results_2 {
+	background-color: white;
+}
+
+#results_1 {
+	float: left;
+	width: 300px;
+}
+#results_2 {
+	float: left;	
+	width: 300px;
+}
+#results_3 {
+	float: left;	
+	width: 300px;
 }
