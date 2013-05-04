@@ -10,7 +10,7 @@ class DB {
 	public static $Base;
   
  	//tente la connexion sur le SGBD, en utilisant des constantes définies
-	function Init()
+	public function Init()
 	{
 		self::$Base = mysql_connect(DB_HOST, DB_USER, DB_PASS);
 		mysql_select_db(BASE, self::$Base);
@@ -21,7 +21,7 @@ class DB {
 		}
 	}
 
-	function Sql($requete)
+	public function Sql($requete)
 	{
 		if (!self::$Base) {
 			self::Init();
@@ -39,7 +39,7 @@ class DB {
 	}
 	
 	//retourne directement les enregistrements de la requete sous la forme d'un tableau asociatif
-	function SqlToArray($requete)
+	public function SqlToArray($requete)
 	{
 		$res = self::Sql($requete);
 		$tab = array();
@@ -51,7 +51,7 @@ class DB {
 		return $tab;	
 	}
 
-	function ProtectData($data)
+	public function ProtectData($data)
 	{
 		if (!self::$Base)
 			self::Init();

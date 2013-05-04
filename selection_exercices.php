@@ -26,13 +26,14 @@
 			require_once(dirname(__FILE__).'/base/DB.class.php');
 			DB::Init();
 			$res = DB::SqlToArray("SELECT * FROM sy08_exercice ORDER BY date DESC");
-			foreach($res as $ligne) {
+            
+            foreach($res as $ligne) {
 				echo '<div class="exo_selection">';
-				echo '<span class="exo_titre_bis">Exercice : '; echo $ligne['intitule']; echo '</span>';
-				echo '<span class="exo_date">'; echo '<b>'; echo date_format(date_create($ligne['date']), 'd/m/Y H:i'); echo '</b>'; echo '</span> <br />';
-				echo '<span class="exo_enonce">'; echo $ligne['enonce']; echo '</span>';
-				echo '<a href="exercice.php?action=effectuer&id='; echo $ligne['id'].'"><img class="go" src="img/go.png" title="Start exercice!"/></a> <br />';
-				echo '<b>Niveau de difficulté : '; echo $ligne['difficulte'].'</b>';
+				echo '<span class="exo_titre_bis">Exercice : '.$ligne['intitule'].'</span>';
+				echo '<span class="exo_date"> <b>'.date_format(date_create($ligne['date']), 'd/m/Y H:i').'</b> </span> <br />';
+				echo '<span class="exo_enonce">'.$ligne['enonce'].'</span>';
+				echo '<a href="exercice.php?action=effectuer&id='.$ligne['id'].'"><img class="go" src="img/go.png" title="Start exercice!"/></a> <br />';
+				echo '<b>Niveau de difficulté : '.$ligne['difficulte'].'</b>';
 				echo '</div>';
 			}
 		?>	

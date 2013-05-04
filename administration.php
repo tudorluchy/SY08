@@ -26,13 +26,13 @@
 		<?php
 			// action
 			if (isset($_REQUEST['action'])) {
-				// delete
+				// delete exercice
 				if ($_GET['action'] == 'delete') {
 					$res = DB::Sql('DELETE FROM sy08_exercice WHERE id = '.$_GET['id']);
-				// edit
+				// edit exercice
 				} else if ($_GET['action'] == 'edit') {
 					header('Location: edit.php?id='.$_GET['id']); 
-				// save
+				// save exercice
 				} else if ($_GET['action'] == 'save') {
 					if (!empty($json)) {	
 						$json_final = $json;
@@ -46,7 +46,7 @@
 			} 
 			// affichage exos
 			$res = DB::SqlToArray("SELECT * FROM sy08_exercice ORDER BY date DESC");
-			foreach($res as $ligne) {
+            foreach($res as $ligne) {
 				echo '<div class="exo">';
 				echo '<span class="exo_titre">'; 
 				echo 'Exercice : '; echo $ligne['intitule'].' - '.date_format(date_create($ligne['date']), 'd/m/Y H:i').'</span>'; 
@@ -54,6 +54,7 @@
 				echo '</div>';	
 			}
 		?>
+    </div>
 	<div id="corps_form_ajout">
 		<h3>Ajout d'un exercice</h3>
 		<form name="ajout_exercice" method="POST" action="?action=save" enctype="multipart/form-data" onsubmit="return verifForm(this)">

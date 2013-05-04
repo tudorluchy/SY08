@@ -5,10 +5,9 @@
     
     /**
      * JSON beautifier
-     * 
-     * @param string    The original JSON string
-     * @param   string  Return string
-     * @param string    Tab string
+     * @param type $json
+     * @param type $ret
+     * @param type $ind
      * @return string
      */
     function pretty_json($json, $ret= "\n", $ind="\t") {
@@ -66,7 +65,11 @@
         return $beauty_json;
     }   
     
-    // convertie le nom d'une prop rdp dans une prop json
+    /**
+     * Convertie le nom d'une prop rdp dans une prop json
+     * @param type $prop
+     * @return string
+     */
     function convert_prop_to_another($prop) {
         if ($prop == 'POSITION.X') {
             $prop = 'coordx';
@@ -82,6 +85,11 @@
         return $prop;
     }
     
+    /**
+     * Conversion RDP to JSON
+     * @param type $file
+     * @return type
+     */
     function convert($file) {
 		
 		// max
