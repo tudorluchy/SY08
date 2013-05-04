@@ -12,114 +12,19 @@
 	<body>	
 	<?php	
 		ini_set('display_errors', 1); 
-		$save = true;
-		$json = '';
+		require_once(dirname(__FILE__).'/base/DB.class.php');
+		DB::Init();
+		// post form
 		if (isset($_POST["intitule"])) {
-			// image exo
-			if (isset($_FILES["image_exo"]["name"]) && !empty($_FILES["image_exo"]["name"])) {
-				// Copie dans le repertoire du script avec un nom
-				// incluant l'heure a la seconde pres 
-				$repertoireDestination = "upload_images/";
-				$nomDestination = $_FILES["image_exo"]["name"];
-
-				$allowedExts = array("gif", "jpeg", "jpg", "png");
-				$extension = end(explode(".", $_FILES["image_exo"]["name"]));
-				echo "<ul class='upload_info'>";
-				if ((($_FILES["image_exo"]["type"] == "image/gif") 
-					|| ($_FILES["image_exo"]["type"] == "image/jpeg")
-					|| ($_FILES["image_exo"]["type"] == "image/jpg")
-					|| ($_FILES["image_exo"]["type"] == "image/pjpeg")
-					|| ($_FILES["image_exo"]["type"] == "image/x-png")
-					|| ($_FILES["image_exo"]["type"] == "image/png"))
-					&& ($_FILES["image_exo"]["size"] < 2097152)
-					&& in_array($extension, $allowedExts)) {
-						if ($_FILES["image_exo"]["error"] > 0) {
-							$save = false;
-							echo "<li>Return Code: " . $_FILES["image_exo"]["error"]. "</li>";
-						} else {
-							echo "<li>Upload: " . $_FILES["image_exo"]["name"] . "</li>";
-							echo "<li>Type: " . $_FILES["image_exo"]["type"] . "</li>";
-							echo "<li>Size: " . ($_FILES["image_exo"]["size"] / 1024) . " kB</li>";
-							echo "<li>Temp file: " . $_FILES["image_exo"]["tmp_name"] . "</li>";
-							
-							if (!is_dir($repertoireDestination)) {
-								if (!@mkdir($repertoireDestination, 0777)) {
-									$error = error_get_last();
-									// echo $error['message'];
-									$save = false;
-								}
-							}
-							if (file_exists($repertoireDestination.$nomDestination)){
-								echo "<li>".$nomDestination . " already exists.</li>";
-							} else {
-							    move_uploaded_file($_FILES["image_exo"]["tmp_name"], $repertoireDestination.$nomDestination);
-							    echo "<li>Stored in: " . $repertoireDestination.$nomDestination."</li>";
-							}
-						}
-					} else {
-						$save = false;
-						echo "<li>Invalid file</li>";
-					}
-					echo "</ul>";
-			}
-			
-			// fichier rdp
-			if (isset($_FILES["fichier_rdp"]["name"]) && !empty($_FILES["fichier_rdp"]["name"])) {
-				require_once(dirname(__FILE__).'/convert_rdp_to_json.php');
-				// Copie dans le repertoire du script avec un nom
-				// incluant l'heure a la seconde pres 
-				$repertoireDestination = "upload_fichiersRDP/";
-				$nomDestination = $_FILES["fichier_rdp"]["name"];
-
-				$allowedExts = array("rdp", "RDP");
-				$extension = end(explode(".", $_FILES["fichier_rdp"]["name"]));
-				echo "<ul class='upload_info'>";
-				if (($_FILES["fichier_rdp"]["size"] < 2097152)
-					&& in_array($extension, $allowedExts)) {
-						if ($_FILES["fichier_rdp"]["error"] > 0) {
-							$save = false;
-							echo "<li>Return Code: " . $_FILES["fichier_rdp"]["error"]. "</li>";
-						} else {
-							echo "<li>Upload: " . $_FILES["fichier_rdp"]["name"] . "</li>";
-							echo "<li>Type: " . $_FILES["fichier_rdp"]["type"] . "</li>";
-							echo "<li>Size: " . ($_FILES["fichier_rdp"]["size"] / 1024) . " kB</li>";
-							echo "<li>Temp file: " . $_FILES["fichier_rdp"]["tmp_name"] . "</li>";
-							
-							if (!is_dir($repertoireDestination)) {
-								if (!@mkdir($repertoireDestination, 0777)) {
-									$error = error_get_last();
-									// echo $error['message'];
-									$save = false;
-								}
-							}
-							if (file_exists($repertoireDestination.$nomDestination)){
-								echo "<li>".$nomDestination . " already exists.</li>";
-								$json = convert($repertoireDestination.$nomDestination);
-								unlink($repertoireDestination.$nomDestination);
-							} else {
-							    move_uploaded_file($_FILES["fichier_rdp"]["tmp_name"], $repertoireDestination.$nomDestination);
-							    echo "<li>Stored in: " . $repertoireDestination.$nomDestination."</li>";
-								$json = convert($repertoireDestination.$nomDestination);
-								unlink($repertoireDestination.$nomDestination);
-							}
-						}
-					} else {
-						$save = false;
-						echo "<li>Invalid file</li>";
-					}
-					echo "</ul>";
-			}
+			$json = '';
+			require_once(dirname(__FILE__).'/verif_files.php');
 		}
 	?>
 	<div id="corps_modif">
 		<h3>Modification des exercices</h3>
 		<b>Voici la liste des énoncés qui sont disponible actuellement</b>
 		<?php
-			ini_set('display_errors', 1);
-			require_once(dirname(__FILE__).'/base/DB.class.php');
-			DB::Init();
-			
-			// action GET
+			// action
 			if (isset($_REQUEST['action'])) {
 				// delete
 				if ($_GET['action'] == 'delete') {
@@ -128,8 +33,8 @@
 				} else if ($_GET['action'] == 'edit') {
 					header('Location: edit.php?id='.$_GET['id']); 
 				// save
-				} else if ($_GET['action'] == 'save' && $save == true) {
-					if (!empty($json)) {
+				} else if ($_GET['action'] == 'save') {
+					if (!empty($json)) {	
 						$json_final = $json;
 					} else {
 						$json_final = $_POST['json'];
@@ -153,8 +58,8 @@
 		<h3>Ajout d'un exercice</h3>
 		<form name="ajout_exercice" method="POST" action="?action=save" enctype="multipart/form-data" onsubmit="return verifForm(this)">
 			<fieldset class="fieldset_ajout_exercice">
-				<label>Intitule de l'énonce :</label><input type='text' name='intitule' title='Intitule' onblur="verifIntitule(this)" value="<?php if(!$save && isset($_POST['intitule'])){echo $_POST['intitule'];}?>"><br />
-				<label>L'énoncé :</label><textarea name='enonce' title='Enonce' rows="8" cols="100" onblur="verifEnonce(this)"><?php if(!$save && isset($_POST['enonce'])){echo $_POST['enonce'];} ?></textarea><br />
+				<label>Intitule de l'énonce :</label><input type='text' name='intitule' title='Intitule' onblur="verifIntitule(this)" value="<?php if(isset($_POST['intitule'])){echo $_POST['intitule'];}?>"><br />
+				<label>L'énoncé :</label><textarea name='enonce' title='Enonce' rows="8" cols="100" onblur="verifEnonce(this)"><?php if(isset($_POST['enonce'])){echo $_POST['enonce'];} ?></textarea><br />
 				<label>Importer une image</label>
 				<input type="hidden" name="MAX_FILE_SIZE" value="2097152">     
 				<input type="file" name="image_exo"> <br/>
