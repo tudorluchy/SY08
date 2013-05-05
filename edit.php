@@ -28,18 +28,14 @@
 				} else {
 					$json_final = $_POST['json'];
 				}
-				$req = "UPDATE sy08_exercice 
-				SET intitule = '".$_POST['intitule']."'
-				, enonce = '".$_POST['enonce']."' 
-				, image = '".$_FILES['image_exo']['name']."' 
-				, difficulte = '".$_POST['difficulte']."'
-				, json = '".$json_final."' 
-				WHERE id = ".$_GET['id'];
+				$req = "UPDATE sy08_exercice SET intitule = '".$_POST['intitule']."', enonce = '".$_POST['enonce']."' , image = '".$_FILES['image_exo']['name']."' , difficulte = '".$_POST['difficulte']."' , json = '".$json_final."' WHERE id = ".$_GET['id'];
 				DB::Sql($req);
-				$res = DB::SqlToArray('SELECT * FROM sy08_exercice WHERE id = '.$_GET['id']);
+                $req = 'SELECT * FROM sy08_exercice WHERE id = '.$_GET['id'];
+				$res = DB::SqlToArray($req);
 			// edit
 			} else if ($_GET['action'] == 'edit') { 
-				$res = DB::SqlToArray('SELECT * FROM sy08_exercice WHERE id = '.$_GET['id']);
+                $req = 'SELECT * FROM sy08_exercice WHERE id = '.$_GET['id'];
+				$res = DB::SqlToArray($req);
 				
 			}
 		} else {

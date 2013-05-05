@@ -6,10 +6,16 @@ define("DB_PASS","pass");
 define("BASE","sy08");
 
 class DB {
- 
+    
+    /**
+     *
+     * @var type 
+     */
 	public static $Base;
   
- 	//tente la connexion sur le SGBD, en utilisant des constantes définies
+    /**
+     * tente la connexion sur le SGBD, en utilisant des constantes définies 
+     */
 	public function Init()
 	{
 		self::$Base = mysql_connect(DB_HOST, DB_USER, DB_PASS);
@@ -21,6 +27,11 @@ class DB {
 		}
 	}
 
+    /**
+     * 
+     * @param type $requete
+     * @return boolean
+     */
 	public function Sql($requete)
 	{
 		if (!self::$Base) {
@@ -38,8 +49,12 @@ class DB {
 		}
 	}
 	
-	//retourne directement les enregistrements de la requete sous la forme d'un tableau asociatif
-	public function SqlToArray($requete)
+	/**
+     * retourne directement les enregistrements de la requete sous la forme d'un tableau asociatif 
+     * @param type $requete
+     * @return type
+     */
+    public function SqlToArray($requete)
 	{
 		$res = self::Sql($requete);
 		$tab = array();
@@ -51,6 +66,11 @@ class DB {
 		return $tab;	
 	}
 
+    /**
+     * 
+     * @param type $data
+     * @return boolean
+     */
 	public function ProtectData($data)
 	{
 		if (!self::$Base)

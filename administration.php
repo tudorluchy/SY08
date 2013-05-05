@@ -17,6 +17,7 @@
 		// post form
 		if (isset($_POST["intitule"])) {
 			$json = '';
+            $save = true;
 			require_once(dirname(__FILE__).'/verif_files.php');
 		}
 	?>
@@ -28,24 +29,28 @@
 			if (isset($_REQUEST['action'])) {
 				// delete exercice
 				if ($_GET['action'] == 'delete') {
-					$res = DB::Sql('DELETE FROM sy08_exercice WHERE id = '.$_GET['id']);
+					$req = 'DELETE FROM sy08_exercice WHERE id = '.$_GET['id'];
+                    $res = DB::Sql($req);
 				// edit exercice
 				} else if ($_GET['action'] == 'edit') {
 					header('Location: edit.php?id='.$_GET['id']); 
 				// save exercice
 				} else if ($_GET['action'] == 'save') {
-					if (!empty($json)) {	
-						$json_final = $json;
-					} else {
-						$json_final = $_POST['json'];
-					}
-					$res = DB::Sql("INSERT INTO sy08_exercice (intitule, enonce, image, difficulte, json, date) 
-					VALUES ('".$_POST['intitule']."', '".$_POST['enonce']."', '".$_FILES['image_exo']['name']."', '".$_POST['difficulte']."', 
-					'".$json_final."', NOW())");
-				}
+                    if ($save) {
+                        if (!empty($json)) {	
+                            $json_final = $json;
+                        } else {
+                            $json_final = $_POST['json'];
+                        }
+                        $req = "INSERT INTO sy08_exercice (intitule, enonce, image, difficulte, json, date) 
+                        VALUES ('".$_POST['intitule']."', '".$_POST['enonce']."', '".$_FILES['image_exo']['name']."', '".$_POST['difficulte']."', '".$json_final."', NOW())";
+                        $res = DB::Sql($req);
+                    }
+                }
 			} 
 			// affichage exos
-			$res = DB::SqlToArray("SELECT * FROM sy08_exercice ORDER BY date DESC");
+            $req = "SELECT * FROM sy08_exercice ORDER BY date DESC";
+			$res = DB::SqlToArray($req);
             foreach($res as $ligne) {
 				echo '<div class="exo">';
 				echo '<span class="exo_titre">'; 
@@ -70,8 +75,8 @@
 					<option value="+++">+++</option>
 					<option selected value="++">++</option>
 					<option value="+">+</option>
-				</select><br/ ><br/ >
-				<b>Resolution du graphe :</b><br/ >
+				</select><br/><br/>
+				<b>Resolution du graphe :</b><br/>
 				<div id='button_group'>
 					<input type='button' value='Ajout Place' name='add_place' onClick='activateAddPlace()' />
 					<input type='button' value='Ajout Transition' name='add_transition' onClick='activateAddTransition()' />

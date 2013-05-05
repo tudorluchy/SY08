@@ -25,7 +25,8 @@
 			ini_set('display_errors', 1);
 			require_once(dirname(__FILE__).'/base/DB.class.php');
 			DB::Init();
-			$res = DB::SqlToArray("SELECT * FROM sy08_exercice ORDER BY date DESC");
+            $req = "SELECT * FROM sy08_exercice ORDER BY date DESC";
+			$res = DB::SqlToArray($req);
             
             foreach($res as $ligne) {
 				echo '<div class="exo_selection">';

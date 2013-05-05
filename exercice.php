@@ -17,7 +17,8 @@
         DB::Init();
         // effectuer exercice
         if ($_GET['action'] == 'effectuer') {
-            $res = DB::SqlToArray('SELECT * FROM sy08_exercice WHERE id = '.$_GET['id']);
+            $req = 'SELECT * FROM sy08_exercice WHERE id = '.$_GET['id'];
+            $res = DB::SqlToArray($req);
         }
 	?>		
 	<div id='corps_form_ajout'>
