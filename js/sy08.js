@@ -144,13 +144,14 @@ function refreshMatrix(statut) {
 			html += "<td class=\"matrice_results_1\">T"+(i+1)+"</td>";
 		}
 		html+= "</tr>";
-
-		for(var i=0;i<res.length;i++) {
-			html += "<tr><td class=\"matrice_results_1\">P"+(i+1)+"</td>";
-			for(var j=0;j<res[i].length;j++) {
-				html += "<td class=\"matrice_results_2\">"+res[i][j]+"</td>";
+		if(res[0].length > 0) {
+			for(var i=0;i<res.length;i++) {
+				html += "<tr><td class=\"matrice_results_1\">P"+(i+1)+"</td>";
+				for(var j=0;j<res[i].length;j++) {
+					html += "<td class=\"matrice_results_2\">"+res[i][j]+"</td>";
+				}
+				html += "</tr>";
 			}
-			html += "</tr>";
 		}
 		html += "</table>";
 		if(document.getElementById(which) != null)
@@ -565,7 +566,8 @@ function generateEveryMatrixInput() {
 		generateMatrixInput(i);
 	}
 	//Calcul de l'invariant et determination du nombre de Pt
-	generateInvariantInput(3/*nbPt*/);
+	generateInvariantInput(0);
+	generateInvariantInput(1);
 }
 	
 function generateMatrixInput(statut) {
@@ -598,26 +600,43 @@ function generateMatrixInput(statut) {
 		document.getElementById(which).innerHTML = html;
 }
 
-function generateInvariantInput(nbPt) {
+function generateInvariantInput(statut) {
+	var which="";
+	var res = undefined;
 
-	var html = "<table id=\"invariant\"><tr><td></td>";
-	var nbPlaces = model.places.length;
-
-	for(var i=0;i<nbPlaces;i++) {
-		html += "<td>P"+(i+1)+"</td>";
+	if(statut == 0) {
+		which = "matrice_Tinvariants";
+		res = Tinvariants();
 	}
-	html+= "</tr>";
-	for(var i=0;i<nbPt;i++) {
-		html += "<tr><td>Pt"+(i+1)+"</td>";
-		for(var j=0;j<nbPlaces;j++) {
-			html += "<td><input type=\"text\" style=\"width:30px;\" value=\"0\" id=\"invariant_"+i+"_"+j+"\"/></td>";
+	else if(statut == 1) {
+		which = "matrice_Pinvariants";
+		res = Pinvariants();
+	}
+
+	var html="";
+
+	if(res != undefined) {
+		html = "<table id=\""+which+"\"><tr><td></td>";
+		var nbLig = res.length;
+		if(nbLig > 0) {
+			var nbCol = res[0].length;
+
+			for(var i=0;i<nbCol;i++) {
+				html += "<td>T"+(i+1)+"</td>";
+			}
+			html+= "</tr>";
+			for(var i=0;i<nbLig;i++) {
+				html += "<tr><td>P"+(i+1)+"</td>";
+				for(var j=0;j<nbCol;j++) {
+					html += "<td><input type=\"text\" style=\"width:30px;\" value=\"0\" id=\""+which+"_"+i+"_"+j+"\"/></td>";
+				}
+				html += "</tr>";
+			}
+			html += "</table>";
 		}
-		html += "</tr>";
 	}
-	html += "</table>";
-	
-	if(document.getElementById("invariant") != null)
-		document.getElementById("invariant").innerHTML = html;
+	if(document.getElementById(which) != null)
+		document.getElementById(which).innerHTML = html;
 }
 
 function controlerMatrice(status) {
@@ -635,6 +654,7 @@ function controlerMatrice(status) {
 		which = "matrice_wmoins";
 		res = omegaMoins();
 	}
+	
 	var nbPlaces = model.places.length;
 	var nbTransitions = model.transitions.length;
 
