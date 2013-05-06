@@ -657,41 +657,103 @@ function controlerMatrice(status) {
 	
 	var nbPlaces = model.places.length;
 	var nbTransitions = model.transitions.length;
-
-	var identique = true;
-	var i=0;
-	while(i<nbPlaces && identique) {
-		var j =0;
-		while(j<nbTransitions && identique) {
-			if(document.getElementById(which+"_"+i+"_"+j) != null) {
-				var current = document.getElementById(which+"_"+i+"_"+j).value;
-				if(current != res[i][j])
-					identique = false;
+	if(nbPlaces >0 && nbTransitions > 0) {
+		var identique = true;
+		var i=0;
+		while(i<nbPlaces && identique) {
+			var j =0;
+			while(j<nbTransitions && identique) {
+				if(document.getElementById(which+"_"+i+"_"+j) != null) {
+					var current = document.getElementById(which+"_"+i+"_"+j).value;
+					if(current != res[i][j])
+						identique = false;
+				}
+				j++;
 			}
-			j++;
+			i++;
 		}
-		i++;
+		if(identique == false) {
+			// en fonction de which, écrire le message d'erreur ou erreur correspondante + modifier css
+			if(document.getElementById(which+"_astuces") != null) {
+				var html = 'incorrect';
+				document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
+				document.getElementById(which+"_astuces").innerHTML = html;
+			}
+		}
+		else if(identique == true) {
+			// Modification css pour etre sur que le background est vert
+			if(document.getElementById(which+"_astuces") != null) {
+				var html = 'correct';
+				document.getElementById(which+"_astuces").style.backgroundColor = "#119911";
+				document.getElementById(which+"_astuces").innerHTML = html;
+			}
+		}
 	}
-	if(identique == false) {
-		// en fonction de which, écrire le message d'erreur ou erreur correspondante + modifier css
+	else {
 		if(document.getElementById(which+"_astuces") != null) {
-			var html = 'incorrect';
+			var html = 'Aucune matrice';
 			document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
-			document.getElementById(which+"_astuces").innerHTML = html;
-		}
-	}
-	else if(identique == true) {
-		// Modification css pour etre sur que le background est vert
-		if(document.getElementById(which+"_astuces") != null) {
-			var html = 'correct';
-			document.getElementById(which+"_astuces").style.backgroundColor = "#119911";
 			document.getElementById(which+"_astuces").innerHTML = html;
 		}
 	}
 }
 
-function controlerInvariant() {
-	
+function controlerInvariant(status) {
+	var which = "";
+	var res;
+	if(status == 0) {
+		which = "matrice_Tinvariants";
+		res = Tinvariants();
+	}
+	else if(status == 1) {
+		which = "matrice_Pinvariants";
+		res = Pinvariants();
+	}
+
+	if(res != undefined) {
+		var nbLig = res.length;
+		if(nbLig > 0) {
+			var nbCol = res[0].length;
+
+			var identique = true;
+			var i=0;
+			while(i<nbLig && identique) {
+				var j =0;
+				while(j<nbCol && identique) {
+					if(document.getElementById(which+"_"+i+"_"+j) != null) {
+						var current = document.getElementById(which+"_"+i+"_"+j).value;
+						if(current != res[i][j])
+							identique = false;
+					}
+					j++;
+				}
+				i++;
+			}
+			if(identique == false) {
+				// en fonction de which, écrire le message d'erreur ou erreur correspondante + modifier css
+				if(document.getElementById(which+"_astuces") != null) {
+					var html = 'Incorrect';
+					document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
+					document.getElementById(which+"_astuces").innerHTML = html;
+				}
+			}
+			else if(identique == true) {
+				// Modification css pour etre sur que le background est vert
+				if(document.getElementById(which+"_astuces") != null) {
+					var html = 'Correct';
+					document.getElementById(which+"_astuces").style.backgroundColor = "#119911";
+					document.getElementById(which+"_astuces").innerHTML = html;
+				}
+			}
+		}
+		else {
+			if(document.getElementById(which+"_astuces") != null) {
+				var html = 'Aucune matrice';
+				document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
+				document.getElementById(which+"_astuces").innerHTML = html;
+			}
+		}
+	}
 }
 
 function printMatricesInvariants() {
