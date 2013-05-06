@@ -14,9 +14,56 @@ var kindOfAdd = -1;
 var place2transTEMP = -1;
 var source = -1;
 
+var idSelected = -1;
+var kindOfSelected = -1; //1 pour places, 2 pour transitions et 3 pour arcs
+
+
+function createPlace(x,y,m)
+{
+	var res = {
+	coordx: x,
+	coordy: y,
+	properties : {
+			marking : m
+			}
+	
+	}
+	model.places.push(res);
+
+}
+
+function createTransition(x,y)
+{
+	var res = {
+	coordx: x,
+	coordy: y
+	}
+	model.transitions.push(res);
+
+}
+
+function createArc(_place2trans,_source,_dest,_value)
+{
+
+	var res = {
+	place2trans: _place2trans,
+	source: _source,
+	dest : _dest,
+	properties : {
+			value : _value
+			}
+	
+	}
+	model.arcs.push(res);
+	
+
+}
+
+ 
 var model = 
 {
-	places: [],
+	places: [
+	],
 	transitions: [],
 	arcs: []
 }
@@ -244,8 +291,16 @@ function drawPlace(layer, i)
 		model.places[cercle.getName()].coordy = cercle.getAbsolutePosition().y; 
 		refreshLines();
 	});
+	
 
 
+	group.on('dblclick', function() {
+		idSelected = i;
+		kindOfSelected=1;
+		displayProperties(model.places[i].properties,true); 
+	
+	},false);
+	
 	group.on('click', function() {
 		if(kindOfAdd == 2) {
 			// On défini le cercle comme l'élement premier de l'arc
@@ -255,7 +310,8 @@ function drawPlace(layer, i)
 			}
 			else if(place2transTEMP == 0){
 				// on insère dans le JSON
-				model.arcs.push({"place2trans": 0,"source": source, "dest": i});
+				createArc(0,source,i,1);
+
 				refreshLines();
 				refreshEveryMatrixResults();
 
@@ -264,7 +320,8 @@ function drawPlace(layer, i)
 			}
 		}
 		else {
-			// Sinon on affiche les caractéristiques de l'éléments (à voir si on le fait ou pas)
+		// Sinon on affiche les caractéristiques de l'éléments (à voir si on le fait ou pas)
+			
 		}
 
 		}, false
@@ -313,7 +370,12 @@ function drawTransition(layer, i)
 
 	group.add(label);
 
-
+	group.on('dblclick', function() {
+		idSelected = i;
+		kindOfSelected=2;
+		displayProperties(model.transitions[i].properties,true); 
+	
+	},false);
 
 	group.on('dragmove',function() { // Si trop de lag en rafraichissant tout le temps, possible de clear au début du déplacement et redessiner à la fin (mais moins beau ^^)
 		layer3.clear();
@@ -332,7 +394,7 @@ function drawTransition(layer, i)
 			}
 			else if(place2transTEMP == 1){
 				// on insère dans le JSON
-				model.arcs.push({"place2trans": 1,"source": source, "dest": i});
+				createArc(1,source,i,1);
 				refreshLines();
 				refreshEveryMatrixResults();
 				place2transTEMP = -1;
@@ -377,10 +439,17 @@ function drawLine(layer, i)
 	var redLine = new Kinetic.Line({
 		points: pts,
 		stroke: 'black',
-		strokeWidth: 2,
+		strokeWidth: 3,
 		lineCap: 'round',
 		lineJoin: 'round'
 	});
+	
+	redLine.on('dblclick', function() {
+		idSelected = i;
+		kindOfSelected=3;
+		displayProperties(model.arcs[i].properties,true); 
+	
+	},false);
 
 	layer.add(redLine);
 
@@ -434,17 +503,49 @@ function refreshLines()
 
 }
 
-$(window).load(function(){
-	refreshOmega();
+
+function redrawAll()
+{
+	layer1.clear();
+	layer1.removeChildren();
+	layer2.clear();
+	layer2.removeChildren();
+	layer3.clear();
+	layer3.removeChildren();
+	redrawPlaces();
+	redrawTransitions();
+	refreshLines();
+	
+	stage.clear();
+	stage.add(backgound);
+	stage.add(layer1); // les places
+	stage.add(layer2); // les transitions
+	stage.add(layer3); // les arcs
+}
+
+function redrawPlaces()
+{
 	for(var i=0;i<model.places.length;i++)
 	{
+		
 		drawPlace(layer1,i);
 	}
 
+}
+
+function redrawTransitions()
+{
 	for(var i=0;i<model.transitions.length;i++)
 	{
 		drawTransition(layer2,i);
 	}
+}
+
+$(window).load(function(){
+	refreshOmega();
+	redrawPlaces()
+
+	redrawTransitions()
 	refreshLines();
 
 	posx=$('#container').findPos().x;
@@ -461,10 +562,10 @@ $(window).load(function(){
 
 	
 	//Calcul des P invariants :
-	console.log(Pinvariants());
+	//console.log(Pinvariants());
 	
 	//Calcul des T invariants :
-	console.log(Tinvariants());
+	//console.log(Tinvariants());
 	
 	//console.log(omegaMoins());
 	//console.log(omegaPlus());
@@ -474,7 +575,95 @@ $(window).load(function(){
 	stage.add(layer2); // les transitions
 	stage.add(layer3); // les arcs
 
+	$( "#dialog-modal" ).dialog({
+	height: 200,
+	width:500,
+	modal: true,
+	autoOpen: false
+	});
+	
+	$( "#dialog-modal" ).dialog({
+	close: function( event, ui ) {
+	$( "#dialog-modal" ).html('');
+	}
+	});
+	
+	
+
 })
+
+
+
+function displayProperties(Json,editable) 
+{
+$( "#dialog-modal" ).html('');
+	for(key in Json)
+	{
+		$( "#dialog-modal" ).append('<span class="key">'+key+' : </span>');
+		if(editable)
+			$( "#dialog-modal" ).append('<input type="text" class="value_edit" id="value_'+key+'"  value="'+Json[key]+'"/></br>');
+		else
+			$( "#dialog-modal" ).append(Json[key]+'</br>');
+	}
+	if(editable)
+		$( "#dialog-modal" ).append('<input type="button" onclick="editProperty()" value="Valider"/>');
+		
+	$( "#dialog-modal" ).append('<input type="button" onclick="eraseElement()" value="Supprimer"/>');
+$( "#dialog-modal" ).dialog( "open" );
+
+
+}
+
+
+function editProperty()
+{
+	if($( "#dialog-modal" ).dialog( "isOpen" ))
+	{
+		$(".value_edit").each(function(){
+		if(kindOfSelected==1)
+			model.places[idSelected].properties[$(this).attr('id').replace("value_","")]=$(this).val();
+		if(kindOfSelected==2)
+			model.transitions[idSelected].properties[$(this).attr('id').replace("value_","")]=$(this).val();
+		if(kindOfSelected==3)
+			model.arcs[idSelected].properties[$(this).attr('id').replace("value_","")]=$(this).val();
+		});
+	}
+	$( "#dialog-modal" ).dialog("close" );
+	
+	//console.log(model.places);
+}
+
+
+function eraseElement()
+{
+	if($( "#dialog-modal" ).dialog( "isOpen" ))
+	{
+		if(kindOfSelected==1)
+		{
+			model.places.splice(idSelected,1);
+			for(var i=0;i<model.arcs.length;i++)
+			{
+				if((model.arcs[i].place2trans==1 && model.arcs[i].source==idSelected) || (model.arcs[i].place2trans!=1 && model.arcs[i].dest==idSelected))
+					model.arcs.splice(i,1);
+			}
+		}
+		else if(kindOfSelected==2)
+		{
+			model.transitions.splice(idSelected,1);
+			for(var i=0;i<model.arcs.length;i++)
+			{
+				if((model.arcs[i].place2trans!=1 && model.arcs[i].source==idSelected) || (model.arcs[i].place2trans==1 && model.arcs[i].dest==idSelected))
+					model.arcs.splice(i,1);
+			}
+			
+		}
+		else if(kindOfSelected==3)
+			model.arcs.splice(idSelected,1);
+	}
+	$( "#dialog-modal" ).dialog("close" );
+	console.log(model);
+	redrawAll();
+}
 
 
 function Pinvariants()
@@ -514,27 +703,23 @@ function mouseEventCallBack() {
 	document.getElementById('container').addEventListener ('click', 
 			function(event) {
 				if(kindOfAdd == 0){
-					model.places.push({"coordx": event.pageX-posx,"coordy": event.pageY-posy})
-					for(var i=0;i<model.places.length;i++)
-					{
-						drawPlace(layer1,i);
-					}
+					createPlace(event.pageX-posx,event.pageY-posy,0);
+					redrawPlaces();
 				}
 				else if(kindOfAdd == 1) {
-					model.transitions.push({"coordx": event.pageX-posx,"coordy": event.pageY-posy})
-					for(var i=0;i<model.transitions.length;i++)
-					{
-						drawTransition(layer2,i);
-					}
+					createTransition(event.pageX-posx,event.pageY-posy);
+					redrawTransitions();
 				}
 				refreshLines();
 
 				refreshEveryMatrixResults();
+
 				printMatricesInvariants();
-	console.log(Pinvariants());
+				console.log(Pinvariants());
+
 	
 	//Calcul des T invariants :
-	console.log(Tinvariants());
+	//console.log(Tinvariants());
 
 				generateEveryMatrixInput();
 				

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>jQuery UI Dialog - Basic modal</title>
+<link href="jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.css" rel="stylesheet">
+	<script src="jquery-ui/js/jquery-1.9.1.js"></script>
+	<script src="jquery-ui/js/jquery-ui-1.10.3.custom.js"></script>
+	<script>
+$(function() {
+$( "#dialog-modal" ).dialog({
+height: 140,
+width:300,
+modal: true,
+autoOpen: false
+});
+Json={
+toto : 'trers',
+ma : 'tomate'
+
+
+
+}
+displayProperties(Json,false);
+});
+
+function displayProperties(Json,editable)
+{
+$( "#dialog-modal" ).html('');
+	for(key in Json)
+	{
+		$( "#dialog-modal" ).append('<span class="key">'+key+' : </span>');
+		if(editable==true)
+			$( "#dialog-modal" ).append('<input type="text" class="value_edit" value="'+Json[key]+'"/></br>');
+		else
+			$( "#dialog-modal" ).append(Json[key]+'</br>');
+	}
+	if(editable)
+		$( "#dialog-modal" ).append('<input type="button" onclick="editProperty()"');
+$( "#dialog-modal" ).dialog( "open" );
+
+
+}
+</script>
+</head>
+<body>
+<div id="dialog-modal" title="Properties" style="display:none;">
+
+</div>
+<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
+</body>
+</html>
