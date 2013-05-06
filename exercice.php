@@ -56,11 +56,17 @@
 				<td><div class="control_button_div"><input type="button" class="control_button" value="controler" onClick="controlerMatrice(0)" /></div></td>
 				<td><div id="matrice_w_astuces" class="astuces"></div></td>
 			</tr>
-			<tr><td><h3>Calculer l'invariant</h3></td></tr>
+			<tr><td><h3>Calculer les T invariants </h3></td></tr>
 			<tr>
-				<td><div id="matrice_invariant" class="matrices_input"></div></td>
-				<td><div class="control_button_div"><input type="button" class="control_button" value="controler" onClick="" /></div></td>
-				<td><div id="matrice_invariant_astuces" class="astuces"></div></td>
+				<td><div id="matrice_Tinvariants" class="matrices_input"></div></td>
+				<td><div class="control_button_div"><input type="button" class="control_button" value="controler" onClick="controlerInvariant(0)" /></div></td>
+				<td><div id="matrice_Tinvariants_astuces" class="astuces"></div></td>
+			</tr>
+			<tr><td><h3>Calculer les P invariants</h3></td></tr>
+			<tr>
+				<td><div id="matrice_Pinvariants" class="matrices_input"></div></td>
+				<td><div class="control_button_div"><input type="button" class="control_button" value="controler" onClick="controlerInvariant(1)" /></div></td>
+				<td><div id="matrice_Pinvariants_astuces" class="astuces"></div></td>
 			</tr>
 		</table>
 	</div>

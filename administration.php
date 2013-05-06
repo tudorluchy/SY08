@@ -102,6 +102,14 @@
 					<h3>Resultat W-</h3>
 						<div id="matrice_wmoins_results"></div>
 					</div>
+					<div id="results_4">
+					<h3>P invariants</h3>
+						<div id="matrice_Pinvariants_results"></div>
+					</div>
+					<div id="results_4">
+					<h3>T invariants</h3>
+						<div id="matrice_Tinvariants_results"></div>
+					</div>
 				</div>
 				<input class="valider" type='submit' value='Valider'>
 			</fieldset>	

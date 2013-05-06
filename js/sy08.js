@@ -465,7 +465,6 @@ $(window).load(function(){
 	//Calcul des T invariants :
 	console.log(Tinvariants());
 	
-	
 	//console.log(omegaMoins());
 	//console.log(omegaPlus());
 
@@ -530,6 +529,7 @@ function mouseEventCallBack() {
 				refreshLines();
 
 				refreshEveryMatrixResults();
+				printMatricesInvariants();
 	console.log(Pinvariants());
 	
 	//Calcul des T invariants :
@@ -672,4 +672,53 @@ function controlerMatrice(status) {
 
 function controlerInvariant() {
 	
+}
+
+function printMatricesInvariants() {
+	var res = Pinvariants();
+	var res2 = Tinvariants();
+
+	if(res != undefined) {
+		if(res.length > 0) {
+			var html = "<table class=\"matrice_Pinvariants_results\"><tr><td></td>";
+
+			for(var i=0;i<res[0].length;i++) {
+				html += "<td class=\"matrice_results_1\">P"+(i+1)+"</td>";
+			}
+			html+= "</tr>";
+
+			for(var i=0;i<res.length;i++) {
+				html += "<tr><td class=\"matrice_results_1\">Pt"+(i+1)+"</td>";
+				for(var j=0;j<res[i].length;j++) {
+					html += "<td class=\"matrice_results_2\">"+res[i][j]+"</td>";
+				}
+				html += "</tr>";
+			}
+			html += "</table>";
+			if(document.getElementById("matrice_Pinvariants_results") != null)
+				document.getElementById("matrice_Pinvariants_results").innerHTML = html;
+		}
+	}
+
+	if(res2 != undefined) {
+		if(res2.length > 0) {
+			var html = "<table class=\"matrice_Tinvariants_results_1\"><tr><td></td>";
+
+			for(var i=0;i<res2[0].length;i++) {
+				html += "<td class=\"matrice_results_1\">T"+(i+1)+"</td>";
+			}
+			html+= "</tr>";
+
+			for(var i=0;i<res2.length;i++) {
+				html += "<tr><td class=\"matrice_results_1\">Pt"+(i+1)+"</td>";
+				for(var j=0;j<res2[i].length;j++) {
+					html += "<td class=\"matrice_results_2\">"+res2[i][j]+"</td>";
+				}
+				html += "</tr>";
+			}
+			html += "</table>";
+			if(document.getElementById("matrice_Tinvariants_results") != null)
+				document.getElementById("matrice_Tinvariants_results").innerHTML = html;
+		}
+	}
 }
