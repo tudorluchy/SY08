@@ -2,12 +2,14 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<link href="js/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.css" rel="stylesheet">
 		<script type="text/javascript" src="js/kinetic.js"></script>
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="js/matrix.js"></script>
 		<script type="text/javascript" src="js/sy08.js"></script>
 		<script type="text/javascript" src="js/verification_form.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<link href="js/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.css" rel="stylesheet">
 	</head>
 	<body>	
 	<?php	
