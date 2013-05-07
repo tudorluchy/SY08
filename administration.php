@@ -24,8 +24,7 @@
 		}
 	?>
 	<div id="corps_modif">
-		<h3>Modification des exercices</h3>
-		<b>Voici la liste des énoncés qui sont disponible actuellement</b>
+		<h2>Modification des exercices <a class='lien_droite' href="selection_exercices.php" title="Aller à la liste des exercices">Liste des exercices</a></h2>
 		<?php
 			// action
 			if (isset($_REQUEST['action'])) {
@@ -47,23 +46,30 @@
                         $req = "INSERT INTO sy08_exercice (intitule, enonce, image, difficulte, json, date) 
                         VALUES ('".$_POST['intitule']."', '".$_POST['enonce']."', '".$_FILES['image_exo']['name']."', '".$_POST['difficulte']."', '".$json_final."', NOW())";
                         $res = DB::Sql($req);
+                        if ($res) {
+                            echo "<ul><li>Exercice bien ajouté!</li></ul>";
+                        }
                     }
                 }
 			} 
 			// affichage exos
             $req = "SELECT * FROM sy08_exercice ORDER BY date DESC";
 			$res = DB::SqlToArray($req);
+            echo "<table class='table_exo'>";
+            echo "<thead><tr><th>Exercice</th><th>Date d'ajout</th><th>Edition</th><th>Suppresion</th></tr></thead>";
             foreach($res as $ligne) {
-				echo '<div class="exo">';
-				echo '<span class="exo_titre">'; 
-				echo 'Exercice : '; echo $ligne['intitule'].' - '.date_format(date_create($ligne['date']), 'd/m/Y H:i').'</span>'; 
-				echo '<a href="edit.php?action=edit&id='.$ligne['id'].'"><img src="img/edit.png" title="Modifier cet exercice"/></a><a href="?action=delete&id='.$ligne['id'].'"><img src="img/delete.png" title="Supprimer cet exercice"/></a>';
-				echo '</div>';	
+				echo "<tr>";
+                echo "<td>".$ligne['intitule']."</td>";
+				echo "<td>".date_format(date_create($ligne['date']), 'd/m/Y H:i')."</td>"; 
+				echo "<td><a href='edit.php?action=edit&id=".$ligne['id']."'><img src='img/edit.png' title='Modifier cet exercice'/></a></td>";
+                echo "<td><a href='?action=delete&id=".$ligne['id']."'><img src='img/delete.png' title='Supprimer cet exercice'/></a></td>";
+                echo "</tr>";
 			}
+            echo "</table>";
 		?>
     </div>
 	<div id="corps_form_ajout">
-		<h3>Ajout d'un exercice</h3>
+		<h2>Ajout d'un exercice</h2>
 		<form name="ajout_exercice" method="POST" action="?action=save" enctype="multipart/form-data" onsubmit="return verifForm(this)">
 			<fieldset class="fieldset_ajout_exercice">
 				<label>Intitule de l'énonce :</label><input type='text' name='intitule' title='Intitule' onblur="verifIntitule(this)" value="<?php if(isset($_POST['intitule'])){echo $_POST['intitule'];}?>"><br />

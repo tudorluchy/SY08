@@ -3,11 +3,10 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<script type="text/javascript" src="js/jquery.js"></script>
-		<script src="js/jquery-ui/js/jquery-ui-1.10.3.custom.js"></script>
+		<script type="text/javascript" src="js/jquery-ui/js/jquery-ui-1.10.3.custom.js"></script>
 		<script type="text/javascript" src="js/kinetic.js"></script>
 		<script type="text/javascript" src="js/matrix.js"></script>
 		<script type="text/javascript" src="js/sy08.js"></script>
-		<script type="text/javascript" src="js/JSON-js-master/json2.js"></script>
 		<script type="text/javascript" src="js/verification_form.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<link href="js/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.css" rel="stylesheet">
@@ -22,14 +21,15 @@
             $req = 'SELECT * FROM sy08_exercice WHERE id = '.$_GET['id'];
             $res = DB::SqlToArray($req);
         }
+        // date : <span class="exo_date">'.date_format(date_create($res[0]['date']), 'd/m/Y H:i').'</span>
 	?>		
 	<div id='corps_form_ajout'>
-		<h3>Exercice : <?php echo $res[0]['intitule']; echo '<span class="exo_date">'.date_format(date_create($res[0]['date']), 'd/m/Y H:i').'</span>'; ?></h3>
-		<?php echo $res[0]['enonce']; ?> <br /><br />
-		<?php if (!empty($res[0]['image'])) { ?>
-			<img title='' src='upload_images/<?php echo $res[0]['image']; ?>'/><br />
+		<h2>Exercice : <?php echo $res[0]['intitule'].'<a class="lien_droite" href="selection_exercices.php" title="Revenir à la liste des exercices">Liste des exercices</a>'; ?></h2>
+        <?php echo $res[0]['enonce']; ?> <br /><br />
+		<?php if (!empty($res[0]['image']) && file_exists('upload_images/'.$res[0]['image'])) { ?>
+			<img title='Image exercice' src='upload_images/<?php echo $res[0]['image']; ?>'/><br />
 		<?php } ?>
-		<b>Resolution du graphe :</b><br/ >
+		<b>Resolution du graphe :</b><br />
 		<div id='button_group'>
 			<input type='button' value='Ajout Place' name='add_place' onClick='activateAddPlace()' />
 			<input type='button' value='Ajout Transition' name='add_transition' onClick='activateAddTransition()' />

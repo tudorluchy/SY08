@@ -20,7 +20,7 @@
 	<div id="corps_selection">
 		<h1 id="titre_exos">Exercices</h1>
 		Sur cette page vous ai présenté un ensemble d'exercices.
-		<h3>Les réseaux de Pétri</h3>
+		<h2>Les réseaux de Pétri <a class='lien_droite' href="administration.php" title="Aller à l'administration">Administration</a></h2>
 		<?php
 			ini_set('display_errors', 1);
 			require_once(dirname(__FILE__).'/base/DB.class.php');

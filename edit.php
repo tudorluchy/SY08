@@ -48,12 +48,12 @@
 		var model = <?php echo $res[0]['json']; ?>;
 	</script>
 	<div id='corps_form_ajout'>
-		<h3>Modification de l' exercice : <?php echo $res[0]['intitule']; ?></h3>
+		<h2>Modification de l'exercice : <?php echo $res[0]['intitule'].'<a class="lien_droite" href="administration.php" title="Revenir à l\'administration">Administration</a>'; ?></h3>
 		<form name="ajout_exercice" method="POST" action="?action=save&id=<?php echo $_GET['id']; ?>"enctype="multipart/form-data" onsubmit="return verifForm(this)">
 			<fieldset class="fieldset_ajout_exercice">
 				<label>Intitule de l'énonce :</label><input type='text' name='intitule' title='Intitule' onblur="verifIntitule(this)" value="<?php echo $res[0]['intitule']; ?>"/><br />
 				<label>L'énoncé :</label><textarea name='enonce' title='Enonce' rows="8" cols="100" onblur="verifEnonce(this)"><?php echo $res[0]['enonce']; ?></textarea><br />
-				<?php if (!empty($res[0]['image'])) { ?>
+                <?php if (!empty($res[0]['image']) && file_exists('upload_images/'.$res[0]['image'])) { ?>
 					<label>Image :</label><img title='' src='upload_images/<?php echo $res[0]['image']; ?>'/><br />
 				<?php } ?>
 				<label>Importer une image</label>
@@ -65,8 +65,8 @@
 					<option <?php if ($res[0]['difficulte'] == '+++') echo 'selected'; ?> value="+++">+++</option>
 					<option <?php if ($res[0]['difficulte'] == '++') echo 'selected'; ?> value="++">++</option>
 					<option <?php if ($res[0]['difficulte'] == '+') echo 'selected'; ?> value="+">+</option>
-				</select><br/ ><br/ >
-				<b>Resolution du graphe :</b><br/ >
+				</select><br /><br />
+				<b>Resolution du graphe :</b><br />
 				<div id='button_group'>
 					<input type='button' value='Ajout Place' name='add_place' onClick='activateAddPlace()' />
 					<input type='button' value='Ajout Transition' name='add_transition' onClick='activateAddTransition()' />
