@@ -1,0 +1,35 @@
+.page_navigation {
+	margin: 15px 0;
+}
+
+.page_navigation a {
+	font-size: 12px;
+	cursor: pointer;
+	margin: 0 5px;
+	color: #333;
+}
+
+.page_navigation a:hover {
+	background-color: #222;
+	color: #fff;
+}
+
+.page_navigation a.jp-previous { margin-right: 15px; }
+.page_navigation a.jp-next { margin-left: 15px; }
+
+.page_navigation a.jp-current, a.jp-current:hover { 
+	color: #FF4242;
+	font-weight: bold;
+}
+
+.page_navigation a.jp-disabled, a.jp-disabled:hover {
+	color: #bbb;
+}
+
+.page_navigation a.jp-current, a.jp-current:hover,
+.page_navigation a.jp-disabled, a.jp-disabled:hover {
+	cursor: default; 
+	background: none;
+}
+
+.page_navigation span { margin: 0 5px; }

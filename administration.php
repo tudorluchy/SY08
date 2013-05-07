@@ -8,8 +8,17 @@
 		<script type="text/javascript" src="js/sy08.js"></script>
 		<script type="text/javascript" src="js/matrix.js"></script>
 		<script type="text/javascript" src="js/verification_form.js"></script>
+        <script language="JavaScript" type="text/javascript" src="js/DataTables-1.9.4/media/js/jquery.dataTables.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<link href="js/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.css" rel="stylesheet">
+        <script language="JavaScript" type="text/javascript">  
+            $(document).ready(function() {
+                $('.table_exo').dataTable({
+                    "bJQueryUI": true,
+                    "bPaginate": true
+                });
+            } );
+        </script> 
 	</head>
 	<body>	
 	<?php	
@@ -57,16 +66,18 @@
 			$res = DB::SqlToArray($req);
             echo "<table class='table_exo'>";
             echo "<thead><tr><th>Exercice</th><th>Date d'ajout</th><th>Edition</th><th>Suppresion</th></tr></thead>";
+            echo "<tbody>";
             foreach($res as $ligne) {
-				echo "<tr>";
+                echo "<tr>";
                 echo "<td>".$ligne['intitule']."</td>";
 				echo "<td>".date_format(date_create($ligne['date']), 'd/m/Y H:i')."</td>"; 
 				echo "<td><a href='edit.php?action=edit&id=".$ligne['id']."'><img src='img/edit.png' title='Modifier cet exercice'/></a></td>";
                 echo "<td><a href='?action=delete&id=".$ligne['id']."'><img src='img/delete.png' title='Supprimer cet exercice'/></a></td>";
                 echo "</tr>";
-			}
+            }
+            echo "</tbody>";
             echo "</table>";
-		?>
+        ?>
     </div>
 	<div id="corps_form_ajout">
 		<h2>Ajout d'un exercice</h2>

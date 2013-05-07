@@ -4,18 +4,19 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="js/truncatable/jquery.truncatable.js"></script>
-        <script type="text/javascript" src="js/Pajinate-master/jquery.pajinate.js"></script>
+        <script type="text/javascript" src="js/jPages-master/js/jPages.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
         <script language="JavaScript" type="text/javascript">  
             $(document).ready(function(){  
-                 $('#page_container').pajinate({
-                    items_per_page : 5,
-                    nav_label_first : 'Premier ',
-                    nav_label_prev : 'Reculer ',
-                    nav_label_next : ' Avancer ',
-                    nav_label_last : 'Dernier ',
-                });  
-
+                $("div.page_navigation").jPages({
+                    containerID : "liste_exercices",
+                    perPage : 5,
+                    first       : "Premier",
+                    previous    : "Revenir",
+                    next        : "Avancer",
+                    last        : "Dernier",
+                    midRange : 10
+                });
             });  
         </script> 
 		<script language="JavaScript" type="text/javascript">
@@ -42,8 +43,7 @@
             $req = "SELECT * FROM sy08_exercice ORDER BY date DESC";
 			$res = DB::SqlToArray($req);
             
-            echo '<div id="page_container">';
-            echo '<div class="content">';
+            echo '<div id="liste_exercices">';
             foreach($res as $ligne) {
 				echo '<div class="exo_selection">';
                 echo '<span class="exo_titre_bis">Exercice : '.$ligne['intitule'].'</span>';
@@ -56,7 +56,6 @@
 			}
             echo "</div>";
             echo '<div class="page_navigation"></div>';
-            echo "</div>";
 		?>	
 	</div>	
 	</body>
