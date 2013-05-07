@@ -542,6 +542,8 @@ function redrawTransitions()
 }
 
 $(window).load(function(){
+
+	$('body').append('<div id="dialog-modal" title="Properties"></div>')
 	refreshOmega();
 	redrawPlaces()
 
