@@ -17,9 +17,11 @@
         require_once(dirname(__FILE__).'/base/DB.class.php');
         DB::Init();
         // effectuer exercice
-        if ($_GET['action'] == 'effectuer') {
+        if ($_GET['action'] == 'effectuer' && $_GET['id'] > 0) {
             $req = 'SELECT * FROM sy08_exercice WHERE id = '.$_GET['id'];
             $res = DB::SqlToArray($req);
+        } else {
+            header('Location: selection_exercices.php');
         }
         // date : <span class="exo_date">'.date_format(date_create($res[0]['date']), 'd/m/Y H:i').'</span>
 	?>		

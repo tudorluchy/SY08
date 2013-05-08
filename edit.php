@@ -22,7 +22,7 @@
 			require_once(dirname(__FILE__).'/verif_files.php');
 		}
 		// action GET
-		if (isset($_GET['action'])) {
+		if (isset($_GET['action']) && (($_GET['action'] =='save') || ($_GET['action'] =='edit')) && $_GET['id'] > 0) {
 			// save
 			if ($_GET['action'] == 'save') {
 				if (!empty($json)) {
