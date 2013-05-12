@@ -22,7 +22,7 @@
 			require_once(dirname(__FILE__).'/verif_files.php');
 		}
 		// action GET
-		if (isset($_GET['action']) && (($_GET['action'] =='save') || ($_GET['action'] =='edit')) && $_GET['id'] > 0) {
+		if (isset($_GET['action'])) {
 			// save
 			if ($_GET['action'] == 'save') {
 				if (!empty($json)) {
@@ -79,7 +79,28 @@
 				</div>
 				<input type="hidden" id="json" name="json" value="">
 				<div id="container"></div>
-				<div id="results"></div>
+				<div id="results">
+					<div id="results_1">
+						<h3>Resultat W</h3>
+						<div id="matrice_w_results"></div>
+					</div>
+					<div id="results_2">
+					<h3>Resultat W+</h3>
+						<div id="matrice_wplus_results"></div>
+					</div>					
+					<div id="results_3">
+					<h3>Resultat W-</h3>
+						<div id="matrice_wmoins_results"></div>
+					</div>
+					<div id="results_4">
+					<h3>P invariants</h3>
+						<div id="matrice_Pinvariants_results"></div>
+					</div>
+					<div id="results_4">
+					<h3>T invariants</h3>
+						<div id="matrice_Tinvariants_results"></div>
+					</div>
+				</div>
 				<input class="valider" type='submit' value='Valider'>
 			</fieldset>	
 		</form>
