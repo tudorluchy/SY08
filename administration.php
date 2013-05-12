@@ -8,8 +8,8 @@
 		<script type="text/javascript" src="js/sy08.js"></script>
 		<script type="text/javascript" src="js/matrix.js"></script>
 		<script type="text/javascript" src="js/verification_form.js"></script>
-        <script language="JavaScript" type="text/javascript" src="js/DataTables-1.9.4/media/js/jquery.dataTables.js"></script>
-        <link rel="stylesheet" type="text/css" href="js/DataTables-1.9.4/media/css/jquery.dataTables.css">
+        <script language="JavaScript" type="text/javascript" src="js/DataTables/media/js/jquery.dataTables.js"></script>
+        <link rel="stylesheet" type="text/css" href="js/DataTables/media/css/jquery.dataTables.css">
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<link href="js/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.css" rel="stylesheet">
         <script language="JavaScript" type="text/javascript">  
