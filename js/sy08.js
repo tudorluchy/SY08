@@ -6,11 +6,11 @@ var stage;
 var posx;
 var posy;
 
-// Utiliser dans le cadre de l'ajout des différents composants dans le canvas
+// Utiliser dans le cadre de l'ajout des diffï¿½rents composants dans le canvas
 // 0 place / 1 transitions / 2 arcs
 var kindOfAdd = -1;
 
-// Voici les différentes variables utilisées dans le cadre de l'ajout d'un arc.
+// Voici les diffï¿½rentes variables utilisï¿½es dans le cadre de l'ajout d'un arc.
 var place2transTEMP = -1;
 var source = -1;
 
@@ -94,9 +94,9 @@ function getXMLHttpRequest() {
 }
 
 function envoyerJson() {
-	// tu crée l'objet :
+	// tu crï¿½e l'objet :
 	var xhr = getXMLHttpRequest();
-	// t'as codé ce constructeur précédemment
+	// t'as codï¿½ ce constructeur prï¿½cï¿½demment
 	 
 	if(xhr && xhr.readyState != 0){
 	   xhr.abort();
@@ -104,15 +104,15 @@ function envoyerJson() {
 	 
 	xhr.onreadystatechange = function(){
 	   if(xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)){
-		  // tu peux récupérer en JS le résultat du traitement avec xhr.responseText;
+		  // tu peux rï¿½cupï¿½rer en JS le rï¿½sultat du traitement avec xhr.responseText;
 	   }
 	   else if(xhr.readyState == 2 || xhr.readyState == 3){ // traitement non fini
 		  // tu peux mettre un message ou un gif de chargement par exemple
 	   }
 	}
 	xhr.open("POST", "traitement_ajout_exercice.php", true); // true pour asynchrone
-	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // seulement si t'as choisi la méthode POST !
-	xhr.send("var="+varJS); // éventuellement t'envois plusieurs variables séparées par un &
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // seulement si t'as choisi la mï¿½thode POST !
+	xhr.send("var="+varJS); // ï¿½ventuellement t'envois plusieurs variables sï¿½parï¿½es par un &
 }
 */
 
@@ -284,7 +284,7 @@ function drawPlace(layer, i)
 	group.add(label);
 
 
-	group.on('dragmove',function() { // Si trop de lag en rafraichissant tout le temps, possible de clear au début du déplacement et redessiner à la fin (mais moins beau ^^)
+	group.on('dragmove',function() { // Si trop de lag en rafraichissant tout le temps, possible de clear au dï¿½but du dï¿½placement et redessiner ï¿½ la fin (mais moins beau ^^)
 		layer3.clear();
 		layer3.removeChildren();
 		model.places[cercle.getName()].coordx = cercle.getAbsolutePosition().x; 
@@ -303,13 +303,13 @@ function drawPlace(layer, i)
 	
 	group.on('click', function() {
 		if(kindOfAdd == 2) {
-			// On défini le cercle comme l'élement premier de l'arc
+			// On dï¿½fini le cercle comme l'ï¿½lement premier de l'arc
 			if(place2transTEMP == -1) {
 				source = i;
 				place2transTEMP = 1;
 			}
 			else if(place2transTEMP == 0){
-				// on insère dans le JSON
+				// on insï¿½re dans le JSON
 				createArc(0,source,i,1);
 
 				refreshLines();
@@ -320,7 +320,7 @@ function drawPlace(layer, i)
 			}
 		}
 		else {
-		// Sinon on affiche les caractéristiques de l'éléments (à voir si on le fait ou pas)
+		// Sinon on affiche les caractï¿½ristiques de l'ï¿½lï¿½ments (ï¿½ voir si on le fait ou pas)
 			
 		}
 
@@ -377,7 +377,7 @@ function drawTransition(layer, i)
 	
 	},false);
 
-	group.on('dragmove',function() { // Si trop de lag en rafraichissant tout le temps, possible de clear au début du déplacement et redessiner à la fin (mais moins beau ^^)
+	group.on('dragmove',function() { // Si trop de lag en rafraichissant tout le temps, possible de clear au dï¿½but du dï¿½placement et redessiner ï¿½ la fin (mais moins beau ^^)
 		layer3.clear();
 		layer3.removeChildren();
 		model.transitions[rec.getName()].coordx = rec.getAbsolutePosition().x; 
@@ -387,13 +387,13 @@ function drawTransition(layer, i)
 
 	group.on('click', function() {
 		if(kindOfAdd == 2) {
-			// On défini le cercle comme l'élement premier de l'arc
+			// On dï¿½fini le cercle comme l'ï¿½lement premier de l'arc
 			if(place2transTEMP == -1) {
 				source = i;
 				place2transTEMP = 0;
 			}
 			else if(place2transTEMP == 1){
-				// on insère dans le JSON
+				// on insï¿½re dans le JSON
 				createArc(1,source,i,1);
 				refreshLines();
 				refreshEveryMatrixResults();
@@ -402,7 +402,7 @@ function drawTransition(layer, i)
 			}
 		}
 		else {
-			// Sinon on affiche les caractéristiques de l'éléments (à voir si on le fait ou pas)
+			// Sinon on affiche les caractï¿½ristiques de l'ï¿½lï¿½ments (ï¿½ voir si on le fait ou pas)
 		}
 
 		}, false
@@ -457,9 +457,9 @@ function drawLine(layer, i)
 	var angle = Math.atan2(pts[1]-pts[3], pts[0]-pts[2]);
 
 	//http://yassinebenabbas.wordpress.com/article/opencv-dessiner-une-ligne-avec-une-31z31ug7b5vz5-7/
-	//calcul des coordonnées de l’extrémité avec l’angle violet
+	//calcul des coordonnï¿½es de lï¿½extrï¿½mitï¿½ avec lï¿½angle violet
 
-	//La flèche à une magnitude spécifiée par le paramètre arrowMagnitude
+	//La flï¿½che ï¿½ une magnitude spï¿½cifiï¿½e par le paramï¿½tre arrowMagnitude
 	arrow[0] = pts[2];
 	arrow[1] = pts[3];
 	arrow[2] =  ( pts[2] +  10 * Math.cos(angle + Math.PI/6)) ;
@@ -475,10 +475,10 @@ function drawLine(layer, i)
 	layer.add(redLine1);
 
 
-	//calcul des coordonnées de l’extrémité avec l’angle vert
+	//calcul des coordonnï¿½es de lï¿½extrï¿½mitï¿½ avec lï¿½angle vert
 	arrow[2] = ( pts[2] +  10 * Math.cos(angle - Math.PI/6)) ;
 	arrow[3] =  ( pts[3] +  10 * Math.sin(angle - Math.PI/6));
-	//enfin, on dessine la deuxième extrémité
+	//enfin, on dessine la deuxiï¿½me extrï¿½mitï¿½
 	var redLine2 = new Kinetic.Line({
 		points: arrow,
 		stroke: 'black',
@@ -544,7 +544,6 @@ function redrawTransitions()
 $(window).load(function(){
 
 	$('body').append('<div id="dialog-modal" title="Properties"></div>')
-	refreshOmega();
 	redrawPlaces()
 
 	redrawTransitions()
@@ -860,7 +859,7 @@ function controlerMatrice(status) {
 			i++;
 		}
 		if(identique == false) {
-			// en fonction de which, écrire le message d'erreur ou erreur correspondante + modifier css
+			// en fonction de which, ï¿½crire le message d'erreur ou erreur correspondante + modifier css
 			if(document.getElementById(which+"_astuces") != null) {
 				var html = 'incorrect';
 				document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
@@ -917,7 +916,7 @@ function controlerInvariant(status) {
 				i++;
 			}
 			if(identique == false) {
-				// en fonction de which, écrire le message d'erreur ou erreur correspondante + modifier css
+				// en fonction de which, ï¿½crire le message d'erreur ou erreur correspondante + modifier css
 				if(document.getElementById(which+"_astuces") != null) {
 					var html = 'Incorrect';
 					document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
