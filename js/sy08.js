@@ -705,18 +705,21 @@ function mouseEventCallBack() {
 			function(event) {
 				if(kindOfAdd == 0){
 					createPlace(event.pageX-posx,event.pageY-posy,0);
-					redrawPlaces();
+					//redrawPlaces();
+					//redrawAll();
 				}
 				else if(kindOfAdd == 1) {
 					createTransition(event.pageX-posx,event.pageY-posy);
-					redrawTransitions();
+					//redrawTransitions();
+					//redrawAll();
 				}
-				refreshLines();
+				redrawAll();
+				//refreshLines();
 
-				refreshEveryMatrixResults();
+				//refreshEveryMatrixResults();
 
-				printMatricesInvariants();
-				console.log(Pinvariants());
+				//printMatricesInvariants();
+				//console.log(Pinvariants());
 
 	
 	//Calcul des T invariants :
@@ -724,11 +727,11 @@ function mouseEventCallBack() {
 
 				generateEveryMatrixInput();
 				
-				stage.clear();
+				/*stage.clear();
 				stage.add(backgound);
 				stage.add(layer1); // les places
 				stage.add(layer2); // les transitions
-				stage.add(layer3); // les arcs
+				stage.add(layer3); // les arcs*/
 
 			}, false
 		);
