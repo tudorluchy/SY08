@@ -716,9 +716,9 @@ function mouseEventCallBack() {
 				redrawAll();
 				//refreshLines();
 
-				//refreshEveryMatrixResults();
+				refreshEveryMatrixResults();
 
-				//printMatricesInvariants();
+				printMatricesInvariants();
 				//console.log(Pinvariants());
 
 	
