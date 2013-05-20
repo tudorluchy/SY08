@@ -872,6 +872,7 @@ function controlerMatrice(status) {
 			if(document.getElementById(which+"_astuces") != null) {
 				var html = '<b>Incorrect<br/>Indices : </b><br/>'+astuce;
 				document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
+				document.getElementById(which+"_astuces").style.visibility = "visible";
 				document.getElementById(which+"_astuces").innerHTML = html;
 			}
 		}
@@ -880,6 +881,7 @@ function controlerMatrice(status) {
 			if(document.getElementById(which+"_astuces") != null) {
 				var html = 'Correct';
 				document.getElementById(which+"_astuces").style.backgroundColor = "#119911";
+				document.getElementById(which+"_astuces").style.visibility = "visible";
 				document.getElementById(which+"_astuces").innerHTML = html;
 			}
 		}
@@ -888,6 +890,7 @@ function controlerMatrice(status) {
 		if(document.getElementById(which+"_astuces") != null) {
 			var html = 'Aucune matrice';
 			document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
+				document.getElementById(which+"_astuces").style.visibility = "visible";
 			document.getElementById(which+"_astuces").innerHTML = html;
 		}
 	}
@@ -935,6 +938,7 @@ function controlerInvariant(status) {
 				if(document.getElementById(which+"_astuces") != null) {
 					var html = '<b>Incorrect<br/>Indices : </b><br/>'+astuce;
 					document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
+					document.getElementById(which+"_astuces").style.visibility = "visible";
 					document.getElementById(which+"_astuces").innerHTML = html;
 				}
 			}
@@ -943,6 +947,7 @@ function controlerInvariant(status) {
 				if(document.getElementById(which+"_astuces") != null) {
 					var html = 'Correct';
 					document.getElementById(which+"_astuces").style.backgroundColor = "#119911";
+					document.getElementById(which+"_astuces").style.visibility = "visible";
 					document.getElementById(which+"_astuces").innerHTML = html;
 				}
 			}
@@ -951,6 +956,7 @@ function controlerInvariant(status) {
 			if(document.getElementById(which+"_astuces") != null) {
 				var html = 'Aucune matrice';
 				document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
+				document.getElementById(which+"_astuces").style.visibility = "visible";
 				document.getElementById(which+"_astuces").innerHTML = html;
 			}
 		}

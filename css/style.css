@@ -187,6 +187,7 @@ fieldset.fieldset_ajout_exercice
 	width: 400px;
 	background-color: #119911;
 	border:1px solid black;
+	visibility:hidden;
 
     /*Coin arrondi*/
 	-moz-border-radius : 5px 5px;			
