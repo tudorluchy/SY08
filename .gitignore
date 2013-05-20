@@ -1,3 +1,6 @@
+#Pas versionner les mdp
+base/DB.loginfo.php
+
 #################
 # Ignore NetBeans Project Info
 #################

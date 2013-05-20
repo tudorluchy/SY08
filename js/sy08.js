@@ -548,6 +548,9 @@ $(window).load(function(){
 
 	redrawTransitions()
 	refreshLines();
+	refreshEveryMatrixResults();
+
+	printMatricesInvariants();
 
 	posx=$('#container').findPos().x;
 	posy=$('#container').findPos().y;
@@ -670,7 +673,7 @@ function eraseElement()
 function Pinvariants()
 {
 	var invP = omega();
-	
+	console.log(invP);
 	//Calcul des P invariants :
 	return CalculP_T(ConcatRight(invP,Identity(getNbRows(invP))),getNbRows(invP),getNbColumns(invP));
 
@@ -966,8 +969,9 @@ function controlerInvariant(status) {
 function printMatricesInvariants() {
 	var res = Pinvariants();
 	var res2 = Tinvariants();
+	console.log(res);
 
-	if(res != undefined) {
+	if(res !== undefined) {
 		if(res.length > 0) {
 			var html = "<table class=\"matrice_Pinvariants_results\"><tr><td></td>";
 
@@ -989,7 +993,7 @@ function printMatricesInvariants() {
 		}
 	}
 
-	if(res2 != undefined) {
+	if(res2 !== undefined) {
 		if(res2.length > 0) {
 			var html = "<table class=\"matrice_Tinvariants_results_1\"><tr><td></td>";
 
