@@ -72,6 +72,26 @@
 				<td><div class="control_button_div"><input type="button" class="control_button" value="controler" onClick="controlerInvariant(1)" /></div></td>
 				<td><div id="matrice_Pinvariants_astuces" class="astuces"></div></td>
 			</tr>
+			<tr><td><h3>Les propriétés du Rdp</h3></td></tr>
+			<tr>
+				<td><div id="RDP_proprietes" class="RDP_prop">
+					<table>
+					<tr>
+						<td style="min-width:200px;">Le RdP est-il borné ?</td>
+						<td><input type="radio" class="radio_button" name="rdpborne" value="oui">Oui</td>
+						<td><input type="radio" class="radio_button" name="rdpborne" value="non">Non</td>
+					</tr>
+					<tr>
+						<td style="min-width:200px;">Le RdP est-il vivant ?</td>
+						<td><input type="radio" class="radio_button" name="rdpVivant" value="oui">Oui</td>
+						<td><input type="radio" class="radio_button" name="rdpVivant" value="non">Non</td>					
+					</tr>
+					</table>
+				</div></td>
+				<td><div class="control_button_div"><input type="button" class="control_button" value="controler" onClick="controlerProprietes(1)" /></div></td>
+				<td><div id="proprietes_astuces" class="astuces"></div></td>
+				
+			</tr>
 		</table>
 	</div>
 	</body>

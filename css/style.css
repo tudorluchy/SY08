@@ -164,6 +164,11 @@ fieldset.fieldset_ajout_exercice
 	width: 400px;
 }
 
+.RDP_prop {
+	float: left;
+	width: 400px;
+}
+
 .control_button {
     background-color: lightsteelblue;
 }
@@ -230,6 +235,10 @@ fieldset.fieldset_ajout_exercice
 	float: left;
 	width: 300px;
 }
+
+/*****************************************************************/
+/*** Composants relatifs à la navigation des pages des exo *******/
+/*****************************************************************/
 
 .page_navigation {
 	margin: 15px 0;

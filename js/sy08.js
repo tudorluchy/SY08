@@ -1,4 +1,4 @@
-var backgound = new Kinetic.Layer();
+﻿var backgound = new Kinetic.Layer();
 var layer1 = new Kinetic.Layer();
 var layer2 = new Kinetic.Layer();
 var layer3 = new Kinetic.Layer();
@@ -831,16 +831,22 @@ function generateInvariantInput(statut) {
 function controlerMatrice(status) {
 	var which = "";
 	var res;
+	var astuce ="";
 	if(status == 0) {
 		which = "matrice_w";
+		astuce = "N'oubliez pas la relation suivante : <br/> W = (W+)-(W-)";
 		res = omega();
 	}
 	else if(status == 1) {
 		which = "matrice_wplus";
+		astuce = "Deux choix possibles :<br/>1 lorsque la place P est une sortie de la transition T.<br />"+
+				 "0 lorsque la place P n'appartient pas aux sorties de la transition T.";
 		res = omegaPlus();
 	}
 	else if(status == 2) {
 		which = "matrice_wmoins";
+		astuce = "Deux choix possibles :<br/>		1 lorsque la place P est une entrée de la transition T.<br />"+
+				 "		0 lorsque la place P n'appartient pas aux entrées de la transition T.";
 		res = omegaMoins();
 	}
 	
@@ -864,7 +870,7 @@ function controlerMatrice(status) {
 		if(identique == false) {
 			// en fonction de which, �crire le message d'erreur ou erreur correspondante + modifier css
 			if(document.getElementById(which+"_astuces") != null) {
-				var html = 'incorrect';
+				var html = '<b>Incorrect<br/>Indices : </b><br/>'+astuce;
 				document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
 				document.getElementById(which+"_astuces").innerHTML = html;
 			}
@@ -872,7 +878,7 @@ function controlerMatrice(status) {
 		else if(identique == true) {
 			// Modification css pour etre sur que le background est vert
 			if(document.getElementById(which+"_astuces") != null) {
-				var html = 'correct';
+				var html = 'Correct';
 				document.getElementById(which+"_astuces").style.backgroundColor = "#119911";
 				document.getElementById(which+"_astuces").innerHTML = html;
 			}
@@ -890,12 +896,18 @@ function controlerMatrice(status) {
 function controlerInvariant(status) {
 	var which = "";
 	var res;
+	var astuce = "";
 	if(status == 0) {
 		which = "matrice_Tinvariants";
+		astuce = "On cherche les composantes répétitives : <br/> Démontrez qu'il existe une séquence de franchissements S telle que T(S)=D (avec D un sous-ensemble non vide contenant l'ensemble des transitions) et W*S = 0.<br/>"+
+				 "La démonstration a effectuée :<br/> Mj = Mi + W*S<br/>Mj = Mi<br/> ==>W*S = 0 <br/>"+
+				 "N'oubliez pas que les composantes répétitives sont indépendantes du marquage !";
 		res = Tinvariants();
 	}
 	else if(status == 1) {
 		which = "matrice_Pinvariants";
+		astuce = "Pour déterminer si le RdP est borné:<br/> Il faut calculer W, chercher les solutions telles que q &isin; N<sup>n</sup> du système d’équations q<sup>T</sup>W = 0<sub>1 x m</sub>, et former l’union des composantes conservatives, si elles existent.<br/>"+
+				 "Un invariant de place est un ensemble de places pour lesquelles la somme (pondérées par le vecteur trouvé précédemment) est constante pour n’importe quel marquage accessible atteignable à partir du marquage initial.";
 		res = Pinvariants();
 	}
 
@@ -921,7 +933,7 @@ function controlerInvariant(status) {
 			if(identique == false) {
 				// en fonction de which, �crire le message d'erreur ou erreur correspondante + modifier css
 				if(document.getElementById(which+"_astuces") != null) {
-					var html = 'Incorrect';
+					var html = '<b>Incorrect<br/>Indices : </b><br/>'+astuce;
 					document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
 					document.getElementById(which+"_astuces").innerHTML = html;
 				}
