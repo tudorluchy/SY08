@@ -189,7 +189,7 @@ function envoyerJson() {
 	}
 	 
 	xhr.onreadystatechange = function(){
-	   if(xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)){
+	   if(xhr.readyState == 4 && (xhr.statut == 200 || xhr.statut == 0)){
 		  // tu peux r�cup�rer en JS le r�sultat du traitement avec xhr.responseText;
 	   }
 	   else if(xhr.readyState == 2 || xhr.readyState == 3){ // traitement non fini
@@ -780,7 +780,8 @@ function drawLine(layer, i)
 
 function refreshLines()
 {
-
+	layer3.clear();
+	layer3.removeChildren();
 	for(var i=0;i<model.arcs.length;i++)
 	{
 		drawLine(layer3,i);
@@ -811,6 +812,8 @@ function redrawAll()
 
 function redrawPlaces()
 {
+	layer1.clear();
+	layer1.removeChildren();
 	for(var i=0;i<model.places.length;i++)
 	{
 		
@@ -821,6 +824,8 @@ function redrawPlaces()
 
 function redrawTransitions()
 {
+	layer2.clear();
+	layer2.removeChildren();
 	for(var i=0;i<model.transitions.length;i++)
 	{
 		drawTransition(layer2,i);
@@ -831,7 +836,6 @@ $(window).load(function(){
 
 	$('body').append('<div id="dialog-modal" title="Properties"></div>')
 	redrawPlaces()
-
 	redrawTransitions()
 	refreshLines();
 	refreshEveryMatrixResults();
@@ -1052,6 +1056,15 @@ function generateEveryMatrixInput() {
 	generateInvariantInput(0);
 	generateInvariantInput(1);
 }
+
+function generateEveryMatrixInputCor() {
+	for(var i=3; i < 6; i++) {
+		generateMatrixInput(i);
+	}
+	//Calcul de l'invariant et determination du nombre de Pt
+	generateInvariantInput(2);
+	generateInvariantInput(3);
+}
 	
 function generateMatrixInput(statut) {
 	var which="";
@@ -1061,6 +1074,12 @@ function generateMatrixInput(statut) {
 		which = "matrice_wplus";
 	else if(statut == 2)
 		which = "matrice_wmoins";
+	else if(statut == 3)
+		which = "matrice_w_cor";
+	else if(statut == 4)
+		which = "matrice_wplus_cor";
+	else if(statut == 5)
+		which = "matrice_wmoins_cor";
 
 	var html = "<table id=\""+which+"\"><tr><td></td>";
 	var nbPlaces = model.places.length;
@@ -1095,6 +1114,14 @@ function generateInvariantInput(statut) {
 		which = "matrice_Pinvariants";
 		res = Pinvariants();
 	}
+	else if(statut == 2) {
+		which = "matrice_Tinvariants_cor";
+		res = Tinvariants();
+	}
+	else if(statut == 3) {
+		which = "matrice_Pinvariants_cor";
+		res = Pinvariants();
+	}
 
 	var html="";
 
@@ -1122,23 +1149,40 @@ function generateInvariantInput(statut) {
 		document.getElementById(which).innerHTML = html;
 }
 
-function controlerMatrice(status) {
+function controlerMatrice(statut) {
 	var which = "";
 	var res;
 	var astuce ="";
-	if(status == 0) {
+	if(statut == 0) {
 		which = "matrice_w";
 		astuce = "N'oubliez pas la relation suivante : <br/> W = (W+)-(W-)";
 		res = omega(model);
 	}
-	else if(status == 1) {
+	else if(statut == 1) {
 		which = "matrice_wplus";
 		astuce = "Deux choix possibles :<br/>1 lorsque la place P est une sortie de la transition T.<br />"+
 				 "0 lorsque la place P n'appartient pas aux sorties de la transition T.";
 		res = omegaPlus(model);
 	}
-	else if(status == 2) {
+	else if(statut == 2) {
 		which = "matrice_wmoins";
+		astuce = "Deux choix possibles :<br/>		1 lorsque la place P est une entrée de la transition T.<br />"+
+				 "		0 lorsque la place P n'appartient pas aux entrées de la transition T.";
+		res = omegaMoins(model);
+	}
+	else if(statut == 3) {
+		which = "matrice_w_cor";
+		astuce = "N'oubliez pas la relation suivante : <br/> W = (W+)-(W-)";
+		res = omega(model);
+	}
+	else if(statut == 4) {
+		which = "matrice_wplus_cor";
+		astuce = "Deux choix possibles :<br/>1 lorsque la place P est une sortie de la transition T.<br />"+
+				 "0 lorsque la place P n'appartient pas aux sorties de la transition T.";
+		res = omegaPlus(model);
+	}
+	else if(statut == 5) {
+		which = "matrice_wmoins_cor";
 		astuce = "Deux choix possibles :<br/>		1 lorsque la place P est une entrée de la transition T.<br />"+
 				 "		0 lorsque la place P n'appartient pas aux entrées de la transition T.";
 		res = omegaMoins(model);
@@ -1190,19 +1234,32 @@ function controlerMatrice(status) {
 	}
 }
 
-function controlerInvariant(status) {
+function controlerInvariant(statut) {
 	var which = "";
 	var res;
 	var astuce = "";
-	if(status == 0) {
+	if(statut == 0) {
 		which = "matrice_Tinvariants";
 		astuce = "On cherche les composantes répétitives : <br/> Démontrez qu'il existe une séquence de franchissements S telle que T(S)=D (avec D un sous-ensemble non vide contenant l'ensemble des transitions) et W*S = 0.<br/>"+
 				 "La démonstration a effectuée :<br/> Mj = Mi + W*S<br/>Mj = Mi<br/> ==>W*S = 0 <br/>"+
 				 "N'oubliez pas que les composantes répétitives sont indépendantes du marquage !";
 		res = Tinvariants();
 	}
-	else if(status == 1) {
+	else if(statut == 1) {
 		which = "matrice_Pinvariants";
+		astuce = "Pour déterminer si le RdP est borné:<br/> Il faut calculer W, chercher les solutions telles que q &isin; N<sup>n</sup> du système d’équations q<sup>T</sup>W = 0<sub>1 x m</sub>, et former l’union des composantes conservatives, si elles existent.<br/>"+
+				 "Un invariant de place est un ensemble de places pour lesquelles la somme (pondérées par le vecteur trouvé précédemment) est constante pour n’importe quel marquage accessible atteignable à partir du marquage initial.";
+		res = Pinvariants();
+	}
+	if(statut == 2) {
+		which = "matrice_Tinvariants_cor";
+		astuce = "On cherche les composantes répétitives : <br/> Démontrez qu'il existe une séquence de franchissements S telle que T(S)=D (avec D un sous-ensemble non vide contenant l'ensemble des transitions) et W*S = 0.<br/>"+
+				 "La démonstration a effectuée :<br/> Mj = Mi + W*S<br/>Mj = Mi<br/> ==>W*S = 0 <br/>"+
+				 "N'oubliez pas que les composantes répétitives sont indépendantes du marquage !";
+		res = Tinvariants();
+	}
+	else if(statut == 3) {
+		which = "matrice_Pinvariants_cor";
 		astuce = "Pour déterminer si le RdP est borné:<br/> Il faut calculer W, chercher les solutions telles que q &isin; N<sup>n</sup> du système d’équations q<sup>T</sup>W = 0<sub>1 x m</sub>, et former l’union des composantes conservatives, si elles existent.<br/>"+
 				 "Un invariant de place est un ensemble de places pour lesquelles la somme (pondérées par le vecteur trouvé précédemment) est constante pour n’importe quel marquage accessible atteignable à partir du marquage initial.";
 		res = Pinvariants();
@@ -1305,33 +1362,115 @@ function printMatricesInvariants() {
 		}
 	}
 }
+var correctionActive = false;
 
 function accesCorrection() {
-	kindOfAdd = -1;
-	var elements = document.getElementsByClassName('disable');
-	for(var i = 0; i < elements.length; i++) {
-		elements[i].disabled = true;
+	if(!correctionActive)
+	{
+		correctionActive = true;
+		kindOfAdd = -1;
+		var elements = document.getElementsByClassName('disable');
+		for(var i = 0; i < elements.length; i++) {
+			elements[i].disabled = true;
+		}
+		stage.clear();
+		document.getElementById('container').innerHTML = "";
+		stage2 = new Kinetic.Stage({
+			container: 'container',
+			width: 600,
+			height: 400
+		});
+		stage2.add(backgound);
+		//copie des layers sinon ca bug et lorsqu'on modifie le model apres, et bien y a des impacts sur le résultat d'avant alors que ce n'est pas souhaité, on veut que cela reste intacte
+		var layer1Copie = layer1.clone();
+		var layer2Copie = layer2.clone();
+		var layer3Copie = layer3.clone();
+		stage2.add(layer1Copie); // les places
+		stage2.add(layer2Copie); // les transitions
+		stage2.add(layer3Copie); // les arcs
+
+		stage2.setListening(false);
+		document.getElementById('container').removeEventListener ('click',	containerEventListener, false);
+		insertionCode();
+		stage = new Kinetic.Stage({
+			container: 'container_cor',
+			width: 600,
+			height: 400
+		});
+		// TODO : supprimer si on a une bdd sur la machine
+		var model2 = {places:[{coordx:355.60975609756,coordy:119.45945945946},{coordx:460.9756097561,coordy:211.35135135135},{coordx:250.24390243902,coordy:211.35135135135},{coordx:540,coordy:82.702702702703},{coordx:250.24390243902,coordy:303.24324324324}],transitions:[{coordx:460.9756097561,coordy:137.83783783784},{coordx:460.9756097561,coordy:266.48648648649},{coordx:302.92682926829,coordy:156.21621621622},{coordx:250.24390243902,coordy:266.48648648649},{coordx:250.24390243902,coordy:340}],arcs:[{place2trans:1,source:0,dest:0,properties : {value :1}},{place2trans:1,source:0,dest:2,properties : {value :1}},{place2trans:1,source:3,dest:0,properties : {value :1}},{place2trans:0,source:0,dest:1,properties : {value :1}},{place2trans:1,source:1,dest:1,properties : {value :1}},{place2trans:0,source:1,dest:3,properties : {value :1}},{place2trans:0,source:2,dest:2,properties : {value :1}},{place2trans:1,source:2,dest:3,properties : {value :1}},{place2trans:0,source:3,dest:4,properties : {value :1}},{place2trans:1,source:4,dest:4,properties : {value :1}},{place2trans:0,source:4,dest:0,properties : {value :1}},{place2trans:0,source:1,dest:2,properties : {value :1}},{place2trans:0,source:2,dest:3,properties : {value :1}},{place2trans:1,source:3,dest:3,properties : {value :1}}]};
+		model = model2;
+
+		redrawPlaces();
+		redrawTransitions();
+		refreshLines();
+
+		stage.add(backgound);
+		stage.add(layer1); // les places
+		stage.add(layer2); // les transitions
+		stage.add(layer3); // les arcs
+		stage.setListening(false);
+
+		generateEveryMatrixInputCor();
 	}
-	stage.clear();
-	document.getElementById('container').innerHTML = "";
-	stage2 = new Kinetic.Stage({
-		container: 'container',
-		width: 600,
-		height: 400
-	});
-	stage2.add(backgound);
-	stage2.add(layer1); // les places
-	stage2.add(layer2); // les transitions
-	stage2.add(layer3); // les arcs
-
-	stage2.setListening(false);
-	document.getElementById('container').removeEventListener ('click',	containerEventListener, false);
-
-	stage = new Kinetic.Stage({
-		container: 'container_cor',
-		width: 600,
-		height: 400
-	});
 }
 
 
+
+
+
+function insertionCode() {
+	var html = "<h3 style=\"color:red;text-align:center;\">Correction</h3><div id=\"container_cor\"></div>"+
+		"<table>"+
+			"<tr><td><h3>Calculer W+</h3></td></tr>"+
+			"<tr>"+
+				"<td><div id=\"matrice_wplus_cor\" class=\"matrices_input\"></div></td>"+
+				"<td><div class=\"control_button_div\"><input type=\"button\" class=\"disable control_button\" value=\"Controler\" onClick=\"controlerMatrice(4)\" /></div></td>"+
+				"<td><div id=\"matrice_wplus_cor_astuces\" class=\"astuces\"></div></td>"+
+			"</tr>"+
+			"<tr><td><h3>Calculer W-</h3></td></tr>"+
+			"<tr>"+
+				"<td><div id=\"matrice_wmoins_cor\" class=\"matrices_input\"></div></td>"+
+				"<td><div class=\"control_button_div\"><input type=\"button\" class=\"disable control_button\" value=\"Controler\" onClick=\"controlerMatrice(5)\" /></div></td>"+
+				"<td><div id=\"matrice_wmoins_cor_astuces\" class=\"astuces\"></div></td>"+
+			"</tr>"+
+			"<tr><td><h3>Calculer W</h3></td></tr>"+
+			"<tr>"+
+				"<td><div id=\"matrice_w_cor\" class=\"matrices_input\"></div></td>"+
+				"<td><div class=\"control_button_div\"><input type=\"button\" class=\"disable control_button\" value=\"controler\" onClick=\"controlerMatrice(3)\" /></div></td>"+
+				"<td><div id=\"matrice_w_cor_astuces\" class=\"astuces\"></div></td>"+
+			"</tr>"+
+			"<tr><td><h3>Calculer les T invariants </h3></td></tr>"+
+			"<tr>"+
+				"<td><div id=\"matrice_Tinvariants_cor\" class=\"matrices_input\"></div></td>"+
+				"<td><div class=\"control_button_div\"><input type=\"button\" class=\"disable control_button\" value=\"controler\" onClick=\"controlerInvariant(2)\" /></div></td>"+
+				"<td><div id=\"matrice_Tinvariants_cor_astuces\" class=\"astuces\"></div></td>"+
+			"</tr>"+
+			"<tr><td><h3>Calculer les P invariants</h3></td></tr>"+
+			"<tr>"+
+				"<td><div id=\"matrice_Pinvariants_cor\" class=\"matrices_input\"></div></td>"+
+				"<td><div class=\"control_button_div\"><input type=\"button\" class=\"disable control_button\" value=\"controler\" onClick=\"controlerInvariant(3)\" /></div></td>"+
+				"<td><div id=\"matrice_Pinvariants_cor_astuces\" class=\"astuces\"></div></td>"+
+			"</tr>"+
+			"<tr><td><h3>Les propriétés du Rdp</h3></td></tr>"+
+			"<tr>"+
+				"<td><div id=\"RDP_proprietes_cor\" class=\"RDP_prop\">"+
+					"<table>"+
+					"<tr>"+
+						"<td style=\"min-width:200px;\">Le RdP est-il borné ?</td>"+
+						"<td><input type=\"radio\" class=\"disable radio_button\" name=\"rdpborne\" value=\"oui\">Oui</td>"+
+						"<td><input type=\"radio\" class=\"disable radio_button\" name=\"rdpborne\" value=\"non\">Non</td>"+
+					"</tr>"+
+					"<tr>"+
+						"<td style=\"min-width:200px;\">Le RdP est-il vivant ?</td>"+
+						"<td><input type=\"radio\" class=\"disable radio_button\" name=\"rdpVivant\" value=\"oui\">Oui</td>"+
+						"<td><input type=\"radio\" class=\"disable radio_button\" name=\"rdpVivant\" value=\"non\">Non</td>"+				
+					"</tr>"+
+					"</table>"+
+				"</div></td>"+
+				"<td><div class=\"control_button_div\"><input type=\"button\" class=\"disable control_button\" value=\"controler\" onClick=\"controlerProprietes(2)\" /></div></td>"+
+				"<td><div id=\"proprietes_astuces\" class=\"astuces\"></div></td>"+
+			"</tr>"+
+		"</table>";
+	document.getElementById('correction').innerHTML = html;
+}

@@ -24,7 +24,10 @@
             header('Location: selection_exercices.php');
         }
         // date : <span class="exo_date">'.date_format(date_create($res[0]['date']), 'd/m/Y H:i').'</span>
-	?>		
+	?>
+	/<script language="JavaScript" type="text/javascript">
+		var model2 = <?php echo $res[0]['json']; ?>;
+	</script>
 	<div id='corps_form_ajout'>
 		<h2>Exercice : <?php echo $res[0]['intitule'].'<a class="lien_droite" href="selection_exercices.php" title="Revenir à la liste des exercices">Liste des exercices</a>'; ?></h2>
         <?php echo $res[0]['enonce']; ?> <br /><br />
@@ -38,7 +41,7 @@
 			<input class="disable" type='button' value='Ajout Arc' name='add_arc' onClick='activateAddArc()' />
 		</div>
 		<input type="hidden" id="json" name="json" value="">
-		<div id="container"></div>		
+		<div id="container"></div>
 		<table>
 			<tr><td><h3>Calculer W+</h3></td></tr>
 			<tr>
@@ -86,12 +89,12 @@
 					</tr>
 					</table>
 				</div></td>
-				<td><div class="control_button_div"><input type="button" class="disable control_button" value="controler" onClick="controlerProprietes(1)" /></div></td>
+				<td><div class="control_button_div"><input type="button" class="disable control_button" value="controler" onClick="controlerProprietes(0)" /></div></td>
 				<td><div id="proprietes_astuces" class="astuces"></div></td>
 			</tr>
 		</table>
 		<input type="button" value="Accéder à la correction" onClick="accesCorrection();"/>
-		<div id="container_cor"></div>
+		<div id="correction"></div>
 	</div>
 	</body>
 </html>
