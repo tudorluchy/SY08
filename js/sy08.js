@@ -2,7 +2,7 @@
 var layer1 = new Kinetic.Layer();
 var layer2 = new Kinetic.Layer();
 var layer3 = new Kinetic.Layer();
-var stage;
+var stage, stage2;
 var posx;
 var posy;
 
@@ -700,43 +700,44 @@ function activateAddTransition() {
 function activateAddArc() {
 	kindOfAdd = 2;
 }
-
+var containerEventListener;
 function mouseEventCallBack() {
 	var previousPositionX;
 	var previousPositionY;
+	containerEventListener = function(event) {
+		if(kindOfAdd == 0){
+			createPlace(event.pageX-posx,event.pageY-posy,0);
+			//redrawPlaces();
+			//redrawAll();
+		}
+		else if(kindOfAdd == 1) {
+			createTransition(event.pageX-posx,event.pageY-posy);
+			//redrawTransitions();
+			//redrawAll();
+		}
+		redrawAll();
+		//refreshLines();
+
+		refreshEveryMatrixResults();
+
+		printMatricesInvariants();
+		//console.log(Pinvariants());
+
+
+		//Calcul des T invariants :
+		//console.log(Tinvariants());
+
+		generateEveryMatrixInput();
+		
+		/*stage.clear();
+		stage.add(backgound);
+		stage.add(layer1); // les places
+		stage.add(layer2); // les transitions
+		stage.add(layer3); // les arcs*/
+	}
+
 	document.getElementById('container').addEventListener ('click', 
-			function(event) {
-				if(kindOfAdd == 0){
-					createPlace(event.pageX-posx,event.pageY-posy,0);
-					//redrawPlaces();
-					//redrawAll();
-				}
-				else if(kindOfAdd == 1) {
-					createTransition(event.pageX-posx,event.pageY-posy);
-					//redrawTransitions();
-					//redrawAll();
-				}
-				redrawAll();
-				//refreshLines();
-
-				refreshEveryMatrixResults();
-
-				printMatricesInvariants();
-				//console.log(Pinvariants());
-
-	
-	//Calcul des T invariants :
-	//console.log(Tinvariants());
-
-				generateEveryMatrixInput();
-				
-				/*stage.clear();
-				stage.add(backgound);
-				stage.add(layer1); // les places
-				stage.add(layer2); // les transitions
-				stage.add(layer3); // les arcs*/
-
-			}, false
+			containerEventListener, false
 		);
 	}
 	
@@ -782,7 +783,7 @@ function generateMatrixInput(statut) {
 	for(var i=0;i<nbPlaces;i++) {
 		html += "<tr><td>P"+(i+1)+"</td>";
 		for(var j=0;j<nbTransitions;j++) {
-			html += "<td><input type=\"text\" style=\"width:30px;\" value=\"0\" id=\""+which+"_"+i+"_"+j+"\"/></td>";
+			html += "<td><input class=\"disable\" type=\"text\" style=\"width:30px;\" value=\"0\" id=\""+which+"_"+i+"_"+j+"\"/></td>";
 		}
 		html += "</tr>";
 	}
@@ -820,7 +821,7 @@ function generateInvariantInput(statut) {
 			for(var i=0;i<nbLig;i++) {
 				html += "<tr><td>P"+(i+1)+"</td>";
 				for(var j=0;j<nbCol;j++) {
-					html += "<td><input type=\"text\" style=\"width:30px;\" value=\"0\" id=\""+which+"_"+i+"_"+j+"\"/></td>";
+					html += "<td><input class=\"disable\" type=\"text\" style=\"width:30px;\" value=\"0\" id=\""+which+"_"+i+"_"+j+"\"/></td>";
 				}
 				html += "</tr>";
 			}
@@ -969,7 +970,6 @@ function controlerInvariant(status) {
 function printMatricesInvariants() {
 	var res = Pinvariants();
 	var res2 = Tinvariants();
-	console.log(res);
 
 	if(res !== undefined) {
 		if(res.length > 0) {
@@ -1015,3 +1015,33 @@ function printMatricesInvariants() {
 		}
 	}
 }
+
+function accesCorrection() {
+	kindOfAdd = -1;
+	var elements = document.getElementsByClassName('disable');
+	for(var i = 0; i < elements.length; i++) {
+		elements[i].disabled = true;
+	}
+	stage.clear();
+	document.getElementById('container').innerHTML = "";
+	stage2 = new Kinetic.Stage({
+		container: 'container',
+		width: 600,
+		height: 400
+	});
+	stage2.add(backgound);
+	stage2.add(layer1); // les places
+	stage2.add(layer2); // les transitions
+	stage2.add(layer3); // les arcs
+
+	stage2.setListening(false);
+	document.getElementById('container').removeEventListener ('click',	containerEventListener, false);
+
+	stage = new Kinetic.Stage({
+		container: 'container_cor',
+		width: 600,
+		height: 400
+	});
+}
+
+
