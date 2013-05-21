@@ -123,11 +123,11 @@ function detectArc(i,j) // i = place, j = transition. Retourne -1 si il y a un a
 	for(var z=0;z<model.arcs.length;z++)
 	{
 		if(model.arcs[z].source==i && model.arcs[z].dest==j && model.arcs[z].place2trans==1)
-			return -1;
+			return -model.arcs[z].properties['value'];
 		else if(model.arcs[z].source==j && model.arcs[z].dest==i && model.arcs[z].place2trans==0)
 		{
 
-			return 1;
+			return model.arcs[z].properties['value'];
 		}
 
 	}
