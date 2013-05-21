@@ -6,6 +6,89 @@ var stage, stage2;
 var posx;
 var posy;
 
+// Attention, pour calculer l'arbre de marquage, ça change des choses : 
+// la plupart de nos fonctions se basent sur la var model, et là nous devons faire une sorte de simulation, sans toucher au model original.
+// Du coup, j'ai mis model en paramètre des fonctions qui m'interesse, mais il pourrait être (très) interessant de faire un peu plus de la POO.
+
+//http://geekz.fr/Les-reseaux-de-Petri?artsuite=3
+// Marquage.js// Contient tout ce qu'il faut pour construire un arbre de marquage
+
+var marquages = [];
+var predecesseurs = [];
+var transitionsFranchies; // Pour quasi vivant : Toutes les transitions sont franchies
+var sauf; //borne un 1 pour tout marquage
+var borne; //pas de w
+
+
+// On ne peut pas utiliser l'opérateur ==
+function compareVector(v1,v2) 
+{
+
+	if(v1.length != v2.length)
+		return false;
+		
+	for(var i=0;i<v1.length;i++)
+	{
+		if(v1[i]!=v2[i])
+			return false;
+	
+	}
+	return true;
+
+}
+
+//opérateur + pas utilisable (concatene)
+function addVector(v1,v2)
+{
+var res = [];
+	if(v1.length != v2.length)
+		return -1;
+	
+	for(var i=0;i<v1.length;i++)
+	{
+		if(v1[i]=="w" || v2[i]=="w")
+			res[i]="w";
+		else
+			res[i] = parseInt(v1[i])+parseInt(v2[i]);
+	
+	}
+	return res;
+
+}
+
+
+
+function getComposanteW(v1,v2) 
+{
+	res = [];
+	if(v1.length != v2.length)
+		return -1;
+		
+	for(var i=0;i<v1.length;i++)
+	{
+		if(v1[i]>v2[i])
+			res.push(i);
+		else if(v2[i]>v1[i])
+			return false;
+		
+	
+	}
+	return res;
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Utiliser dans le cadre de l'ajout des diff�rents composants dans le canvas
 // 0 place / 1 transitions / 2 arcs
 var kindOfAdd = -1;
@@ -16,6 +99,9 @@ var source = -1;
 
 var idSelected = -1;
 var kindOfSelected = -1; //1 pour places, 2 pour transitions et 3 pour arcs
+
+
+
 
 
 function createPlace(x,y,m)
@@ -118,7 +204,7 @@ function envoyerJson() {
 
 
 
-function detectArc(i,j) // i = place, j = transition. Retourne -1 si il y a un arc direct entre i et j, 1 si entre j et i et 0 sinon.
+function detectArc(i,j) // i = place, j = transition. Retourne -<pondération de l'arc> si il y a un arc direct entre i et j, <pondération de l'arc> si entre j et i et 0 sinon.
 {
 	for(var z=0;z<model.arcs.length;z++)
 	{
@@ -136,9 +222,9 @@ function detectArc(i,j) // i = place, j = transition. Retourne -1 si il y a un a
 
 }
 
-function refreshOmega()
+function refreshomega(model)
 {
-	var res = omega();
+	var res = omega(model);
 	if(res.length > 0) {
 		$('#results').html("&nbsp &nbsp &nbsp &nbsp");
 		for(var i=0; i<res[0].length; i++) 
@@ -172,15 +258,15 @@ function refreshMatrix(statut) {
 	var res;
 	var which;
 	if(statut == 0) {
-		res = omega();
+		res = omega(model);
 		which = "matrice_w_results";
 	}
 	else if(statut == 1) {
-		res = omegaPlus();
+		res = omegaPlus(model);
 		which = "matrice_wplus_results";
 	}
 	else if(statut == 2) {
-		res = omegaMoins();
+		res = omegaMoins(model);
 		which = "matrice_wmoins_results";
 	}
 
@@ -206,7 +292,7 @@ function refreshMatrix(statut) {
 	}
 }
 
-function omega()
+function omega(model)
 {
 	var res = [];
 	for(var i=0; i<model.places.length; i++) {
@@ -218,15 +304,15 @@ function omega()
 	return res;
 }
 
-function omegaMoins()
+function omegaMoins(model)
 {
 	var res = [];
 	for(var i=0; i<model.places.length; i++) {
 		res[i] = new Array(model.transitions.length);
 		for(var j=0; j<model.transitions.length; j++) {
 			var da = detectArc(i,j);
-			if(da==-1)
-				res[i][j] = 1;
+			if(da<0)
+				res[i][j] = Math.abs(da);
 			else
 				res[i][j] = 0;
 		}
@@ -235,20 +321,220 @@ function omegaMoins()
 }
 
 
-function omegaPlus()
+function omegaPlus(model)
 {
 	var res = [];
 	for(var i=0; i<model.places.length; i++) {
 		res[i] = new Array(model.transitions.length);
 		for(var j=0; j<model.transitions.length; j++) {
 			var da = detectArc(i,j);
-			if(da==1)
-				res[i][j] = 1;
+			if(da>0)
+				res[i][j] = da;
 			else
 				res[i][j] = 0;
 		}
 	}
 	return res;
+}
+
+
+function arbreDeCouverture()
+{
+ marquages = [];
+ predecesseurs = [];
+ var m0 = getMarquage(model);
+ marquages.push(m0);
+  predecesseurs.push(m0);
+  
+  borne=true;
+  if(Math.max.apply(Math, m0)<=1)
+	sauf=true;
+	else
+	sauf=false;
+	
+	console.log("sauf");
+	console.log(sauf);
+  transitionsFranchies = [];
+ makeMeATree(model,0);
+ 
+ $('body').append("</br>Le réseau est ");
+ if(!borne)
+	$('body').append("non ");
+	$('body').append("borné</br>");
+	
+$('body').append("</br>Le réseau est ");
+ if(!sauf)
+	$('body').append("non ");
+	$('body').append("sauf</br>");
+	
+	// Marche pas pour l'instant
+	/*
+	console.log("len");
+	console.log(transitionsFranchies);
+$('body').append("</br>Le réseau est ");
+ if(transitionsFranchies.length != m0.length)
+	$('body').append("non ");
+	$('body').append("quasi vivant</br>");*/
+	
+}
+
+
+//Méfiance avec les tableaux, c'est des passages par reférence ! --> jQuery.extend(true, {}, model)
+// A force de programmer en javascript, on oublie un peu ces dangers classiques, j'ai perdu pas mal de temps avec ces conneries^^
+function makeMeATree(model,level)
+{
+	var tmpModel = jQuery.extend(true, {}, model);
+	var trFranchissables = getTransitionsFranchissables(model);
+	var oldMarquage = getMarquage(model);
+	if(level==0)
+	$('body').append(oldMarquage+"</br>");
+	
+	for(var i=0; i<trFranchissables.length; i++) {
+	if(level==0)
+		predecesseurs.splice(1,predecesseurs.length);
+	resModel = franchirTransition(jQuery.extend(true, {}, model),trFranchissables[i]);
+
+	
+	
+	if(resModel!=false)
+	{
+	if(transitionsFranchies.indexOf(trFranchissables[i])==-1)
+		transitionsFranchies.push(trFranchissables[i]);
+	var newMarquage = getMarquage(resModel);
+	for(var j=0;j<4*level;j++)
+			$('body').append("&nbsp;");
+		$('body').append("|___");
+		$('body').append(newMarquage+"</br>");
+		makeMeATree(resModel,level+1);
+		}
+		}
+	
+
+}
+
+function checkIfNonBorne(newMarquage)
+{
+
+	for(var i=0; i<predecesseurs.length; i++) {
+		
+			var res = getComposanteW(newMarquage,predecesseurs[i]) 
+			if(res!=false)
+			{
+			console.log(res);
+			for(var j=0;j<res.length;j++)
+			{
+				newMarquage[res[j]]="w";
+			}
+			}
+			return newMarquage;
+		
+		
+	}
+	return newMarquage;
+
+}
+
+
+function isNotOld(newMarquage)
+{
+
+	for(var i=0; i<marquages.length; i++) {
+		if(compareVector(newMarquage,marquages[i]))
+		return false;
+	}
+	return true;
+
+}
+
+function franchirTransition(model,transition)
+{
+
+	var o = omega(model);
+	
+	var colToAdd = extractColumn(o,transition);
+	var oldMarquage = getMarquage(model);
+
+	var newMarquage = addVector(oldMarquage,colToAdd);
+	var newMarquageNB = checkIfNonBorne(jQuery.extend(true, {}, newMarquage));
+	console.log(newMarquage);
+	console.log(newMarquageNB);
+	if(!compareVector(newMarquageNB,newMarquage))
+	{
+		console.log("bbbbb");
+		borne=false;
+		sauf=false;
+		}
+	newMarquage=newMarquageNB;
+	if(isNotOld(newMarquage))
+	{
+		
+		
+		marquages.push(newMarquage);
+		predecesseurs.push(newMarquage);
+		
+		/*model = setMarquage(model, newMarquage);
+		if(Math.max.apply(Math, newMarquage)>1)
+			sauf=false;*/
+		return model;
+	}
+	return false;
+	
+	
+
+}
+
+function getMarquage(model)
+{	
+var res = [];
+for(var i=0; i<model.places.length; i++) {
+	res[i]=model.places[i].properties['marking'];
+}
+return res;
+}
+
+
+function setMarquage(model, vectMarquage) 
+{
+if(vectMarquage.length != model.places.length)
+return -1;
+for(var i=0; i<vectMarquage.length; i++) {
+	model.places[i].properties['marking']=vectMarquage[i];
+}
+return model;
+
+}
+
+
+function getTransitionsFranchissables(model)
+{
+	var res =[];
+	var oMoins = omegaMoins(model);
+	var oPlus = omegaPlus(model);
+	for(var i =0;i<getNbColumns(oMoins);i++)
+	{
+		var okPre = true;
+		var okPost = false;
+		for(var j =0;j<getNbRows(oMoins);j++)
+		{
+			if(oPlus[j][i]!=0)
+				okPost=true;
+			if(model.places[j].properties['marking']<oMoins[j][i])
+{			
+
+				okPre= false;
+				}
+
+		}
+				if(okPre && okPost)
+				res.push(i);
+				
+	
+	}
+
+	return res;
+	
+	
+
 }
 
 function drawPlace(layer, i)
@@ -560,7 +846,13 @@ $(window).load(function(){
 		width: 600,
 		height: 400
 	});
+	
 
+	
+	var v1 =[1,0,0,1];
+	var v2 = [1,0,0,1];
+
+	console.log(compareVector(v1,v2));
 	mouseEventCallBack();
 	
 
@@ -571,8 +863,8 @@ $(window).load(function(){
 	//Calcul des T invariants :
 	//console.log(Tinvariants());
 	
-	//console.log(omegaMoins());
-	//console.log(omegaPlus());
+	//console.log(omegaMoins(model));
+	//console.log(omegaPlus(model));
 
 	stage.add(backgound);
 	stage.add(layer1); // les places
@@ -665,15 +957,13 @@ function eraseElement()
 			model.arcs.splice(idSelected,1);
 	}
 	$( "#dialog-modal" ).dialog("close" );
-	console.log(model);
 	redrawAll();
 }
 
 
 function Pinvariants()
 {
-	var invP = omega();
-	console.log(invP);
+	var invP = omega(model);
 	//Calcul des P invariants :
 	return CalculP_T(ConcatRight(invP,Identity(getNbRows(invP))),getNbRows(invP),getNbColumns(invP));
 
@@ -682,7 +972,7 @@ function Pinvariants()
 
 function Tinvariants()
 {
-	var invT = Transpose(omega());
+	var invT = Transpose(omega(model));
 	
 	//Calcul des P invariants :
 	return CalculP_T(ConcatRight(invT,Identity(getNbRows(invT))),getNbRows(invT),getNbColumns(invT));
@@ -839,19 +1129,19 @@ function controlerMatrice(status) {
 	if(status == 0) {
 		which = "matrice_w";
 		astuce = "N'oubliez pas la relation suivante : <br/> W = (W+)-(W-)";
-		res = omega();
+		res = omega(model);
 	}
 	else if(status == 1) {
 		which = "matrice_wplus";
 		astuce = "Deux choix possibles :<br/>1 lorsque la place P est une sortie de la transition T.<br />"+
 				 "0 lorsque la place P n'appartient pas aux sorties de la transition T.";
-		res = omegaPlus();
+		res = omegaPlus(model);
 	}
 	else if(status == 2) {
 		which = "matrice_wmoins";
 		astuce = "Deux choix possibles :<br/>		1 lorsque la place P est une entrée de la transition T.<br />"+
 				 "		0 lorsque la place P n'appartient pas aux entrées de la transition T.";
-		res = omegaMoins();
+		res = omegaMoins(model);
 	}
 	
 	var nbPlaces = model.places.length;

@@ -19,6 +19,24 @@ function getNbColumns(mat)
 		return 0;
 }
 
+function extractColumn(mat,numero)
+{
+	var lignes = getNbRows(mat);
+	var col = getNbColumns(mat);
+	var res = new Array(lignes);
+	
+	for(var i=0;i<lignes;i++)
+	{
+		res[i] = mat[i][numero];
+	
+	}
+	return res;
+
+}
+
+
+
+
 function Identity(dim)
 {
 	
