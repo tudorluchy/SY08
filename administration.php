@@ -18,7 +18,7 @@
                     "bJQueryUI": true,
                     "bPaginate": true
                 });
-            } );
+            });
         </script> 
 	</head>
 	<body>	
@@ -66,12 +66,13 @@
             $req = "SELECT * FROM sy08_exercice ORDER BY date DESC";
 			$res = DB::SqlToArray($req);
             echo "<table class='table_exo'>";
-            echo "<thead><tr><th>Exercice</th><th>Date d'ajout</th><th>Edition</th><th>Suppresion</th></tr></thead>";
+            echo "<thead><tr><th>Exercice</th><th>Date d'ajout</th><th>Difficulte</th><th>Edition</th><th>Suppresion</th></tr></thead>";
             echo "<tbody>";
             foreach($res as $ligne) {
                 echo "<tr>";
                 echo "<td>".$ligne['intitule']."</td>";
 				echo "<td>".date_format(date_create($ligne['date']), 'd/m/Y H:i')."</td>"; 
+                echo "<td>".$ligne['difficulte']."</td>";
 				echo "<td><a href='edit.php?action=edit&id=".$ligne['id']."'><img src='img/edit.png' title='Modifier cet exercice'/></a></td>";
                 echo "<td><a href='?action=delete&id=".$ligne['id']."'><img src='img/delete.png' title='Supprimer cet exercice'/></a></td>";
                 echo "</tr>";
@@ -87,9 +88,12 @@
 				<label>Intitule de l'énonce :</label><input type='text' name='intitule' title='Intitule' onblur="verifIntitule(this)" value="<?php if(isset($_POST['intitule'])){echo $_POST['intitule'];}?>"><br />
 				<label>L'énoncé :</label><textarea name='enonce' title='Enonce' rows="8" cols="100" onblur="verifEnonce(this)"><?php if(isset($_POST['enonce'])){echo $_POST['enonce'];} ?></textarea><br />
 				<label>Importer une image</label>
-				<input type="hidden" name="MAX_FILE_SIZE" value="2097152">     
+				<input type="hidden" name="MAX_FILE_SIZE" value="10097152">     
 				<input type="file" name="image_exo"> <br/>
 				<span id="image_info"></span>
+                <label>Importer un fichier</label>
+				<input type="hidden" name="MAX_FILE_SIZE" value="10097152">     
+				<input type="file" name="fichier_exo"> <br/>
 				<label>Niveau de difficulté</label>
 				<select name='difficulte'>
 					<option value="+++">+++</option>

@@ -15,7 +15,7 @@ if (isset($_FILES["image_exo"]["name"]) && !empty($_FILES["image_exo"]["name"]))
 		|| ($_FILES["image_exo"]["type"] == "image/pjpeg")
 		|| ($_FILES["image_exo"]["type"] == "image/x-png")
 		|| ($_FILES["image_exo"]["type"] == "image/png"))
-		&& ($_FILES["image_exo"]["size"] < 2097152)
+		&& ($_FILES["image_exo"]["size"] < 10097152)
 		&& in_array($extension, $allowedExts)) {
 			if ($_FILES["image_exo"]["error"] > 0) {
 				$save = false;
@@ -57,7 +57,7 @@ if (isset($_FILES["fichier_rdp"]["name"]) && !empty($_FILES["fichier_rdp"]["name
 	$allowedExts = array("rdp", "RDP");
 	$extension = end(explode(".", $_FILES["fichier_rdp"]["name"]));
 	echo "<ul class='upload_info'>";
-	if (($_FILES["fichier_rdp"]["size"] < 2097152)
+	if (($_FILES["fichier_rdp"]["size"] < 10097152)
 		&& in_array($extension, $allowedExts)) {
 			if ($_FILES["fichier_rdp"]["error"] > 0) {
 				$save = false;
@@ -97,5 +97,45 @@ if (isset($_FILES["fichier_rdp"]["name"]) && !empty($_FILES["fichier_rdp"]["name
 		echo "</ul>";
 }
 
+// fichier exo
+if (isset($_FILES["fichier_exo"]["name"]) && !empty($_FILES["fichier_exo"]["name"])) {
+    // Copie dans le repertoire du script avec un nom
+	// incluant l'heure a la seconde pres 
+	$repertoireDestination = "upload_fichiers/";
+	$nomDestination = $_FILES["fichier_exo"]["name"];
+
+	$extension = end(explode(".", $_FILES["fichier_exo"]["name"]));
+	echo "<ul class='upload_info'>";
+	if (($_FILES["fichier_exo"]["size"] < 10097152)) {
+			if ($_FILES["fichier_exo"]["error"] > 0) {
+				$save = false;
+				echo "<li>Return Code: " . $_FILES["fichier_exo"]["error"]. "</li>";
+			} else {
+				echo "<li>Upload: " . $_FILES["fichier_exo"]["name"] . "</li>";
+				echo "<li>Type: " . $_FILES["fichier_exo"]["type"] . "</li>";
+				echo "<li>Size: " . ($_FILES["fichier_exo"]["size"] / 1024) . " kB</li>";
+				echo "<li>Temp file: " . $_FILES["fichier_exo"]["tmp_name"] . "</li>";
+				
+				if (!is_dir($repertoireDestination)) {
+					if (!@mkdir($repertoireDestination, 0777)) {
+                        $error = error_get_last();
+						// echo $error['message'];
+						$save = false;
+					}
+				}
+				
+				if (file_exists($repertoireDestination.$nomDestination)){
+					echo "<li>".$nomDestination . " already exists.</li>";
+				} else {
+					move_uploaded_file($_FILES["fichier_exo"]["tmp_name"], $repertoireDestination.$nomDestination);
+					echo "<li>Stored in: " . $repertoireDestination.$nomDestination."</li>";
+				}
+			}
+		} else {
+			$save = false;
+			echo "<li>Invalid file</li>";
+		}
+		echo "</ul>";
+}
 	
 ?>

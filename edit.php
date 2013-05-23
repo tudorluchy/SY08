@@ -57,9 +57,12 @@
 					<label>Image :</label><img title='' src='upload_images/<?php echo $res[0]['image']; ?>'/><br />
 				<?php } ?>
 				<label>Importer une image</label>
-				<input type="hidden" name="MAX_FILE_SIZE" value="2097152">     
+				<input type="hidden" name="MAX_FILE_SIZE" value="10097152">     
 				<input type="file" name="image_exo"> <br/>
 				<span id="image_info"></span>
+                <label>Importer un fichier</label>
+				<input type="hidden" name="MAX_FILE_SIZE" value="10097152">     
+				<input type="file" name="fichier_exo"> <br/>
 				<label>Niveau de difficulté</label>
 				<select name='difficulte'>
 					<option <?php if ($res[0]['difficulte'] == '+++') echo 'selected'; ?> value="+++">+++</option>
