@@ -544,12 +544,24 @@ function drawPlace(layer, i)
 {
 
 	var group = new Kinetic.Group({
-		draggable : true
+	x: model.places[i].coordx,
+		y: model.places[i].coordy,
+		draggable : true,
+		dragBoundFunc: function(pos) {
+			
+            var newY = pos.y < 40 ? 40 : pos.y;
+			var newX = pos.x < 40 ? 40 : pos.x;
+			
+			var newY = newY > 400-40 ? 400-40 : newY;
+			var newX = newX > 600-40 ? 600-40 : newX;
+            return {
+              x: newX ,
+              y: newY
+            };
+          }
 
 	});
 	var cercle = new Kinetic.Circle({
-		x: model.places[i].coordx,
-		y: model.places[i].coordy,
 		radius: 20,
 		fill: 'red',
 		stroke: 'black',
@@ -560,8 +572,7 @@ function drawPlace(layer, i)
 
 
 	var label = new Kinetic.Text({
-		x: model.places[i].coordx,
-		y: model.places[i].coordy,
+		
 		text: 'P'+(i+1),
 		fontSize: 18,
 		fontFamily: 'Calibri',
@@ -625,8 +636,6 @@ function drawPlace(layer, i)
 function drawTransition(layer, i)
 {
 	var rec = new Kinetic.Rect({
-		x: model.transitions[i].coordx,
-		y: model.transitions[i].coordy,
 		width: 50,
 		height: 10,
 		fill: 'red',
@@ -639,7 +648,21 @@ function drawTransition(layer, i)
 
 
 	var group = new Kinetic.Group({
-		draggable : true
+		x: model.transitions[i].coordx,
+		y: model.transitions[i].coordy,
+		draggable : true,
+		dragBoundFunc: function(pos) {
+			
+            var newY = pos.y < 20 ? 20 : pos.y;
+			var newX = pos.x < 20 ? 20 : pos.x;
+			
+			var newY = newY > 400-30 ? 400-30 : newY;
+			var newX = newX > 600-70 ? 600-70 : newX;
+            return {
+              x: newX ,
+              y: newY
+            };
+          }
 
 	});
 
@@ -647,8 +670,6 @@ function drawTransition(layer, i)
 
 
 	var label = new Kinetic.Text({
-		x: model.transitions[i].coordx,
-		y: model.transitions[i].coordy,
 		text: 'T'+(i+1),
 		fontSize: 18,
 		fontFamily: 'Calibri',
@@ -991,6 +1012,8 @@ function eraseElement()
 	console.log(idSelected);
 	console.log(model);
 	redrawAll();
+	refreshEveryMatrixResults();
+	printMatricesInvariants();
 }
 
 

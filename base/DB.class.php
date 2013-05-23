@@ -1,10 +1,7 @@
 <?php
 
 
-define("DB_HOST","localhost");
-define("DB_USER","root");
-define("DB_PASS","pass");
-define("BASE","sy08");
+require_once('DB.loginfo.php');
 
 
 class DB {
