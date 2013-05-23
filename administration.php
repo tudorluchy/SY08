@@ -16,7 +16,19 @@
             $(document).ready(function() {
                 $('.table_exo').dataTable({
                     "bJQueryUI": true,
-                    "bPaginate": true
+                    "bPaginate": true,
+                    "aaSorting": [[ 1, "desc" ]],
+                     "oLanguage": {
+                        "sLengthMenu": "Afficher _MENU_ entrées par page",
+                        "sZeroRecords": "Rien trouvé. Désolé.",
+                        "sInfo": "Afficher _START_ à _END_ de _TOTAL_ lignes",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 records",
+                        "sInfoFiltered": "(filtré depuis _MAX_ total lignes)",
+                        "sSearch" : "Rechercher"
+                    },
+                    "aoColumnDefs": [
+                        { 'bSortable': false, 'aTargets': [ 4, 5 ] }
+                     ]
                 });
             });
         </script> 
@@ -31,7 +43,9 @@
 			$json = '';
             $save = true;
 			require_once(dirname(__FILE__).'/verif_files.php');
-		}
+		} else {
+            $save = false;
+        }
 	?>
 	<div id="corps_modif">
 		<h2>Modification des exercices <a class='lien_droite' href="selection_exercices.php" title="Aller à la liste des exercices">Liste des exercices</a></h2>
@@ -53,8 +67,9 @@
                         } else {
                             $json_final = $_POST['json'];
                         }
-                        $req = "INSERT INTO sy08_exercice (intitule, enonce, image, difficulte, json, date) 
-                        VALUES ('".$_POST['intitule']."', '".$_POST['enonce']."', '".$_FILES['image_exo']['name']."', '".$_POST['difficulte']."', '".$json_final."', NOW())";
+                        $req = "INSERT INTO sy08_exercice (intitule, enonce, actif, image, fichier, difficulte, json, date) 
+                        VALUES ('".$_POST['intitule']."', '".$_POST['enonce']."', 1, '".$_FILES['image_exo']['name']."', '".$_FILES['fichier_exo']['name']."','".$_POST['difficulte']."', '".$json_final."', NOW())";
+                        echo $req;
                         $res = DB::Sql($req);
                         if ($res) {
                             echo "<ul><li>Exercice bien ajouté!</li></ul>";
@@ -66,13 +81,14 @@
             $req = "SELECT * FROM sy08_exercice ORDER BY date DESC";
 			$res = DB::SqlToArray($req);
             echo "<table class='table_exo'>";
-            echo "<thead><tr><th>Exercice</th><th>Date d'ajout</th><th>Difficulte</th><th>Edition</th><th>Suppresion</th></tr></thead>";
+            echo "<thead><tr><th>Exercice</th><th>Date d'ajout</th><th>Difficulte</th><th>Actif</th><th>Edition</th><th>Suppresion</th></tr></thead>";
             echo "<tbody>";
             foreach($res as $ligne) {
                 echo "<tr>";
                 echo "<td>".$ligne['intitule']."</td>";
 				echo "<td>".date_format(date_create($ligne['date']), 'd/m/Y H:i')."</td>"; 
                 echo "<td>".$ligne['difficulte']."</td>";
+                echo "<td>"; if ($ligne['actif']) echo "Oui"; else echo "Non"; echo "</td>";
 				echo "<td><a href='edit.php?action=edit&id=".$ligne['id']."'><img src='img/edit.png' title='Modifier cet exercice'/></a></td>";
                 echo "<td><a href='?action=delete&id=".$ligne['id']."'><img src='img/delete.png' title='Supprimer cet exercice'/></a></td>";
                 echo "</tr>";

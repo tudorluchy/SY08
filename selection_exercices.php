@@ -12,8 +12,8 @@
                     containerID : "liste_exercices",
                     perPage : 5,
                     first       : "Premier",
-                    previous    : "Revenir",
-                    next        : "Avancer",
+                    previous    : "Précédent",
+                    next        : "Suivant",
                     last        : "Dernier",
                     midRange : 10
                 });
@@ -45,14 +45,15 @@
             
             echo '<div id="liste_exercices">';
             foreach($res as $ligne) {
-				echo '<div class="exo_selection">';
-                echo '<span class="exo_titre_bis">Exercice : '.$ligne['intitule'].'</span>';
-				echo '<span class="exo_date"> <b>'.date_format(date_create($ligne['date']), 'd/m/Y H:i').'</b> </span> <br />';
-				echo '<span class="exo_enonce">'.$ligne['enonce'].'</span>';
-				echo '<a href="exercice.php?action=effectuer&id='.$ligne['id'].'"><img class="go" src="img/go.png" title="Start exercice!"/></a> <br />';
-				echo '<b>Niveau de difficulté : '.$ligne['difficulte'].'</b>';
-				echo '</div>';
-                
+                if ($ligne['actif']) {
+                    echo '<div class="exo_selection">';
+                    echo '<span class="exo_titre_bis">Exercice : '.$ligne['intitule'].'</span>';
+                    echo '<span class="exo_date"> <b>'.date_format(date_create($ligne['date']), 'd/m/Y H:i').'</b> </span> <br />';
+                    echo '<span class="exo_enonce">'.$ligne['enonce'].'</span>';
+                    echo '<a href="exercice.php?action=effectuer&id='.$ligne['id'].'"><img class="go" src="img/go.png" title="Start exercice!"/></a> <br />';
+                    echo '<b>Niveau de difficulté : '.$ligne['difficulte'].'</b>';
+                    echo '</div>';
+                }
 			}
             echo "</div>";
             echo '<div class="page_navigation"></div>';

@@ -28,10 +28,18 @@
 				if (!empty($json)) {
 					$json_final = $json;
 				} else {
-					$json_final = $_POST['json'];
+					if (isset($_POST['json'])) {
+                        $json_final = $_POST['json'];
+                    }
 				}
-				$req = "UPDATE sy08_exercice SET intitule = '".$_POST['intitule']."', enonce = '".$_POST['enonce']."' , image = '".$_FILES['image_exo']['name']."' , difficulte = '".$_POST['difficulte']."' , json = '".$json_final."' WHERE id = ".$_GET['id'];
-				DB::Sql($req);
+                if (isset($_POST['actif']) &&  $_POST['actif'] == 'on') {
+                    $actif = 1;
+                } else {
+                    $actif = 0;
+                }
+				$req = "UPDATE sy08_exercice SET intitule = '".$_POST['intitule']."', enonce = '".$_POST['enonce']."' , actif = ".$actif.", image = '".$_FILES['image_exo']['name']."' , fichier = '".$_FILES['fichier_exo']['name']."' , difficulte = '".$_POST['difficulte']."' , json = '".$json_final."' WHERE id = ".$_GET['id'];
+				echo $req;
+                DB::Sql($req);
                 $req = 'SELECT * FROM sy08_exercice WHERE id = '.$_GET['id'];
 				$res = DB::SqlToArray($req);
 			// edit
@@ -68,7 +76,9 @@
 					<option <?php if ($res[0]['difficulte'] == '+++') echo 'selected'; ?> value="+++">+++</option>
 					<option <?php if ($res[0]['difficulte'] == '++') echo 'selected'; ?> value="++">++</option>
 					<option <?php if ($res[0]['difficulte'] == '+') echo 'selected'; ?> value="+">+</option>
-				</select><br /><br />
+				</select><br />
+                <label>Actif</label><input type="checkbox" name="actif" <?php if ($res[0]['actif'] == '1') echo "checked='true'";?>/>
+                <br /><br />
 				<b>Resolution du graphe :</b><br />
 				<div id='button_group'>
 					<input type='button' value='Ajout Place' name='add_place' onClick='activateAddPlace()' />
