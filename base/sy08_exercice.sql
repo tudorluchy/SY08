@@ -13,9 +13,9 @@ CREATE  TABLE IF NOT EXISTS `sy08`.`sy08_exercice` (
   `intitule` VARCHAR(255) NOT NULL ,
   `enonce` LONGTEXT NOT NULL ,
   `image` VARCHAR(255) NULL ,
+  `fichier` VARCHAR(255) NULL ,
   `difficulte` ENUM('+','++','+++') NOT NULL ,
   `json` LONGTEXT NOT NULL ,
-  `rdp` VARCHAR(255) NOT NULL ,
   `date` DATETIME NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
