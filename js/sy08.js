@@ -19,6 +19,10 @@ var transitionsFranchies; // Pour quasi vivant : Toutes les transitions sont fra
 var sauf; //borne un 1 pour tout marquage
 var borne; //pas de w
 
+var transition_width = 50;
+var transition_height = 10;
+var place_radius = 20;
+
 //On ne peut pas utiliser l'opérateur ==
 function compareVector(v1,v2) 
 {
@@ -562,7 +566,7 @@ function drawPlace(layer, i)
 
 	});
 	var cercle = new Kinetic.Circle({
-		radius: 20,
+		radius: place_radius,
 		fill: 'red',
 		stroke: 'black',
 		strokeWidth: 4,
@@ -636,8 +640,8 @@ function drawPlace(layer, i)
 function drawTransition(layer, i)
 {
 	var rec = new Kinetic.Rect({
-		width: 50,
-		height: 10,
+		width: transition_width,
+		height: transition_height,
 		fill: 'red',
 		stroke: 'black',
 		strokeWidth: 4,
@@ -722,25 +726,74 @@ function drawTransition(layer, i)
 
 }
 
+//http://stackoverflow.com/questions/6091728/line-segment-circle-intersection
+//Source : transition, dest place
+function getAnchorPointPlace(sourceX,sourceY,destX,destY)
+{
+	var theta = Math.atan2(destY-sourceY, destX-sourceX)
+	return {
+		  x: sourceX + place_radius * Math.cos(theta),
+		  y: sourceY + place_radius * Math.sin(theta)
+		};
+
+
+}
+
+//Source : place, dest transition
+function getAnchorPointTransition(sourceX,sourceY,destX,destY)
+{
+	//Points d'ancrages possibles : les milieux des côtés du rectangle qui représente une transition
+	var anchor1X = destX+transition_width/2;
+	var anchor1Y = destY+transition_height/2;
+	var len1 = Math.sqrt((sourceX-anchor1X)*(sourceX-anchor1X)+(sourceY-destY)*(sourceY-destY));
+	var len2 = Math.sqrt((sourceX-destX)*(sourceX-destX)+(sourceY-anchor1Y)*(sourceY-anchor1Y));
+	var len3 = Math.sqrt((sourceX-anchor1X)*(sourceX-anchor1X)+(sourceY-(destY+transition_height))*(sourceY-(destY+transition_height)));
+	var len4 = Math.sqrt((sourceX-(destX+transition_width))*(sourceX-(destX+transition_width))+(sourceY-anchor1Y)*(sourceY-anchor1Y));
+	if(len1<len2 && len1<len3 && len1<len4)
+		return {
+		  x: anchor1X,
+		  y: destY
+		};
+	if(len2<len1 && len2<len3 && len2<len4)
+		return {
+		  x: destX,
+		  y: anchor1Y
+		};
+	if(len3<len1 && len3<len2 && len3<len4)
+		return {
+		  x: anchor1X,
+		  y: destY+transition_height
+		};
+	else
+		return {
+		  x: destX+transition_width,
+		  y: anchor1Y
+		};
+}
+
 function drawLine(layer, i)
 {
 	var pts = new Array();
+	
 	if(model.arcs[i].place2trans==1)
 	{
-
-		pts.push(model.places[model.arcs[i].source].coordx);
-		pts.push(model.places[model.arcs[i].source].coordy);
-
-		pts.push(model.transitions[model.arcs[i].dest].coordx);
-		pts.push(model.transitions[model.arcs[i].dest].coordy);
+		var pt = getAnchorPointTransition(model.places[model.arcs[i].source].coordx,model.places[model.arcs[i].source].coordy,model.transitions[model.arcs[i].dest].coordx,model.transitions[model.arcs[i].dest].coordy);
+		var pt2 = getAnchorPointPlace(model.places[model.arcs[i].source].coordx,model.places[model.arcs[i].source].coordy,model.transitions[model.arcs[i].dest].coordx,model.transitions[model.arcs[i].dest].coordy);
+		pts.push(pt2.x);
+		pts.push(pt2.y);
+		
+		
+		pts.push(pt.x);
+		pts.push(pt.y);
 	}
 	else
 	{
-		pts.push(model.transitions[model.arcs[i].source].coordx);
-		pts.push(model.transitions[model.arcs[i].source].coordy);
-
-		pts.push(model.places[model.arcs[i].dest].coordx);
-		pts.push(model.places[model.arcs[i].dest].coordy);
+		var pt = getAnchorPointTransition(model.places[model.arcs[i].dest].coordx,model.places[model.arcs[i].dest].coordy,model.transitions[model.arcs[i].source].coordx,model.transitions[model.arcs[i].source].coordy);
+		pts.push(pt.x);
+		pts.push(pt.y);
+		var pt2 = getAnchorPointPlace(model.places[model.arcs[i].dest].coordx,model.places[model.arcs[i].dest].coordy,model.transitions[model.arcs[i].source].coordx,model.transitions[model.arcs[i].source].coordy);
+		pts.push(pt2.x);
+		pts.push(pt2.y);
 
 
 	}
