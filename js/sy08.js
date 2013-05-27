@@ -1024,14 +1024,17 @@ function eraseElement()
 					model.arcs.splice(i,1);
 					i--;
 				}
-				if(model.arcs[i].place2trans==1 && model.arcs[i].source>idSelected)
+				else
 				{
-					model.arcs[i].source = model.arcs[i].source-1;
-				}
+					if(model.arcs[i].place2trans==1 && model.arcs[i].source>idSelected)
+					{
+						model.arcs[i].source = model.arcs[i].source-1;
+					}
 
-				if(model.arcs[i].place2trans!=1 && model.arcs[i].dest>idSelected)
-				{
-					model.arcs[i].dest = model.arcs[i].dest-1;
+					if(model.arcs[i].place2trans!=1 && model.arcs[i].dest>idSelected)
+					{
+						model.arcs[i].dest = model.arcs[i].dest-1;
+					}
 				}
 
 			}
@@ -1046,14 +1049,17 @@ function eraseElement()
 					model.arcs.splice(i,1);
 					i--;
 				}
-				if(model.arcs[i].place2trans!=1 && model.arcs[i].source>idSelected)
+				else
 				{
-					model.arcs[i].source = model.arcs[i].source-1;
-				}
+					if(model.arcs[i].place2trans!=1 && model.arcs[i].source>idSelected)
+					{
+						model.arcs[i].source = model.arcs[i].source-1;
+					}
 
-				if(model.arcs[i].place2trans==1 && model.arcs[i].dest>idSelected)
-				{
-					model.arcs[i].dest = model.arcs[i].dest-1;
+					if(model.arcs[i].place2trans==1 && model.arcs[i].dest>idSelected)
+					{
+						model.arcs[i].dest = model.arcs[i].dest-1;
+					}
 				}
 			}
 
