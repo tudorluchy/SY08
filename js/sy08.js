@@ -52,7 +52,7 @@ function addVector(v1,v2)
 		if(v1[i]=="w" || v2[i]=="w")
 			res[i]="w";
 		else
-			res[i] = parseInt(v1[i])+parseInt(v2[i]);
+			res[i] = parseInt(v1[i],10)+parseInt(v2[i],10);
 
 	}
 	return res;
@@ -547,6 +547,7 @@ function getTransitionsFranchissables(model)
 function drawPlace(layer, i)
 {
 
+
 	var group = new Kinetic.Group({
 	x: model.places[i].coordx,
 		y: model.places[i].coordy,
@@ -556,8 +557,8 @@ function drawPlace(layer, i)
             var newY = pos.y < 40 ? 40 : pos.y;
 			var newX = pos.x < 40 ? 40 : pos.x;
 			
-			var newY = newY > 400-40 ? 400-40 : newY;
-			var newX = newX > 600-40 ? 600-40 : newX;
+			newY = newY > 400-40 ? 400-40 : newY;
+			newX = newX > 600-40 ? 600-40 : newX;
             return {
               x: newX ,
               y: newY
@@ -567,7 +568,7 @@ function drawPlace(layer, i)
 	});
 	var cercle = new Kinetic.Circle({
 		radius: place_radius,
-		fill: 'red',
+		//fill: 'red',
 		stroke: 'black',
 		strokeWidth: 4,
 		name : i,
@@ -584,7 +585,24 @@ function drawPlace(layer, i)
 		padding: 20,
 		align: 'center'
 	});
+	
+	var marking = new Kinetic.Text({
+		
+		text: ''+model.places[i].properties['marking'],
+		fontSize: 18,
+		fontFamily: 'Calibri',
+		fill: '#555',
+		x: parseInt(model.places[i].coordx,10)-group.getX()-place_radius,
+		y: parseInt(model.places[i].coordy,10)-group.getY()-place_radius/2+4,
+		width:38,
+		align: 'center'
+	});
+	
+
+
+	 
 	group.add(cercle);
+	group.add(marking);
 	group.add(label);
 
 
@@ -644,7 +662,7 @@ function drawTransition(layer, i)
 	var rec = new Kinetic.Rect({
 		width: transition_width,
 		height: transition_height,
-		fill: 'red',
+		//fill: 'red',
 		stroke: 'black',
 		strokeWidth: 4,
 
@@ -804,7 +822,20 @@ function drawLine(layer, i)
 
 
 	}
-
+	
+	console.log(pts);
+	console.log((pts[0]+pts[2])/2);
+	var ponderation = new Kinetic.Text({
+		
+		text: ''+model.arcs[i].properties['value'],
+		fontSize: 18,
+		fontFamily: 'Calibri',
+		fill: '#555',
+		x : (pts[0]+pts[2])/2,
+		y: (pts[1]+pts[3])/2,
+		padding:10,
+		align: 'center'
+	});
 
 	var redLine = new Kinetic.Line({
 		points: pts,
@@ -821,6 +852,7 @@ function drawLine(layer, i)
 
 	},false);
 
+	layer.add(ponderation);
 	layer.add(redLine);
 
 	var arrow = [];
@@ -984,7 +1016,7 @@ function displayProperties(Json,editable)
 	{
 		$( "#dialog-modal" ).append('<span class="key">'+key+' : </span>');
 		if(editable)
-			$( "#dialog-modal" ).append('<input type="text" class="value_edit" id="value_'+key+'"  value="'+Json[key]+'"/></br>');
+			$( "#dialog-modal" ).append('<input type="text" class="value_edit" id="value_'+key+'" maxlength="3" value="'+Json[key]+'"/></br>');
 		else
 			$( "#dialog-modal" ).append(Json[key]+'</br>');
 	}
@@ -1004,15 +1036,15 @@ function editProperty()
 	{
 		$(".value_edit").each(function(){
 			if(kindOfSelected==1)
-				model.places[idSelected].properties[$(this).attr('id').replace("value_","")]=$(this).val();
+				model.places[idSelected].properties[$(this).attr('id').replace("value_","")]=parseInt($(this).val(),10);
 			if(kindOfSelected==2)
-				model.transitions[idSelected].properties[$(this).attr('id').replace("value_","")]=$(this).val();
+				model.transitions[idSelected].properties[$(this).attr('id').replace("value_","")]=parseInt($(this).val(),10);
 			if(kindOfSelected==3)
-				model.arcs[idSelected].properties[$(this).attr('id').replace("value_","")]=$(this).val();
+				model.arcs[idSelected].properties[$(this).attr('id').replace("value_","")]=parseInt($(this).val(),10);
 		});
 	}
 	$( "#dialog-modal" ).dialog("close" );
-
+	redrawAll();
 	//console.log(model.places);
 }
 
