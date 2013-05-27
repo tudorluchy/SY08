@@ -207,6 +207,10 @@ fieldset.fieldset_ajout_exercice
 	-webkit-border-top-right-radius: 5px; /* pour Chrome */
 }
 
+#treeCorrection, #tree {
+	display: none;
+}
+
 /****************************************************/
 /*********Composants relatifs aux résultats**********/
 /****************************************************/
