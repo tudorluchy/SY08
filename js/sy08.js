@@ -341,9 +341,9 @@ function omegaPlus(model)
 }
 
 
-function arbreDeCouverture()
+function arbreDeCouverture(idElementAffichage)
 {
-	$('#tree').html("");
+	$(idElementAffichage).html("");
 	marquages = [];
 	predecesseurs = [];
 	var m0 = getMarquage(model);
@@ -357,9 +357,9 @@ function arbreDeCouverture()
 		sauf=false;
 
 	transitionsFranchies = [];
-	makeMeATree(model,0);
+	makeMeATree(model,0, idElementAffichage);
 
-
+/*
 	$('#tree').append("</br>Le réseau est ");
 	if(!borne)
 		$('#tree').append("non ");
@@ -369,16 +369,21 @@ function arbreDeCouverture()
 	if(!sauf)
 		$('#tree').append("non ");
 	$('#tree').append("sauf</br>");
-
+*/
 	// A Vérifier
 	console.log("len");
 	console.log(transitionsFranchies.length);
 	console.log(model.transitions.length);
 	console.log(transitionsFranchies.length != model.transitions.length);
-	$('#tree').append("</br>Le réseau est ");
-	if(transitionsFranchies.length != model.transitions.length)
-		$('#tree').append("non ");
-	$('#tree').append("quasi vivant</br>");
+	//$('#tree').append("</br>Le réseau est ");
+	if(transitionsFranchies.length != model.transitions.length) {
+		//$('#tree').append("non ");
+		quasivivant = false;
+	}
+	else 
+		quasivivant = true;
+
+	//$('#tree').append("quasi vivant</br>");
 
 
 
@@ -387,7 +392,7 @@ function arbreDeCouverture()
 
 //jQuery.extend(true, {}, model) Poure recopier un objet 
 
-function makeMeATree(model,level)
+function makeMeATree(model,level, idElementAffichage)
 {
 	var tmpModel = jQuery.extend(true, {}, model);
 	var trFranchissables = getTransitionsFranchissables(model);
@@ -395,7 +400,7 @@ function makeMeATree(model,level)
 	var oldMarquage = getMarquage(model);
 
 	if(level==0)
-		$('#tree').append(oldMarquage+"</br>");
+		$(idElementAffichage).append(oldMarquage+"</br>");
 
 	for(var i=0; i<trFranchissables.length; i++) {
 		if(transitionsFranchies.indexOf(trFranchissables[i])==-1)
@@ -411,9 +416,9 @@ function makeMeATree(model,level)
 
 			var newMarquage = getMarquage(resModel);
 			for(var j=0;j<4*level;j++)
-				$('#tree').append("&nbsp;");
-			$('#tree').append("|___");
-			$('#tree').append(newMarquage+"</br>");
+				$(idElementAffichage).append("&nbsp;");
+			$(idElementAffichage).append("|___");
+			$(idElementAffichage).append(newMarquage+"</br>");
 			makeMeATree(resModel,level+1);
 		}
 	}
@@ -1478,62 +1483,185 @@ function controlerInvariant(statut) {
 	}
 }
 
+
+function controlerProprietes() {
+	var astuce = "";
+
+	if (!(formu_prop.rdpborne[0].checked || formu_prop.rdpborne[1].checked) ||
+		!(formu_prop.rdpSauf[0].checked || formu_prop.rdpSauf[1].checked) ||
+		!(formu_prop.rdpQuasiVivant[0].checked || formu_prop.rdpQuasiVivant[1].checked)) {
+
+		document.getElementById("proprietes_astuces").style.backgroundColor = "#DD1111";
+		document.getElementById("proprietes_astuces").style.visibility = "visible";
+		document.getElementById("proprietes_astuces").innerHTML = "Veuillez renseigner l'ensemble des propriétés !";		
+	}
+	else {
+		var saufTMP = false;
+		var borneTMP = false;
+		var quasivivantTMP = false;
+		var allIsCorrect = true;
+
+		if(formu_prop.rdpborne[0].checked)
+			var borneTMP = true;
+		if(formu_prop.rdpSauf[0].checked)
+			var saufTMP = true;
+		if(formu_prop.rdpQuasiVivant[0].checked)
+			var quasivivantTMP = true;
+
+		astuce = "Arbre de couverture s'il existe :<br/><div id=\"tree\"></div>";
+		arbreDeCouverture("#tree");
+		alert('coucou');
+		if(borne != borneTMP) {
+			astuce += "Incorrect : le rdp n'est pas borné !<br/>";
+			allIsCorrect = false;
+		}
+		else
+			astuce += "Correct : Le rdp est bien borné.<br/>";
+
+		if(sauf != saufTMP) {
+			astuce += "Incorrect : le rdp n'est pas sauf !<br/>";
+			allIsCorrect = false;
+		}
+		else
+			astuce += "Correct : Le rdp est bien sauf.<br/>";
+
+		if(quasivivant != quasivivantTMP) {
+			astuce += "Incorrect : le rdp n'est pas quasi vivant !<br/>";
+			allIsCorrect = false;
+		}
+		else
+			astuce += "Correct : Le rdp est bien quasi vivant.<br/>";
+
+		if(allIsCorrect)
+			document.getElementById("proprietes_astuces").style.backgroundColor = "#119911";
+		else
+			document.getElementById("proprietes_astuces").style.backgroundColor = "#DD1111";
+		document.getElementById("proprietes_astuces").style.visibility = "visible";
+		document.getElementById("proprietes_astuces").innerHTML = astuce;
+	}
+}
+
+function controlerProprietesCorrection() {
+	var astuce = "";
+
+	if (!(formu_prop.rdpborne[0].checked || formu_prop.rdpborne[1].checked) ||
+		!(formu_prop.rdpSauf[0].checked || formu_prop.rdpSauf[1].checked) ||
+		!(formu_prop.rdpQuasiVivant[0].checked || formu_prop.rdpQuasiVivant[1].checked)) {
+
+		document.getElementById("proprietes_astuces_cor").style.backgroundColor = "#DD1111";
+		document.getElementById("proprietes_astuces_cor").style.visibility = "visible";
+		document.getElementById("proprietes_astuces_cor").innerHTML = "Veuillez renseigner l'ensemble des propriétés !";		
+	}
+	else {
+		var saufTMP = false;
+		var borneTMP = false;
+		var quasivivantTMP = false;
+		var allIsCorrect = true;
+
+		if(formu_prop.rdpborne[0].checked)
+			var borneTMP = true;
+		if(formu_prop.rdpSauf[0].checked)
+			var saufTMP = true;
+		if(formu_prop.rdpQuasiVivant[0].checked)
+			var quasivivantTMP = true;
+
+		astuce = "Arbre de couverture s'il existe :<br/><div id=\"treeCorrection\"></div>";
+		arbreDeCouverture("treeCorrection");
+		if(borne != borneTMP) {
+			astuce += "Incorrect : le rdp n'est pas borné !<br/>";
+			allIsCorrect = false;
+		}
+		else
+			astuce += "Correct : Le rdp est bien borné.<br/>";
+
+		if(sauf != saufTMP) {
+			astuce += "Incorrect : le rdp n'est pas sauf !<br/>";
+			allIsCorrect = false;
+		}
+		else
+			astuce += "Correct : Le rdp est bien sauf.<br/>";
+
+		if(quasivivant != quasivivantTMP) {
+			astuce += "Incorrect : le rdp n'est pas quasi vivant !<br/>";
+			allIsCorrect = false;
+		}
+		else
+			astuce += "Correct : Le rdp est bien quasi vivant.<br/>";
+
+		if(allIsCorrect)
+			document.getElementById("proprietes_astuces_cor").style.backgroundColor = "#119911";
+		else
+			document.getElementById("proprietes_astuces_cor").style.backgroundColor = "#DD1111";
+		document.getElementById("proprietes_astuces_cor").style.visibility = "visible";
+		document.getElementById("proprietes_astuces_cor").innerHTML = astuce;
+	}
+}
+
+
 function printMatricesInvariants() {
 	var res = Pinvariants();
 	var res2 = Tinvariants();
 
-	if(res !== undefined) {
-		if(res.length > 0) {
-			var html = "<table class=\"matrice_Pinvariants_results\"><tr><td></td>";
+	if(document.getElementById("matrice_Pinvariants_results") != null)
+	{
+		if(res !== undefined) {
+			if(res.length > 0) {
+				var html = "<table class=\"matrice_Pinvariants_results\"><tr><td></td>";
 
-			for(var i=0;i<res[0].length;i++) {
-				html += "<td class=\"matrice_results_1\">P"+(i+1)+"</td>";
-			}
-			html+= "</tr>";
-
-			for(var i=0;i<res.length;i++) {
-				html += "<tr><td class=\"matrice_results_1\">Pt"+(i+1)+"</td>";
-				for(var j=0;j<res[i].length;j++) {
-					html += "<td class=\"matrice_results_2\">"+res[i][j]+"</td>";
+				for(var i=0;i<res[0].length;i++) {
+					html += "<td class=\"matrice_results_1\">P"+(i+1)+"</td>";
 				}
-				html += "</tr>";
+				html+= "</tr>";
+
+				for(var i=0;i<res.length;i++) {
+					html += "<tr><td class=\"matrice_results_1\">Pt"+(i+1)+"</td>";
+					for(var j=0;j<res[i].length;j++) {
+						html += "<td class=\"matrice_results_2\">"+res[i][j]+"</td>";
+					}
+					html += "</tr>";
+				}
+				html += "</table>";
+				if(document.getElementById("matrice_Pinvariants_results") != null)
+					document.getElementById("matrice_Pinvariants_results").innerHTML = html;
 			}
-			html += "</table>";
-			if(document.getElementById("matrice_Pinvariants_results") != null)
-				document.getElementById("matrice_Pinvariants_results").innerHTML = html;
+			else
+				document.getElementById("matrice_Pinvariants_results").innerHTML = "";
 		}
 		else
 			document.getElementById("matrice_Pinvariants_results").innerHTML = "";
 	}
-	else
-		document.getElementById("matrice_Pinvariants_results").innerHTML = "";
 
-	if(res2 !== undefined) {
-		if(res2.length > 0) {
-			var html = "<table class=\"matrice_Tinvariants_results_1\"><tr><td></td>";
+	if(document.getElementById("matrice_Tinvariants_results") != null)
+	{
+		if(res2 !== undefined) {
+			if(res2.length > 0) {
+				var html = "<table class=\"matrice_Tinvariants_results_1\"><tr><td></td>";
 
-			for(var i=0;i<res2[0].length;i++) {
-				html += "<td class=\"matrice_results_1\">T"+(i+1)+"</td>";
-			}
-			html+= "</tr>";
-
-			for(var i=0;i<res2.length;i++) {
-				html += "<tr><td class=\"matrice_results_1\">Pt"+(i+1)+"</td>";
-				for(var j=0;j<res2[i].length;j++) {
-					html += "<td class=\"matrice_results_2\">"+res2[i][j]+"</td>";
+				for(var i=0;i<res2[0].length;i++) {
+					html += "<td class=\"matrice_results_1\">T"+(i+1)+"</td>";
 				}
-				html += "</tr>";
+				html+= "</tr>";
+
+				for(var i=0;i<res2.length;i++) {
+					html += "<tr><td class=\"matrice_results_1\">Pt"+(i+1)+"</td>";
+					for(var j=0;j<res2[i].length;j++) {
+						html += "<td class=\"matrice_results_2\">"+res2[i][j]+"</td>";
+					}
+					html += "</tr>";
+				}
+				html += "</table>";
+				if(document.getElementById("matrice_Tinvariants_results") != null)
+					document.getElementById("matrice_Tinvariants_results").innerHTML = html;
 			}
-			html += "</table>";
-			if(document.getElementById("matrice_Tinvariants_results") != null)
-				document.getElementById("matrice_Tinvariants_results").innerHTML = html;
+			else
+				document.getElementById("matrice_Tinvariants_results").innerHTML = "";
 		}
 		else
 			document.getElementById("matrice_Tinvariants_results").innerHTML = "";
 	}
-	else
-		document.getElementById("matrice_Tinvariants_results").innerHTML = "";
 }
+
+
 var correctionActive = false;
 
 function accesCorrection() {
@@ -1638,10 +1766,15 @@ function insertionCode() {
 	"<td><input type=\"radio\" class=\"disable radio_button\" name=\"rdpVivant\" value=\"oui\">Oui</td>"+
 	"<td><input type=\"radio\" class=\"disable radio_button\" name=\"rdpVivant\" value=\"non\">Non</td>"+				
 	"</tr>"+
+	"<tr>"+
+	"<td style=\"min-width:200px;\">Le RdP est-il quasi vivant ?</td>"+
+	"<td><input type=\"radio\" class=\"disable radio_button\" name=\"rdpQuasiVivant_cor\" value=\"oui\">Oui</td>"+
+	"<td><input type=\"radio\" class=\"disable radio_button\" name=\"rdpQuasiVivant_cor\" value=\"non\">Non</td>"+				
+	"</tr>"+
 	"</table>"+
 	"</div></td>"+
-	"<td><div class=\"control_button_div\"><input type=\"button\" class=\"disable control_button\" value=\"controler\" onClick=\"controlerProprietes(2)\" /></div></td>"+
-	"<td><div id=\"proprietes_astuces\" class=\"astuces\"></div></td>"+
+	"<td><div class=\"control_button_div\"><input type=\"button\" class=\"disable control_button\" value=\"controler\" onClick=\"controlerProprietesCorrection()\" /></div></td>"+
+	"<td><div id=\"proprietes_astuces_cor\" class=\"astuces\"></div></td>"+
 	"</tr>"+
 	"</table>";
 	document.getElementById('correction').innerHTML = html;

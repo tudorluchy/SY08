@@ -25,7 +25,7 @@
         }
         // date : <span class="exo_date">'.date_format(date_create($res[0]['date']), 'd/m/Y H:i').'</span>
 	?>
-	/<script language="JavaScript" type="text/javascript">
+	<script language="JavaScript" type="text/javascript">
 		var model2 = <?php echo $res[0]['json']; ?>;
 	</script>
 	<div id='corps_form_ajout'>
@@ -76,20 +76,27 @@
 			<tr><td><h3>Les propriétés du Rdp</h3></td></tr>
 			<tr>
 				<td><div id="RDP_proprietes" class="RDP_prop">
-					<table>
-					<tr>
-						<td style="min-width:200px;">Le RdP est-il borné ?</td>
-						<td><input type="radio" class="disable radio_button" name="rdpborne" value="oui">Oui</td>
-						<td><input type="radio" class="disable radio_button" name="rdpborne" value="non">Non</td>
-					</tr>
-					<tr>
-						<td style="min-width:200px;">Le RdP est-il vivant ?</td>
-						<td><input type="radio" class="disable radio_button" name="rdpVivant" value="oui">Oui</td>
-						<td><input type="radio" class="disable radio_button" name="rdpVivant" value="non">Non</td>					
-					</tr>
-					</table>
+					<form name="formu_prop">
+						<table>
+						<tr>
+							<td style="min-width:200px;">Le RdP est-il borné ?</td>
+							<td><input type="radio" class="disable radio_button" name="rdpborne" value="oui">Oui</td>
+							<td><input type="radio" class="disable radio_button" name="rdpborne" value="non">Non</td>
+						</tr>
+						<tr>
+							<td style="min-width:200px;">Le RdP est-il sauf ?</td>
+							<td><input type="radio" class="disable radio_button" name="rdpSauf" value="oui">Oui</td>
+							<td><input type="radio" class="disable radio_button" name="rdpSauf" value="non">Non</td>					
+						</tr>
+						<tr>
+							<td style="min-width:200px;">Le RdP est-il quasi vivant ?</td>
+							<td><input type="radio" class="disable radio_button" name="rdpQuasiVivant" value="oui">Oui</td>
+							<td><input type="radio" class="disable radio_button" name="rdpQuasiVivant" value="non">Non</td>					
+						</tr>
+						</table>
+					</form>
 				</div></td>
-				<td><div class="control_button_div"><input type="button" class="disable control_button" value="controler" onClick="controlerProprietes(0)" /></div></td>
+				<td><div class="control_button_div"><input type="button" class="disable control_button" value="controler" onClick="controlerProprietes()" /></div></td>
 				<td><div id="proprietes_astuces" class="astuces"></div></td>
 			</tr>
 		</table>
