@@ -637,6 +637,7 @@ function drawPlace(layer, i)
 					createArc(0,source,i,1);
 					refreshLines();
 					refreshEveryMatrixResults();
+					printMatricesInvariants();
 					
 				}
 				place2transTEMP = -1;
@@ -798,6 +799,8 @@ function getAnchorPointTransition(sourceX,sourceY,destX,destY)
 
 function drawLine(layer, i)
 {
+
+	var group = new Kinetic.Group();
 	var pts = new Array();
 	
 	if(model.arcs[i].place2trans==1)
@@ -823,8 +826,7 @@ function drawLine(layer, i)
 
 	}
 	
-	console.log(pts);
-	console.log((pts[0]+pts[2])/2);
+
 	var ponderation = new Kinetic.Text({
 		
 		text: ''+model.arcs[i].properties['value'],
@@ -845,15 +847,16 @@ function drawLine(layer, i)
 		lineJoin: 'round'
 	});
 
-	redLine.on('dblclick', function() {
+	group.on('dblclick', function() {
 		idSelected = i;
 		kindOfSelected=3;
 		displayProperties(model.arcs[i].properties,true); 
 
 	},false);
 
-	layer.add(ponderation);
-	layer.add(redLine);
+	group.add(ponderation);
+	group.add(redLine);
+	layer.add(group);
 
 	var arrow = [];
 	var angle = Math.atan2(pts[1]-pts[3], pts[0]-pts[2]);
@@ -1045,6 +1048,8 @@ function editProperty()
 	}
 	$( "#dialog-modal" ).dialog("close" );
 	redrawAll();
+	refreshEveryMatrixResults();
+	printMatricesInvariants();
 	//console.log(model.places);
 }
 
@@ -1119,8 +1124,8 @@ function eraseElement()
 	}
 	$( "#dialog-modal" ).dialog("close" );
 	redrawAll();
-	//refreshEveryMatrixResults();
-	//printMatricesInvariants();
+	refreshEveryMatrixResults();
+	printMatricesInvariants();
 }
 
 
@@ -1497,7 +1502,11 @@ function printMatricesInvariants() {
 			if(document.getElementById("matrice_Pinvariants_results") != null)
 				document.getElementById("matrice_Pinvariants_results").innerHTML = html;
 		}
+		else
+			document.getElementById("matrice_Pinvariants_results").innerHTML = "";
 	}
+	else
+		document.getElementById("matrice_Pinvariants_results").innerHTML = "";
 
 	if(res2 !== undefined) {
 		if(res2.length > 0) {
@@ -1519,7 +1528,11 @@ function printMatricesInvariants() {
 			if(document.getElementById("matrice_Tinvariants_results") != null)
 				document.getElementById("matrice_Tinvariants_results").innerHTML = html;
 		}
+		else
+			document.getElementById("matrice_Tinvariants_results").innerHTML = "";
 	}
+	else
+		document.getElementById("matrice_Tinvariants_results").innerHTML = "";
 }
 var correctionActive = false;
 
