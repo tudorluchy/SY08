@@ -97,7 +97,7 @@
 					</form>
 				</div></td>
 				<td><div class="control_button_div"><input type="button" class="disable control_button" value="controler" onClick="controlerProprietes()" /></div></td>
-				<td><div id="proprietes_astuces" class="astuces"><div id="proprietes_astuces_comp"></div>Arbre de couverture s'il existe : <input type="button" value="Afficher/Masquer" onClick="expandDiv(0);" /><div id="tree"></div></div></td>
+				<td><div id="proprietes_astuces" class="astuces"><div id="proprietes_astuces_comp"></div><div id="proprietes_astuces_comp2">Arbre de couverture s'il existe : <input type="button" value="Afficher/Masquer" onClick="expandDiv(0);" /><div id="tree"></div></div></div></td>
 			</tr>
 		</table>
 		<input type="button" value="Accéder à la correction" onClick="accesCorrection();"/>

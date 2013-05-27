@@ -1513,11 +1513,13 @@ function controlerProprietes() {
 		!(formu_prop.rdpSauf[0].checked || formu_prop.rdpSauf[1].checked) ||
 		!(formu_prop.rdpQuasiVivant[0].checked || formu_prop.rdpQuasiVivant[1].checked)) {
 
+		document.getElementById("proprietes_astuces_comp2").style.display = 'none';
 		document.getElementById("proprietes_astuces").style.backgroundColor = "#DD1111";
 		document.getElementById("proprietes_astuces").style.visibility = "visible";
 		document.getElementById("proprietes_astuces_comp").innerHTML = "Veuillez renseigner l'ensemble des propriétés !";		
 	}
 	else {
+		document.getElementById("proprietes_astuces_comp2").style.display = 'inherit';
 		var saufTMP = false;
 		var borneTMP = false;
 		var quasivivantTMP = false;
@@ -1586,12 +1588,14 @@ function controlerProprietesCorrection() {
 	if (!(formu_prop_cor.rdpBorne_cor[0].checked || formu_prop_cor.rdpBorne_cor[1].checked) ||
 		!(formu_prop_cor.rdpSauf_cor[0].checked || formu_prop_cor.rdpSauf_cor[1].checked) ||
 		!(formu_prop_cor.rdpQuasiVivant_cor[0].checked || formu_prop_cor.rdpQuasiVivant_cor[1].checked)) {
-
+		
+		document.getElementById("proprietes_astuces_cor_comp2").style.display = 'none';
 		document.getElementById("proprietes_astuces_cor").style.backgroundColor = "#DD1111";
 		document.getElementById("proprietes_astuces_cor").style.visibility = "visible";
 		document.getElementById("proprietes_astuces_cor_comp").innerHTML = "Veuillez renseigner l'ensemble des propriétés !";		
 	}
 	else {
+		document.getElementById("proprietes_astuces_cor_comp2").style.display = 'inherit';
 		var saufTMP = false;
 		var borneTMP = false;
 		var quasivivantTMP = false;
@@ -1831,7 +1835,7 @@ function insertionCode() {
 	"</form>"+
 	"</div></td>"+
 	"<td><div class=\"control_button_div\"><input type=\"button\" class=\"disable control_button\" value=\"controler\" onClick=\"controlerProprietesCorrection()\" /></div></td>"+
-	"<td><div id=\"proprietes_astuces_cor\" class=\"astuces\"><div id=\"proprietes_astuces_cor_comp\"></div>Arbre de couverture s'il existe :<input type=\"button\" value=\"Afficher/Masquer\" onClick=\"expandDiv(1);\" /><br/><div id=\"treeCorrection\"></div></div></td>"+
+	"<td><div id=\"proprietes_astuces_cor\" class=\"astuces\"><div id=\"proprietes_astuces_cor_comp\"></div><div id=\"proprietes_astuces_cor_comp2\">Arbre de couverture s'il existe :<input type=\"button\" value=\"Afficher/Masquer\" onClick=\"expandDiv(1);\" /><br/><div id=\"treeCorrection\"></div></div></div></td>"+
 	"</tr>"+
 	"</table>";
 	document.getElementById('correction').innerHTML = html;
