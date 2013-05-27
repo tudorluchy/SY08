@@ -69,9 +69,9 @@ function getComposanteW(v1,v2)
 
 	for(var i=0;i<v1.length;i++)
 	{
-		if(v1[i]>v2[i])
+		if(parseInt(v1[i],10)>parseInt(v2[i],10))
 			res.push(i);
-		else if(v2[i]>v1[i])
+		else if(parseInt(v2[i],10)>parseInt(v1[i],10))
 			return false;
 
 
@@ -525,11 +525,14 @@ function getTransitionsFranchissables(model)
 	for(var i =0;i<getNbColumns(oMoins);i++)
 	{
 		var okPre = true;
+		var okPre2 = false;
 		var okPost = false;
 		for(var j =0;j<getNbRows(oMoins);j++)
 		{
 			if(oPlus[j][i]!=0)
 				okPost=true;
+			if(oMoins[j][i]!=0)
+				okPre2=true;
 			if(model.places[j].properties['marking']<oMoins[j][i] && model.places[j].properties['marking']!="w")
 			{			
 
@@ -537,7 +540,7 @@ function getTransitionsFranchissables(model)
 			}
 
 		}
-		if(okPre && okPost)
+		if(okPre && okPost && okPre2)
 			res.push(i);
 
 
@@ -612,8 +615,6 @@ function drawPlace(layer, i)
 
 
 	group.on('dragmove',function() { // Si trop de lag en rafraichissant tout le temps, possible de clear au d�but du d�placement et redessiner � la fin (mais moins beau ^^)
-		layer3.clear();
-		layer3.removeChildren();
 		model.places[cercle.getName()].coordx = cercle.getAbsolutePosition().x; 
 		model.places[cercle.getName()].coordy = cercle.getAbsolutePosition().y; 
 		refreshLines();
@@ -659,6 +660,7 @@ function drawPlace(layer, i)
 
 
 	layer.add(group);
+	
 
 
 }
@@ -718,8 +720,6 @@ function drawTransition(layer, i)
 	},false);
 
 	group.on('dragmove',function() { // Si trop de lag en rafraichissant tout le temps, possible de clear au d�but du d�placement et redessiner � la fin (mais moins beau ^^)
-		layer3.clear();
-		layer3.removeChildren();
 		model.transitions[rec.getName()].coordx = rec.getAbsolutePosition().x; 
 		model.transitions[rec.getName()].coordy = rec.getAbsolutePosition().y; 
 		refreshLines();
@@ -861,7 +861,7 @@ function drawLine(layer, i)
 
 	group.add(ponderation);
 	group.add(redLine);
-	layer.add(group);
+	
 
 	var arrow = [];
 	var angle = Math.atan2(pts[1]-pts[3], pts[0]-pts[2]);
@@ -882,7 +882,7 @@ function drawLine(layer, i)
 		lineJoin: 'round'
 	});
 
-	layer.add(redLine1);
+
 
 
 	//calcul des coordonn�es de l�extr�mit� avec l�angle vert
@@ -896,77 +896,90 @@ function drawLine(layer, i)
 		lineCap: 'round',
 		lineJoin: 'round'
 	});
+	group.add(redLine1);
+	group.add(redLine2);
+	layer.add(group);
 
-	layer.add(redLine2);
 
 }
 
 
 function refreshLines()
 {
+	recurseClear(layer3,0);
+	//layer3.removeChildren();
 	layer3.clear();
-	layer3.removeChildren();
-	console.log(model);
 	for(var i=0;i<model.arcs.length;i++)
 	{
 		drawLine(layer3,i);
 	}
-	layer3.draw();
+	stage.add(layer3);
+
 
 }
 
 
 function redrawAll()
 {
-	layer1.clear();
-	layer1.removeChildren();
-	layer2.clear();
-	layer2.removeChildren();
-	layer3.clear();
-	layer3.removeChildren();
+	stage.clear();
 	redrawPlaces();
 	redrawTransitions();
 	refreshLines();
 
-	stage.clear();
-	stage.add(backgound);
-	stage.add(layer1); // les places
-	stage.add(layer2); // les transitions
-	stage.add(layer3); // les arcs
+
+}
+
+function recurseClear(container,lvl)
+{
+
+	if(container instanceof Kinetic.Group || container instanceof Kinetic.Layer || container instanceof Kinetic.Container)
+	{
+
+		var children = container.getChildren();
+		for(var i=0;i<children.length;i++)
+		{
+			recurseClear(children[i],lvl+1);
+			
+		}
+	}
+	if(lvl>0)
+		container.destroy();
+	
 }
 
 function redrawPlaces()
 {
+	
+	recurseClear(layer1,0);
+	//layer1.removeChildren();
 	layer1.clear();
-	layer1.removeChildren();
 	for(var i=0;i<model.places.length;i++)
 	{
 
 		drawPlace(layer1,i);
 	}
+	stage.add(layer1);
 
 }
 
 function redrawTransitions()
 {
+
+	recurseClear(layer2,0);
+	//layer2.removeChildren();
 	layer2.clear();
-	layer2.removeChildren();
 	for(var i=0;i<model.transitions.length;i++)
 	{
 		drawTransition(layer2,i);
 	}
+	stage.add(layer2);
 }
 
 $(window).load(function(){
 
 	$('body').append('<div id="dialog-modal" title="Properties"></div>');
 	$('body').append('<div id="tree"></div>');
-	redrawPlaces();
-	redrawTransitions();
-	refreshLines();
-	refreshEveryMatrixResults();
-
-	printMatricesInvariants();
+	
 
 	posx=$('#container').findPos().x;
 	posy=$('#container').findPos().y;
@@ -978,8 +991,19 @@ $(window).load(function(){
 	});
 
 
+	stage.add(backgound);
+	stage.add(layer1); // les places
+	stage.add(layer2); // les transitions
+	stage.add(layer3); // les arcs
 
-	console.log(model);
+	redrawPlaces();
+	redrawTransitions();
+	refreshLines();
+	refreshEveryMatrixResults();
+
+	printMatricesInvariants();
+	
+	
 	mouseEventCallBack();
 
 
@@ -993,10 +1017,7 @@ $(window).load(function(){
 	//console.log(omegaMoins(model));
 	//console.log(omegaPlus(model));
 
-	stage.add(backgound);
-	stage.add(layer1); // les places
-	stage.add(layer2); // les transitions
-	stage.add(layer3); // les arcs
+	
 
 	$( "#dialog-modal" ).dialog({
 		height: 200,
