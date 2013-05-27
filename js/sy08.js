@@ -906,14 +906,16 @@ function drawLine(layer, i)
 
 function refreshLines()
 {
-	recurseClear(layer3,0);
+	recurseClear(layer3,1);
 	//layer3.removeChildren();
-	layer3.clear();
+	//layer3.clear();
+	var layertmp = new Kinetic.Layer();
 	for(var i=0;i<model.arcs.length;i++)
 	{
-		drawLine(layer3,i);
+		drawLine(layertmp,i);
 	}
-	stage.add(layer3);
+	stage.add(layertmp);
+	layer3=layertmp;
 
 
 }
@@ -950,29 +952,30 @@ function recurseClear(container,lvl)
 function redrawPlaces()
 {
 	
-	recurseClear(layer1,0);
+	recurseClear(layer1,1);
 	//layer1.removeChildren();
-	layer1.clear();
+	var layertmp = new Kinetic.Layer();
 	for(var i=0;i<model.places.length;i++)
 	{
 
-		drawPlace(layer1,i);
+		drawPlace(layertmp,i);
 	}
-	stage.add(layer1);
+	stage.add(layertmp);
+	layer1=layertmp;
 
 }
 
 function redrawTransitions()
 {
 
-	recurseClear(layer2,0);
-	//layer2.removeChildren();
-	layer2.clear();
+	recurseClear(layer2,1);
+	var layertmp = new Kinetic.Layer();
 	for(var i=0;i<model.transitions.length;i++)
 	{
-		drawTransition(layer2,i);
+		drawTransition(layertmp,i);
 	}
-	stage.add(layer2);
+	stage.add(layertmp);
+	layer2=layertmp;
 }
 
 $(window).load(function(){
