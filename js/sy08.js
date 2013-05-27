@@ -614,11 +614,13 @@ function drawPlace(layer, i)
 			}
 			else if(place2transTEMP == 0){
 				// on ins�re dans le JSON
-				createArc(0,source,i,1);
-
-				refreshLines();
-				refreshEveryMatrixResults();
-
+				if(model.transitions[source]!==undefined)
+				{
+					createArc(0,source,i,1);
+					refreshLines();
+					refreshEveryMatrixResults();
+					
+				}
 				place2transTEMP = -1;
 				source = -1;
 			}
@@ -707,10 +709,15 @@ function drawTransition(layer, i)
 				place2transTEMP = 0;
 			}
 			else if(place2transTEMP == 1){
-				// on ins�re dans le JSON
-				createArc(1,source,i,1);
-				refreshLines();
-				refreshEveryMatrixResults();
+				if(model.places[source]!==undefined)
+				{
+					// on ins�re dans le JSON
+					createArc(1,source,i,1);
+					refreshLines();
+					refreshEveryMatrixResults();
+					place2transTEMP = -1;
+					source = -1;
+				}
 				place2transTEMP = -1;
 				source = -1;
 			}
@@ -859,6 +866,7 @@ function refreshLines()
 {
 	layer3.clear();
 	layer3.removeChildren();
+	console.log(model);
 	for(var i=0;i<model.arcs.length;i++)
 	{
 		drawLine(layer3,i);
@@ -1017,6 +1025,11 @@ function eraseElement()
 		if(kindOfSelected==1)
 		{
 			model.places.splice(idSelected,1);
+			if(place2transTEMP==1 && source==idSelected)
+			{
+				place2transTEMP = -1;
+				source = -1;
+			}
 			for(var i=0;i<model.arcs.length;i++)
 			{
 				if((model.arcs[i].place2trans==1 && model.arcs[i].source==idSelected) || (model.arcs[i].place2trans!=1 && model.arcs[i].dest==idSelected))
@@ -1042,6 +1055,11 @@ function eraseElement()
 		else if(kindOfSelected==2)
 		{
 			model.transitions.splice(idSelected,1);
+			if(place2transTEMP==0 && source==idSelected)
+			{
+				place2transTEMP = -1;
+				source = -1;
+			}
 			for(var i=0;i<model.arcs.length;i++)
 			{
 				if((model.arcs[i].place2trans!=1 && model.arcs[i].source==idSelected) || (model.arcs[i].place2trans==1 && model.arcs[i].dest==idSelected))
@@ -1068,11 +1086,9 @@ function eraseElement()
 			model.arcs.splice(idSelected,1);
 	}
 	$( "#dialog-modal" ).dialog("close" );
-	console.log(idSelected);
-	console.log(model);
 	redrawAll();
-	refreshEveryMatrixResults();
-	printMatricesInvariants();
+	//refreshEveryMatrixResults();
+	//printMatricesInvariants();
 }
 
 
