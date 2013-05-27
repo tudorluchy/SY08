@@ -69,7 +69,6 @@
                         }
                         $req = "INSERT INTO sy08_exercice (intitule, enonce, actif, image, fichier, difficulte, json, date) 
                         VALUES ('".$_POST['intitule']."', '".$_POST['enonce']."', 1, '".$_FILES['image_exo']['name']."', '".$_FILES['fichier_exo']['name']."','".$_POST['difficulte']."', '".$json_final."', NOW())";
-                        echo $req;
                         $res = DB::Sql($req);
                         if ($res) {
                             echo "<ul><li>Exercice bien ajouté!</li></ul>";
