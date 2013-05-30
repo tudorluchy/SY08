@@ -101,7 +101,7 @@
 			</tr>
 		</table>
 		<input type="button" value="Accéder à la correction" onClick="accesCorrection();"/>
-		<div id="correction"></div>
+		<div id="correction" style="border-top: 1px solid red;"></div>
 	</div>
 	</body>
 </html>

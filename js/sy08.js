@@ -1215,6 +1215,12 @@ function mouseEventCallBack() {
 		}
 		redrawAll();
 		//refreshLines();
+		resetAccesCorrection();
+
+		var elements = document.getElementsByClassName('astuces');
+		for(var i=0; i < elements.length; i++) {
+			elements[i].style.visibility = "hidden";
+		}
 
 		refreshEveryMatrixResults();
 
@@ -1772,8 +1778,10 @@ var correctionActive = false;
 function accesCorrection() {
 	var i = 0;
 	while(i < tabAccesCorrection.length) {
-		if(tabAccesCorrection[i] == false)
+		if(tabAccesCorrection[i] == false) {
+			alert('Vous ne pouvez pas accéder à la correction sans avoir au moins essayé !');
 			return;
+		}
 		i++;
 	}
 	if(!correctionActive)
