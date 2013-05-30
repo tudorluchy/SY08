@@ -19,6 +19,8 @@ var transitionsFranchies; // Pour quasi vivant : Toutes les transitions sont fra
 var sauf; //borne un 1 pour tout marquage
 var borne; //pas de w
 
+var tabAccesCorrection = new Array(6);
+
 var transition_width = 50;
 var transition_height = 10;
 var place_radius = 20;
@@ -640,7 +642,10 @@ function drawPlace(layer, i)
 				{
 					createArc(0,source,i,1);
 					refreshLines();
-					refreshEveryMatrixResults();
+					
+					generateInvariantInput(0);
+					generateInvariantInput(1);
+					
 					printMatricesInvariants();
 					
 				}
@@ -736,7 +741,10 @@ function drawTransition(layer, i)
 					// on ins�re dans le JSON
 					createArc(1,source,i,1);
 					refreshLines();
-					refreshEveryMatrixResults();
+					
+					generateInvariantInput(0);
+					generateInvariantInput(1);
+					
 					place2transTEMP = -1;
 					source = -1;
 				}
@@ -825,8 +833,6 @@ function drawLine(layer, i)
 		var pt2 = getAnchorPointPlace(model.places[model.arcs[i].dest].coordx,model.places[model.arcs[i].dest].coordy,model.transitions[model.arcs[i].source].coordx,model.transitions[model.arcs[i].source].coordy);
 		pts.push(pt2.x);
 		pts.push(pt2.y);
-
-
 	}
 	
 
@@ -875,7 +881,7 @@ function drawLine(layer, i)
 	var redLine1 = new Kinetic.Line({
 		points: arrow,
 		stroke: 'black',
-		strokeWidth: 1,
+		strokeWidth:2,
 		lineCap: 'round',
 		lineJoin: 'round'
 	});
@@ -890,15 +896,14 @@ function drawLine(layer, i)
 	var redLine2 = new Kinetic.Line({
 		points: arrow,
 		stroke: 'black',
-		strokeWidth: 1,
+		strokeWidth:2,
 		lineCap: 'round',
 		lineJoin: 'round'
 	});
 	group.add(redLine1);
 	group.add(redLine2);
+
 	layer.add(group);
-
-
 }
 
 
@@ -976,6 +981,14 @@ function redrawTransitions()
 	layer2=layertmp;
 }
 
+function resetAccesCorrection() {
+	var i = 0;
+	while(i < tabAccesCorrection.length) {
+		tabAccesCorrection[i] = false;
+		i++;
+	}
+}
+
 $(window).load(function(){
 
 	$('body').append('<div id="dialog-modal" title="Properties"></div>');
@@ -1018,7 +1031,7 @@ $(window).load(function(){
 	//console.log(omegaMoins(model));
 	//console.log(omegaPlus(model));
 
-	
+	resetAccesCorrection();
 
 	$( "#dialog-modal" ).dialog({
 		height: 200,
@@ -1206,11 +1219,6 @@ function mouseEventCallBack() {
 		refreshEveryMatrixResults();
 
 		printMatricesInvariants();
-		//console.log(Pinvariants());
-
-
-		//Calcul des T invariants :
-		//console.log(Tinvariants());
 
 		generateEveryMatrixInput();
 
@@ -1247,6 +1255,7 @@ function generateEveryMatrixInput() {
 	generateInvariantInput(0);
 	generateInvariantInput(1);
 }
+
 
 function generateEveryMatrixInputCor() {
 	for(var i=3; i < 6; i++) {
@@ -1351,13 +1360,13 @@ function controlerMatrice(statut) {
 	}
 	else if(statut == 1) {
 		which = "matrice_wplus";
-		astuce = "Deux choix possibles :<br/>1 lorsque la place P est une sortie de la transition T.<br />"+
+		astuce = "Deux choix possibles :<br/>Egal au poids de l'arc lorsque la place P est une sortie de la transition T.<br />"+
 		"0 lorsque la place P n'appartient pas aux sorties de la transition T.";
 		res = omegaPlus(model);
 	}
 	else if(statut == 2) {
 		which = "matrice_wmoins";
-		astuce = "Deux choix possibles :<br/>		1 lorsque la place P est une entrée de la transition T.<br />"+
+		astuce = "Deux choix possibles :<br/>Egal au poids de l'arc lorsque la place P est une entrée de la transition T.<br />"+
 		"		0 lorsque la place P n'appartient pas aux entrées de la transition T.";
 		res = omegaMoins(model);
 	}
@@ -1368,13 +1377,13 @@ function controlerMatrice(statut) {
 	}
 	else if(statut == 4) {
 		which = "matrice_wplus_cor";
-		astuce = "Deux choix possibles :<br/>1 lorsque la place P est une sortie de la transition T.<br />"+
+		astuce = "Deux choix possibles :<br/>Egal au poids de l'arc lorsque la place P est une sortie de la transition T.<br />"+
 		"0 lorsque la place P n'appartient pas aux sorties de la transition T.";
 		res = omegaPlus(model);
 	}
 	else if(statut == 5) {
 		which = "matrice_wmoins_cor";
-		astuce = "Deux choix possibles :<br/>		1 lorsque la place P est une entrée de la transition T.<br />"+
+		astuce = "Deux choix possibles :<br/>Egal au poids de l'arc lorsque la place P est une entrée de la transition T.<br />"+
 		"		0 lorsque la place P n'appartient pas aux entrées de la transition T.";
 		res = omegaMoins(model);
 	}
@@ -1409,6 +1418,13 @@ function controlerMatrice(statut) {
 			// Modification css pour etre sur que le background est vert
 			if(document.getElementById(which+"_astuces") != null) {
 				var html = 'Correct';
+				if(statut == 0)
+					tabAccesCorrection[0] = true;
+				else if(statut ==1)
+					tabAccesCorrection[1] = true;
+				else if(statut == 2)
+					tabAccesCorrection[2] = true;
+
 				document.getElementById(which+"_astuces").style.backgroundColor = "#119911";
 				document.getElementById(which+"_astuces").style.visibility = "visible";
 				document.getElementById(which+"_astuces").innerHTML = html;
@@ -1488,6 +1504,10 @@ function controlerInvariant(statut) {
 				// Modification css pour etre sur que le background est vert
 				if(document.getElementById(which+"_astuces") != null) {
 					var html = 'Correct';
+					if(statut == 0)
+						tabAccesCorrection[3] = true;
+					else if(statut == 1)
+						tabAccesCorrection[4] = true;
 					document.getElementById(which+"_astuces").style.backgroundColor = "#119911";
 					document.getElementById(which+"_astuces").style.visibility = "visible";
 					document.getElementById(which+"_astuces").innerHTML = html;
@@ -1496,11 +1516,32 @@ function controlerInvariant(statut) {
 		}
 		else {
 			if(document.getElementById(which+"_astuces") != null) {
-				var html = 'Aucune matrice';
+				var html = 'Aucun invariant';
+
+				if(statut == 0)
+					tabAccesCorrection[3] = true;
+				else if(statut == 1)
+					tabAccesCorrection[4] = true;
+
+
 				document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
 				document.getElementById(which+"_astuces").style.visibility = "visible";
 				document.getElementById(which+"_astuces").innerHTML = html;
 			}
+		}
+	}
+	else {
+		if(document.getElementById(which+"_astuces") != null) {
+			var html = 'Aucun invariant';
+
+			if(statut == 0)
+				tabAccesCorrection[3] = true;
+			else if(statut == 1)
+				tabAccesCorrection[4] = true;
+
+			document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
+			document.getElementById(which+"_astuces").style.visibility = "visible";
+			document.getElementById(which+"_astuces").innerHTML = html;
 		}
 	}
 }
@@ -1573,8 +1614,10 @@ function controlerProprietes() {
 				astuce += "Correct : Le rdp est bien non quasi vivant.<br/>";
 		}
 
-		if(allIsCorrect)
+		if(allIsCorrect) {
 			document.getElementById("proprietes_astuces").style.backgroundColor = "#119911";
+			tabAccesCorrection[5] = true;
+		}
 		else
 			document.getElementById("proprietes_astuces").style.backgroundColor = "#DD1111";
 		document.getElementById("proprietes_astuces").style.visibility = "visible";
@@ -1727,6 +1770,12 @@ function printMatricesInvariants() {
 var correctionActive = false;
 
 function accesCorrection() {
+	var i = 0;
+	while(i < tabAccesCorrection.length) {
+		if(tabAccesCorrection[i] == false)
+			return;
+		i++;
+	}
 	if(!correctionActive)
 	{
 		correctionActive = true;
