@@ -1,7 +1,7 @@
 <?php
 session_start();  
 if (!isset($_SESSION['login'])) { 
-   header ('Location: index.php'); 
+   header('Location: index.php'); 
    exit();  
 }  
 ?>
@@ -75,7 +75,7 @@ if (!isset($_SESSION['login'])) {
                             $json_final = $_POST['json'];
                         }
                         $req = "INSERT INTO sy08_exercice (intitule, enonce, actif, image, fichier, difficulte, json, date) 
-                        VALUES ('".$_POST['intitule']."', '".$_POST['enonce']."', 1, '".$_FILES['image_exo']['name']."', '".$_FILES['fichier_exo']['name']."','".$_POST['difficulte']."', '".$json_final."', NOW())";
+                        VALUES ('".DB::ProtectData($_POST['intitule'])."', '".DB::ProtectData($_POST['enonce'])."', 1, '".DB::ProtectData($_FILES['image_exo']['name'])."', '".DB::ProtectData($_FILES['fichier_exo']['name'])."','".DB::ProtectData($_POST['difficulte'])."', '".$json_final."', NOW())";
                         $res = DB::Sql($req);
                         if ($res) {
                             echo "<ul><li>Exercice bien ajouté!</li></ul>";
@@ -86,6 +86,7 @@ if (!isset($_SESSION['login'])) {
 			// affichage exos
             $req = "SELECT * FROM sy08_exercice ORDER BY date DESC";
 			$res = DB::SqlToArray($req);
+            DB::Close();
             echo "<table class='table_exo'>";
             echo "<thead><tr><th>Exercice</th><th>Date d'ajout</th><th>Difficulte</th><th>Actif</th><th>Edition</th><th>Suppresion</th></tr></thead>";
             echo "<tbody>";

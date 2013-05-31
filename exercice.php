@@ -24,7 +24,8 @@
             header('Location: selection_exercices.php');
         }
         // date : <span class="exo_date">'.date_format(date_create($res[0]['date']), 'd/m/Y H:i').'</span>
-	?>
+        DB::Close();
+    ?>
 	<script language="JavaScript" type="text/javascript">
 		var model2 = <?php echo $res[0]['json']; ?>;
 	</script>

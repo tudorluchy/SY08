@@ -37,7 +37,7 @@
                 } else {
                     $actif = 0;
                 }
-				$req = "UPDATE sy08_exercice SET intitule = '".$_POST['intitule']."', enonce = '".$_POST['enonce']."' , actif = ".$actif.", image = '".$_FILES['image_exo']['name']."' , fichier = '".$_FILES['fichier_exo']['name']."' , difficulte = '".$_POST['difficulte']."' , json = '".$json_final."' WHERE id = ".$_GET['id'];
+				$req = "UPDATE sy08_exercice SET intitule = '".DB::ProtectData($_POST['intitule'])."', enonce = '".$_POST['enonce']."' , actif = ".DB::ProtectData($actif).", image = '".DB::ProtectData($_FILES['image_exo']['name'])."' , fichier = '".DB::ProtectData($_FILES['fichier_exo']['name'])."' , difficulte = '".DB::ProtectData($_POST['difficulte'])."' , json = '".$json_final."' WHERE id = ".$_GET['id'];
 				echo $req;
                 DB::Sql($req);
                 $req = 'SELECT * FROM sy08_exercice WHERE id = '.$_GET['id'];
@@ -51,6 +51,7 @@
 		} else {
 			header('Location: administration.php'); 
 		}
+        DB::Close();
 	?>
 	<script language="JavaScript" type="text/javascript">
 		var model = <?php echo $res[0]['json']; ?>;
