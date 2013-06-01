@@ -647,6 +647,7 @@ function drawPlace(layer, i)
 					generateInvariantInput(1);
 					
 					printMatricesInvariants();
+					afficherMarquage(0);
 					
 				}
 				place2transTEMP = -1;
@@ -747,6 +748,7 @@ function drawTransition(layer, i)
 					
 					place2transTEMP = -1;
 					source = -1;
+					afficherMarquage(0);
 				}
 				place2transTEMP = -1;
 				source = -1;
@@ -1090,6 +1092,7 @@ function editProperty()
 	redrawAll();
 	refreshEveryMatrixResults();
 	printMatricesInvariants();
+	afficherMarquage(0);
 	//console.log(model.places);
 }
 
@@ -1198,41 +1201,43 @@ function activateAddTransition() {
 function activateAddArc() {
 	kindOfAdd = 2;
 }
+
+function desactivateAdd() {
+	kindOfAdd = -1;
+}
+
 var containerEventListener;
 function mouseEventCallBack() {
 	var previousPositionX;
 	var previousPositionY;
 	containerEventListener = function(event) {
-		if(kindOfAdd == 0){
-			createPlace(event.pageX-posx,event.pageY-posy,0);
-			//redrawPlaces();
-			//redrawAll();
+		if(kindOfAdd == -1)
+			return;
+		if(kindOfAdd == 0 || kindOfAdd == 1) {
+			if(kindOfAdd == 0){
+				createPlace(event.pageX-posx,event.pageY-posy,0);
+				//redrawPlaces();
+				//redrawAll();
+			}
+			else if(kindOfAdd == 1) {
+				createTransition(event.pageX-posx,event.pageY-posy);
+				//redrawTransitions();
+				//redrawAll();
+			}
+			redrawAll();
+			resetAccesCorrection();
+			
+			// On cache tout les éléments 'astuces' dans le cas ou ils étaient précédemment affichés !
+			var elements = document.getElementsByClassName('astuces');
+			for(var i=0; i < elements.length; i++) {
+				elements[i].style.visibility = "hidden";
+			}
+			generateEveryMatrixInput();
 		}
-		else if(kindOfAdd == 1) {
-			createTransition(event.pageX-posx,event.pageY-posy);
-			//redrawTransitions();
-			//redrawAll();
-		}
-		redrawAll();
-		//refreshLines();
-		resetAccesCorrection();
 
-		var elements = document.getElementsByClassName('astuces');
-		for(var i=0; i < elements.length; i++) {
-			elements[i].style.visibility = "hidden";
-		}
-
+		afficherMarquage(0);
 		refreshEveryMatrixResults();
-
 		printMatricesInvariants();
-
-		generateEveryMatrixInput();
-
-		/*stage.clear();
-		stage.add(backgound);
-		stage.add(layer1); // les places
-		stage.add(layer2); // les transitions
-		stage.add(layer3); // les arcs*/
 	}
 
 	document.getElementById('container').addEventListener ('click', 
@@ -1776,14 +1781,18 @@ function printMatricesInvariants() {
 var correctionActive = false;
 
 function accesCorrection() {
+	/*if(model.places.length < 1 || model.transitions.length < 1) {
+		alert('Vous ne pouvez pas accéder à la correction. \nEssayer de réfléchir un minimum avant de demander la correction !');
+		return;
+	}
 	var i = 0;
 	while(i < tabAccesCorrection.length) {
 		if(tabAccesCorrection[i] == false) {
-			alert('Vous ne pouvez pas accéder à la correction sans avoir au moins essayé !');
+			alert('Vous ne pouvez pas accéder à la correction. \nTout les éléments ci-dessus doivent être controlés !');
 			return;
 		}
 		i++;
-	}
+	}*/
 	if(!correctionActive)
 	{
 		correctionActive = true;
@@ -1831,12 +1840,13 @@ function accesCorrection() {
 		stage.setListening(false);
 
 		generateEveryMatrixInputCor();
+		afficherMarquage(1);
 	}
 }
 
 
 function insertionCode() {
-	var html = "<h3 style=\"color:red;text-align:center;\">Correction</h3><div id=\"container_cor\"></div>"+
+	var html = "<h3 style=\"color:red;text-align:center;\">Correction</h3><div id=\"container_cor\"></div><div class=\"marquage\"><div id=\"marquage_places_cor\" class=\"marquage_places\"></div><div id=\"poids_arcs_cor\" class=\"poids_arcs\"></div></div>"+
 	"<table>"+
 	"<tr><td><h3>Calculer W+</h3></td></tr>"+
 	"<tr>"+
@@ -1920,5 +1930,39 @@ function expandDiv(statut) {
 			document.getElementById('treeCorrection').style.display = 'inherit';
 			treeCorrectionAffichageActiver = true;
 		}
+	}
+}
+
+
+function afficherMarquage(statut) {
+	if(statut == 0) {
+		var html = "<table><th>Marquage des places</th>";
+		for(var i = 0; i < model.places.length; i++) {
+			html+="<tr><td>P"+(i+1)+"</td><td>"+model.places[i].properties['marking']+"</td></tr>";
+		}
+		html += "</table>";
+		document.getElementById('marquage_places').innerHTML = html;
+		
+		html = "<table><th>Poids des arcs</th>";
+		for(var i = 0; i < model.arcs.length; i++) {
+			html+="<tr><td>A"+(i+1)+"</td><td>"+model.arcs[i].properties['value']+"</td></tr>";
+		}
+		html += "</table>";
+		document.getElementById('poids_arcs').innerHTML = html;
+	}
+	if(statut == 1) {
+		var html = "<table><th>Marquage des places</th>";
+		for(var i = 0; i < model.places.length; i++) {
+			html+="<tr><td>P"+(i+1)+"</td><td>"+model.places[i].properties['marking']+"</td></tr>";
+		}
+		html += "</table>";
+		document.getElementById('marquage_places_cor').innerHTML = html;
+		
+		html = "<table><th>Poids des arcs</th>";
+		for(var i = 0; i < model.arcs.length; i++) {
+			html+="<tr><td>A"+(i+1)+"</td><td>"+model.arcs[i].properties['value']+"</td></tr>";
+		}
+		html += "</table>";
+		document.getElementById('poids_arcs_cor').innerHTML = html;
 	}
 }
