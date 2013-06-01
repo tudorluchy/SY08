@@ -77,8 +77,6 @@ class DB {
 		
 		@mysql_query("SET NAMES UTF8");
 		//Strip_tags supprime toutes balise php et html
-		//$resultat=@mysql_real_escape_string(strip_tags($data));
-		
 		$resultat=@mysql_real_escape_string(strip_tags($data));
  
 		if (mysql_error()>0) {
@@ -88,4 +86,9 @@ class DB {
 		}
 		return false;
 	}
+    
+    public function Close()
+	{
+        mysql_close(self::$Base);
+    }
 }

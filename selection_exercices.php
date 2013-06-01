@@ -42,7 +42,7 @@
 			DB::Init();
             $req = "SELECT * FROM sy08_exercice ORDER BY date DESC";
 			$res = DB::SqlToArray($req);
-            
+            DB::Close();
             echo '<div id="liste_exercices">';
             foreach($res as $ligne) {
                 if ($ligne['actif']) {
