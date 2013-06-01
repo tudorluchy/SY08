@@ -43,7 +43,7 @@
 			<input class="disable" type='button' value='Desactiver ajout' name='desac_ajout' onClick="desactivateAdd()" />
 		</div>
 		<input type="hidden" id="json" name="json" value="">
-		<div id="container"></div><div class="marquage"><div id="marquage_places" class="marquage_places"></div><div id="poids_arcs" class="poids_arcs"></div></div>
+		<div id="container"></div>
 		<div id="message_avertissement">Veuillez noter que si vous ajouter des places ou transitions alors que des modifications ont été effectuées sur les matrices ci-dessous, ces modifications seront perdues !
 			Assurez-vous donc que votre graphe est correct avant de passer à la prochaine étape.</div>
 		<table>

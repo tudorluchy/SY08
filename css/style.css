@@ -31,33 +31,6 @@ body
 	float: left;
 }
 
-
-.marquage {
-	float: left;
-	width : 250px;
-	margin-left: 30px;
-	margin-right: 30px;
-	max-height: 400px;
-	height: 400px;
-}
-
-.marquage_places {
-	float: left;
-	width: 100px;
-	max-height: 400px;
-	height: 400px;
-	padding-right: 5px;
-	overflow: auto;
-}
-
-.poids_arcs {
-	float:right;
-	width: 100px;
-	max-height: 400px;
-	height: 400px;
-	overflow-y: auto;
-}
-
 #message_avertissement {
 	float: left;
 	color: red;

@@ -647,7 +647,6 @@ function drawPlace(layer, i)
 					generateInvariantInput(1);
 					
 					printMatricesInvariants();
-					afficherMarquage(0);
 					
 				}
 				place2transTEMP = -1;
@@ -748,7 +747,6 @@ function drawTransition(layer, i)
 					
 					place2transTEMP = -1;
 					source = -1;
-					afficherMarquage(0);
 				}
 				place2transTEMP = -1;
 				source = -1;
@@ -1092,7 +1090,6 @@ function editProperty()
 	redrawAll();
 	refreshEveryMatrixResults();
 	printMatricesInvariants();
-	afficherMarquage(0);
 	//console.log(model.places);
 }
 
@@ -1235,7 +1232,8 @@ function mouseEventCallBack() {
 			generateEveryMatrixInput();
 		}
 
-		afficherMarquage(0);
+		
+		
 		refreshEveryMatrixResults();
 		printMatricesInvariants();
 	}
@@ -1840,13 +1838,13 @@ function accesCorrection() {
 		stage.setListening(false);
 
 		generateEveryMatrixInputCor();
-		afficherMarquage(1);
+		
 	}
 }
 
 
 function insertionCode() {
-	var html = "<h3 style=\"color:red;text-align:center;\">Correction</h3><div id=\"container_cor\"></div><div class=\"marquage\"><div id=\"marquage_places_cor\" class=\"marquage_places\"></div><div id=\"poids_arcs_cor\" class=\"poids_arcs\"></div></div>"+
+	var html = "<h3 style=\"color:red;text-align:center;\">Correction</h3><div id=\"container_cor\"></div>"+
 	"<table>"+
 	"<tr><td><h3>Calculer W+</h3></td></tr>"+
 	"<tr>"+
@@ -1930,39 +1928,5 @@ function expandDiv(statut) {
 			document.getElementById('treeCorrection').style.display = 'inherit';
 			treeCorrectionAffichageActiver = true;
 		}
-	}
-}
-
-
-function afficherMarquage(statut) {
-	if(statut == 0) {
-		var html = "<table><th>Marquage des places</th>";
-		for(var i = 0; i < model.places.length; i++) {
-			html+="<tr><td>P"+(i+1)+"</td><td>"+model.places[i].properties['marking']+"</td></tr>";
-		}
-		html += "</table>";
-		document.getElementById('marquage_places').innerHTML = html;
-		
-		html = "<table><th>Poids des arcs</th>";
-		for(var i = 0; i < model.arcs.length; i++) {
-			html+="<tr><td>A"+(i+1)+"</td><td>"+model.arcs[i].properties['value']+"</td></tr>";
-		}
-		html += "</table>";
-		document.getElementById('poids_arcs').innerHTML = html;
-	}
-	if(statut == 1) {
-		var html = "<table><th>Marquage des places</th>";
-		for(var i = 0; i < model.places.length; i++) {
-			html+="<tr><td>P"+(i+1)+"</td><td>"+model.places[i].properties['marking']+"</td></tr>";
-		}
-		html += "</table>";
-		document.getElementById('marquage_places_cor').innerHTML = html;
-		
-		html = "<table><th>Poids des arcs</th>";
-		for(var i = 0; i < model.arcs.length; i++) {
-			html+="<tr><td>A"+(i+1)+"</td><td>"+model.arcs[i].properties['value']+"</td></tr>";
-		}
-		html += "</table>";
-		document.getElementById('poids_arcs_cor').innerHTML = html;
 	}
 }
