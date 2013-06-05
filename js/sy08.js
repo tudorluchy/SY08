@@ -638,9 +638,19 @@ function drawPlace(layer, i)
 			}
 			else if(place2transTEMP == 0){
 				// on ins�re dans le JSON
-				if(model.transitions[source]!==undefined)
+				if(model.transitions[source]!=undefined)
 				{
-					createArc(0,source,i,1);
+					if(detectArc(source, i) != 0) {
+						for(var z = 0; z < model.arcs.length; z++) {
+							if(model.arcs[z].source==source && model.arcs[z].dest==i && model.arcs[z].place2trans==1)
+							{
+								model.arcs[z].place2trans = 0;
+								break;
+							}
+						}
+					}
+					else
+						createArc(0,source,i,1);
 					refreshLines();
 					
 					generateInvariantInput(0);
@@ -736,10 +746,22 @@ function drawTransition(layer, i)
 				place2transTEMP = 0;
 			}
 			else if(place2transTEMP == 1){
-				if(model.places[source]!==undefined)
+				if(model.places[source]!=undefined)
 				{
 					// on ins�re dans le JSON
-					createArc(1,source,i,1);
+					
+					// Si l'arc existe deja
+					if(detectArc(source, i) != 0) {
+						for(var z = 0; z < model.arcs.length; z++) {
+							if(model.arcs[z].source==source && model.arcs[z].dest==i && model.arcs[z].place2trans==0)
+							{
+								model.arcs[z].place2trans = 1;
+								break;
+							}
+						}
+					}
+					else
+						createArc(1,source,i,1);
 					refreshLines();
 					
 					generateInvariantInput(0);
