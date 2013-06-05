@@ -1443,7 +1443,7 @@ function controlerMatrice(statut) {
 	else {
 		if(document.getElementById(which+"_astuces") != null) {
 			var html = 'Aucune matrice';
-			document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
+			document.getElementById(which+"_astuces").style.backgroundColor = "#FE9A2E";
 			document.getElementById(which+"_astuces").style.visibility = "visible";
 			document.getElementById(which+"_astuces").innerHTML = html;
 		}
@@ -1533,7 +1533,7 @@ function controlerInvariant(statut) {
 					tabAccesCorrection[4] = true;
 
 
-				document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
+				document.getElementById(which+"_astuces").style.backgroundColor = "#FE9A2E";
 				document.getElementById(which+"_astuces").style.visibility = "visible";
 				document.getElementById(which+"_astuces").innerHTML = html;
 			}
@@ -1548,7 +1548,7 @@ function controlerInvariant(statut) {
 			else if(statut == 1)
 				tabAccesCorrection[4] = true;
 
-			document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
+			document.getElementById(which+"_astuces").style.backgroundColor = "#FE9A2E";
 			document.getElementById(which+"_astuces").style.visibility = "visible";
 			document.getElementById(which+"_astuces").innerHTML = html;
 		}
@@ -1779,7 +1779,7 @@ function printMatricesInvariants() {
 var correctionActive = false;
 
 function accesCorrection() {
-	/*if(model.places.length < 1 || model.transitions.length < 1) {
+	if(model.places.length < 1 || model.transitions.length < 1) {
 		alert('Vous ne pouvez pas accéder à la correction. \nEssayer de réfléchir un minimum avant de demander la correction !');
 		return;
 	}
@@ -1790,7 +1790,7 @@ function accesCorrection() {
 			return;
 		}
 		i++;
-	}*/
+	}
 	if(!correctionActive)
 	{
 		correctionActive = true;

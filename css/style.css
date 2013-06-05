@@ -34,6 +34,7 @@ body
 #message_avertissement {
 	float: left;
 	color: red;
+	font-weight: bold;
 }
 
 #titre_exos {
