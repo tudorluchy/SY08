@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/truncatable/jquery.truncatable.js"></script>
+        <script type="text/javascript" src="js/jPages-master/js/jPages.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+        <script language="JavaScript" type="text/javascript">  
+            $(document).ready(function(){  
+                $("div.page_navigation").jPages({
+                    containerID : "liste_exercices",
+                    perPage : 5,
+                    first       : "Premier",
+                    previous    : "Précédent",
+                    next        : "Suivant",
+                    last        : "Dernier",
+                    midRange : 10
+                });
+            });  
+        </script> 
+		<script language="JavaScript" type="text/javascript">
+            $(function(){
+               $('.exo_enonce').truncatable({
+                    limit:400,
+                    more: '.....',
+                    less: true,
+                    hideText: '[cacher]'
+                });
+            });          
+		</script>
+	</head>
+	<body>	
+	<div id="corps_selection">
+		<h1 id="titre_exos">Exercices</h1>
+		Sur cette page vous ai présenté un ensemble d'exercices.
+		<h2>Les réseaux de Pétri <a class='lien_droite' href="administration.php" title="Aller à l'administration">Administration</a></h2>
+             
+		<?php
+			ini_set('display_errors', 1);
+			require_once(dirname(__FILE__).'/base/DB.class.php');
+			DB::Init();
+            $req = "SELECT * FROM sy08_exercice ORDER BY date DESC";
+			$res = DB::SqlToArray($req);
+            DB::Close();
+            echo '<div id="liste_exercices">';
+            foreach($res as $ligne) {
+                if ($ligne['actif']) {
+                    echo '<div class="exo_selection">';
+                    echo '<span class="exo_titre_bis">Exercice : '.$ligne['intitule'].'</span><br/>';
+                    echo '<span class="exo_enonce">'.$ligne['enonce'].'</span>';
+                    echo '<a href="exercice.php?action=effectuer&id='.$ligne['id'].'"><img class="go" src="img/go.png" title="Start exercice!"/></a> <br />';
+                    echo '<b>Niveau de difficulté : '.$ligne['difficulte'].'</b>';
+                    echo '</div>';
+                }
+			}
+            echo "</div>";
+            echo '<div class="page_navigation"></div>';
+		?>	
+	</div>	
+	</body>
+</html>
