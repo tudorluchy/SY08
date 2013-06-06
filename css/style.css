@@ -52,8 +52,8 @@ body
 	background-color:lightsteelblue;
 	border : 1px solid #1a1056;
 	margin-bottom: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
+	padding: 20px;
+	text-align: justify;
     /*Coin arrondi*/
 	-moz-border-radius : 5px 5px;			
 	-webkit-border-radius: 5px 5px; 
@@ -325,6 +325,10 @@ fieldset.fieldset_form_connexion
 	width: 300px;
 }
 
+#arbreDeCouverture {
+	float:left;
+	width: 1000px;
+}
 /*****************************************************************/
 /*** Composants relatifs à la navigation des pages des exo *******/
 /*****************************************************************/
