@@ -81,6 +81,10 @@
             $prop = 'dest';
         } else if ($prop == 'PLACE2TRANS') {
             $prop = 'place2trans';
+        } else if ($prop == 'MARKING') {
+            $prop = 'marking';
+        } else if ($prop == 'VALUE') {
+            $prop = 'value';
         }
         return $prop;
     }
@@ -105,7 +109,8 @@
 		$valid_prop_place = array();
 		$valid_prop_place[] = 'POSITION.X';
 		$valid_prop_place[] = 'POSITION.Y';
-		
+		$valid_prop_place[] = 'MARKING';
+        
 		// propriétés valides = TRANSITION
 		$valid_prop_trans = array();
 		$valid_prop_trans[] = 'POSITION.X';
@@ -116,7 +121,8 @@
 		$valid_prop_arc[] = 'SOURCE';
 		$valid_prop_arc[] = 'DEST';
 		$valid_prop_arc[] = 'PLACE2TRANS';
-		
+		$valid_prop_arc[] = 'VALUE';
+        
 		// recherche extreme Y
 		$extreme_y = 9999;
 		while ($element = current($array)) {
@@ -187,8 +193,15 @@
 							} else if ($prop_good == 'coordy') {
 								$val = abs($val) * $ratio_y;
 							}
-							$good_array['places'][$i][$prop_good] = $val;
-							$b = true;
+                            if ($prop_good == 'marking') {
+                                $good_array['places'][$i]['properties'][$prop_good] = $val;
+                                if ($val != 1) {
+                                    $good_array['places'][$i]['properties'][$prop_good] = 0;
+                                }
+                            } else {
+                                $good_array['places'][$i][$prop_good] = $val;
+                            }
+                            $b = true;
 						}
 					}
 					if ($b) {
@@ -222,8 +235,15 @@
 								$val = $val * $ratio_x;
 							} else if ($prop_good == 'coordy') {
 								$val = abs($val) * $ratio_y;
-							}
-							$good_array['arcs'][$k][$prop_good] = $val;
+							}                            
+                            if ($prop_good == 'value') {
+                                $good_array['arcs'][$k]['properties'][$prop_good] = $val;
+                                if ($val != 1) {
+                                    $good_array['arcs'][$k]['properties'][$prop_good] = 0;
+                                }
+                            } else {
+                                $good_array['arcs'][$k][$prop_good] = $val;
+                            }
 							$b = true;
 						}
 					}
@@ -237,21 +257,20 @@
 		reset($array);
 		
 		// affichage tableau résultats
-		// var_dump($good_array);    
+		//var_dump($good_array);    
 		
 		// encodage json
 		$res_json = json_encode($good_array);
 		$res_json = str_replace('"','', $res_json);
-		$res_json_joli = pretty_json($res_json); 
-		
-		return $res_json;
-		
+        $res_json_joli = pretty_json($res_json); 
+	
 		// affichage json
 		//echo '<b>Resultat JSON pas joli</b> : <br/><br/>'.$res_json;
 		
-		// affichage json
+		// affichage json joli
 		//echo '<pre><b>Resultat JSON joli</b> : <br/><br/>'.$res_json_joli.'</pre>';
+	
+		return $res_json;
 	}
-    
 ?>
 
