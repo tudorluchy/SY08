@@ -325,6 +325,10 @@ fieldset.fieldset_form_connexion
 	width: 300px;
 }
 
+#arbreDeCouverture {
+	float:left;
+	width: 1000px;
+}
 /*****************************************************************/
 /*** Composants relatifs à la navigation des pages des exo *******/
 /*****************************************************************/

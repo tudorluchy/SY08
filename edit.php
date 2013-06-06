@@ -112,6 +112,7 @@
 						<div id="matrice_Tinvariants_results"></div>
 					</div>
 				</div>
+				<div id="arbreDeCouverture"><input type="button" id="arbre_couverture_button" value="Afficher arbre de couverture" onClick="arbreDeCouverture('#arbreDeCouverture_content'); document.getElementById('arbre_couverture_button').value='Actualiser arbre de couverture'"/><div id="arbreDeCouverture_content"></div></div>
 				<input class="valider" type='submit' value='Valider'>
 			</fieldset>	
 		</form>
