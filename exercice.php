@@ -13,7 +13,6 @@
 	</head>
 	<body>	
     <?php
-        ini_set('display_errors', 1);
         require_once(dirname(__FILE__).'/base/DB.class.php');
         DB::Init();
         // effectuer exercice
@@ -21,7 +20,7 @@
             $req = 'SELECT * FROM sy08_exercice WHERE id = '.$_GET['id'];
             $res = DB::SqlToArray($req);
         } else {
-            header('Location: selection_exercices.php');
+            header('Location: index.php');
         }
         // date : <span class="exo_date">'.date_format(date_create($res[0]['date']), 'd/m/Y H:i').'</span>
         DB::Close();
@@ -30,7 +29,7 @@
 		var model2 = <?php echo $res[0]['json']; ?>;
 	</script>
 	<div id='corps_form_ajout'>
-		<h2>Exercice : <?php echo $res[0]['intitule'].'<a class="lien_droite" href="selection_exercices.php" title="Revenir à la liste des exercices">Liste des exercices</a>'; ?></h2>
+		<h2>Exercice : <?php echo $res[0]['intitule']; ?> <a class="lien_droite" href="index.php" title="Revenir à la liste des exercices">Liste des exercices</a></h2>
         <?php echo $res[0]['enonce']; ?> <br /><br />
 		<?php if (!empty($res[0]['image']) && file_exists('upload_images/'.$res[0]['image'])) { ?>
 			<img title='Image exercice' src='upload_images/<?php echo $res[0]['image']; ?>'/><br />
@@ -102,7 +101,12 @@
 			</tr>
 		</table>
 		<input type="button" value="Accéder à la correction" onClick="accesCorrection();"/>
-		<div id="correction"></div>
+		<div id="correction">
+            <br />
+            <?php if (!empty($res[0]['fichier']) && file_exists('upload_fichiers/'.$res[0]['fichier'])) { ?>
+                    <a class="invisible" href="upload_fichiers/<?php echo $res[0]['fichier']; ?>">Fichier d'aide lié à la correction</a> 
+            <?php } ?>
+        </div>
 	</div>
 	</body>
 </html>

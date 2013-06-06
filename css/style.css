@@ -44,6 +44,8 @@ body
 	background-color:lightsteelblue;
 	border : 1px solid #1a1056;
 	margin-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
     /*Coin arrondi*/
 	-moz-border-radius : 5px 5px;			
 	-webkit-border-radius: 5px 5px; 
@@ -97,6 +99,11 @@ ul.upload_info {
 .go {
 	float : right;
 	margin-right : 10px;
+}
+
+.hr_go {
+    clear: both;
+    visibility: hidden;
 }
 
 .fieldset_ajout_exercice input,textarea
@@ -202,6 +209,11 @@ fieldset.fieldset_form_connexion
 	-webkit-border-top-left-radius: 5px; /* pour Chrome */ 
 	-webkit-border-top-right-radius: 5px; /* pour Chrome */
 }
+
+.invisible {
+    visibility: hidden;
+}
+
 
 
 #corps_form_ajout, #corps_modif

@@ -42,7 +42,6 @@ if (!isset($_SESSION['login'])) {
 	</head>
 	<body>	
 	<?php	
-		ini_set('display_errors', 1); 
 		require_once(dirname(__FILE__).'/base/DB.class.php');
 		DB::Init();
 		// post form
@@ -55,7 +54,7 @@ if (!isset($_SESSION['login'])) {
         }
 	?>
 	<div id="corps_modif">
-		<h2>Modification des exercices <a class='lien_droite' href="selection_exercices.php" title="Aller à la liste des exercices">Liste des exercices</a></h2>
+		<h2>Modification des exercices <a class='lien_droite' href="index.php" title="Aller à la liste des exercices">Liste des exercices</a></h2>
 		<?php
 			// action
 			if (isset($_REQUEST['action'])) {
@@ -75,7 +74,7 @@ if (!isset($_SESSION['login'])) {
                             $json_final = $_POST['json'];
                         }
                         $req = "INSERT INTO sy08_exercice (intitule, enonce, actif, image, fichier, difficulte, json, date) 
-                        VALUES ('".DB::ProtectData($_POST['intitule'])."', '".DB::ProtectData($_POST['enonce'])."', 1, '".DB::ProtectData($_FILES['image_exo']['name'])."', '".DB::ProtectData($_FILES['fichier_exo']['name'])."','".DB::ProtectData($_POST['difficulte'])."', '".$json_final."', NOW())";
+                        VALUES ('".$_POST['intitule']."', '".$_POST['enonce']."', 1, '".$_FILES['image_exo']['name']."', '".$_FILES['fichier_exo']['name']."','".$_POST['difficulte']."', '".$json_final."', NOW())";
                         $res = DB::Sql($req);
                         if ($res) {
                             echo "<ul><li>Exercice bien ajouté!</li></ul>";

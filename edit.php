@@ -13,7 +13,6 @@
 	</head>
 	<body>	
 	<?php	
-		ini_set('display_errors', 1); 
 		require_once(dirname(__FILE__).'/base/DB.class.php');
 		DB::Init();
 		// post form
@@ -37,8 +36,7 @@
                 } else {
                     $actif = 0;
                 }
-				$req = "UPDATE sy08_exercice SET intitule = '".DB::ProtectData($_POST['intitule'])."', enonce = '".$_POST['enonce']."' , actif = ".DB::ProtectData($actif).", image = '".DB::ProtectData($_FILES['image_exo']['name'])."' , fichier = '".DB::ProtectData($_FILES['fichier_exo']['name'])."' , difficulte = '".DB::ProtectData($_POST['difficulte'])."' , json = '".$json_final."' WHERE id = ".$_GET['id'];
-				echo $req;
+				$req = "UPDATE sy08_exercice SET intitule = '".$_POST['intitule']."', enonce = '".$_POST['enonce']."' , actif = ".$actif.", image = '".$_FILES['image_exo']['name']."' , fichier = '".$_FILES['fichier_exo']['name']."' , difficulte = '".$_POST['difficulte']."' , json = '".$json_final."' WHERE id = ".$_GET['id'];
                 DB::Sql($req);
                 $req = 'SELECT * FROM sy08_exercice WHERE id = '.$_GET['id'];
 				$res = DB::SqlToArray($req);
@@ -46,7 +44,6 @@
 			} else if ($_GET['action'] == 'edit') { 
                 $req = 'SELECT * FROM sy08_exercice WHERE id = '.$_GET['id'];
 				$res = DB::SqlToArray($req);
-				
 			}
 		} else {
 			header('Location: administration.php'); 
@@ -57,7 +54,7 @@
 		var model = <?php echo $res[0]['json']; ?>;
 	</script>
 	<div id='corps_form_ajout'>
-		<h2>Modification de l'exercice : <?php echo $res[0]['intitule'].'<a class="lien_droite" href="administration.php" title="Revenir à l\'administration">Administration</a>'; ?></h3>
+		<h2>Modification de l'exercice : <?php echo $res[0]['intitule']; ?> <a class="lien_droite" href="administration.php" title="Retour à l'administration">Retour à l'administration</a></h3>
 		<form name="ajout_exercice" method="POST" action="?action=save&id=<?php echo $_GET['id']; ?>"enctype="multipart/form-data" onsubmit="return verifForm(this)">
 			<fieldset class="fieldset_ajout_exercice">
 				<label>Intitule de l'énonce :</label><input type='text' name='intitule' title='Intitule' onblur="verifIntitule(this)" value="<?php echo $res[0]['intitule']; ?>"/><br />

@@ -1,8 +1,6 @@
 <?php
 
-
 require_once('DB.loginfo.php');
-
 
 class DB {
     
