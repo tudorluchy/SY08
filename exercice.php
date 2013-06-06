@@ -39,9 +39,12 @@
 			<input class="disable" type='button' value='Ajout Place' name='add_place' onClick='activateAddPlace()' />
 			<input class="disable" type='button' value='Ajout Transition' name='add_transition' onClick='activateAddTransition()' />
 			<input class="disable" type='button' value='Ajout Arc' name='add_arc' onClick='activateAddArc()' />
+			<input class="disable" type='button' value='Desactiver ajout' name='desac_ajout' onClick="desactivateAdd()" />
 		</div>
 		<input type="hidden" id="json" name="json" value="">
 		<div id="container"></div>
+		<div id="message_avertissement">Veuillez noter que si vous ajouter des places ou transitions alors que des modifications ont été effectuées sur les matrices ci-dessous, ces modifications seront perdues !
+			Assurez-vous donc que votre graphe est correct avant de passer à la prochaine étape.</div>
 		<table>
 			<tr><td><h3>Calculer W+</h3></td></tr>
 			<tr>
@@ -100,11 +103,11 @@
 				<td><div id="proprietes_astuces" class="astuces"><div id="proprietes_astuces_comp"></div><div id="proprietes_astuces_comp2">Arbre de couverture s'il existe : <input type="button" value="Afficher/Masquer" onClick="expandDiv(0);" /><div id="tree"></div></div></div></td>
 			</tr>
 		</table>
-		<input type="button" value="Accéder à la correction" onClick="accesCorrection();"/>
-		<div id="correction">
+		<input class="disable" type="button" value="Accéder à la correction" onClick="accesCorrection();"/>
+		<div id="correction" style="border-top: 1px solid red;">
             <br />
             <?php if (!empty($res[0]['fichier']) && file_exists('upload_fichiers/'.$res[0]['fichier'])) { ?>
-                    <a class="invisible" href="upload_fichiers/<?php echo $res[0]['fichier']; ?>">Fichier d'aide lié à la correction</a> 
+                <a class="invisible" href="upload_fichiers/<?php echo $res[0]['fichier']; ?>">Fichier d'aide lié à la correction</a> 
             <?php } ?>
         </div>
 	</div>

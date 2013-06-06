@@ -17,6 +17,7 @@ body
 	margin-top:20px;
 	margin-bottom:20px;
 	width : 600px;
+	float: left;
 }
 
 #container_cor {
@@ -27,6 +28,13 @@ body
 	margin-top:20px;
 	margin-bottom:20px;
 	width : 600px;
+	float: left;
+}
+
+#message_avertissement {
+	float: left;
+	color: red;
+	font-weight: bold;
 }
 
 #titre_exos {

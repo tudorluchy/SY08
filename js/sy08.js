@@ -638,9 +638,19 @@ function drawPlace(layer, i)
 			}
 			else if(place2transTEMP == 0){
 				// on ins�re dans le JSON
-				if(model.transitions[source]!==undefined)
+				if(model.transitions[source]!=undefined)
 				{
-					createArc(0,source,i,1);
+					if(detectArc(source, i) != 0) {
+						for(var z = 0; z < model.arcs.length; z++) {
+							if(model.arcs[z].source==source && model.arcs[z].dest==i && model.arcs[z].place2trans==1)
+							{
+								model.arcs[z].place2trans = 0;
+								break;
+							}
+						}
+					}
+					else
+						createArc(0,source,i,1);
 					refreshLines();
 					
 					generateInvariantInput(0);
@@ -736,10 +746,22 @@ function drawTransition(layer, i)
 				place2transTEMP = 0;
 			}
 			else if(place2transTEMP == 1){
-				if(model.places[source]!==undefined)
+				if(model.places[source]!=undefined)
 				{
 					// on ins�re dans le JSON
-					createArc(1,source,i,1);
+					
+					// Si l'arc existe deja
+					if(detectArc(source, i) != 0) {
+						for(var z = 0; z < model.arcs.length; z++) {
+							if(model.arcs[z].source==source && model.arcs[z].dest==i && model.arcs[z].place2trans==0)
+							{
+								model.arcs[z].place2trans = 1;
+								break;
+							}
+						}
+					}
+					else
+						createArc(1,source,i,1);
 					refreshLines();
 					
 					generateInvariantInput(0);
@@ -1198,35 +1220,44 @@ function activateAddTransition() {
 function activateAddArc() {
 	kindOfAdd = 2;
 }
+
+function desactivateAdd() {
+	kindOfAdd = -1;
+}
+
 var containerEventListener;
 function mouseEventCallBack() {
 	var previousPositionX;
 	var previousPositionY;
 	containerEventListener = function(event) {
-		if(kindOfAdd == 0){
-			createPlace(event.pageX-posx,event.pageY-posy,0);
-			//redrawPlaces();
-			//redrawAll();
+		if(kindOfAdd == -1)
+			return;
+		if(kindOfAdd == 0 || kindOfAdd == 1) {
+			if(kindOfAdd == 0){
+				createPlace(event.pageX-posx,event.pageY-posy,0);
+				//redrawPlaces();
+				//redrawAll();
+			}
+			else if(kindOfAdd == 1) {
+				createTransition(event.pageX-posx,event.pageY-posy);
+				//redrawTransitions();
+				//redrawAll();
+			}
+			redrawAll();
+			resetAccesCorrection();
+			
+			// On cache tout les éléments 'astuces' dans le cas ou ils étaient précédemment affichés !
+			var elements = document.getElementsByClassName('astuces');
+			for(var i=0; i < elements.length; i++) {
+				elements[i].style.visibility = "hidden";
+			}
+			generateEveryMatrixInput();
 		}
-		else if(kindOfAdd == 1) {
-			createTransition(event.pageX-posx,event.pageY-posy);
-			//redrawTransitions();
-			//redrawAll();
-		}
-		redrawAll();
-		//refreshLines();
 
+		
+		
 		refreshEveryMatrixResults();
-
 		printMatricesInvariants();
-
-		generateEveryMatrixInput();
-
-		/*stage.clear();
-		stage.add(backgound);
-		stage.add(layer1); // les places
-		stage.add(layer2); // les transitions
-		stage.add(layer3); // les arcs*/
 	}
 
 	document.getElementById('container').addEventListener ('click', 
@@ -1434,7 +1465,7 @@ function controlerMatrice(statut) {
 	else {
 		if(document.getElementById(which+"_astuces") != null) {
 			var html = 'Aucune matrice';
-			document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
+			document.getElementById(which+"_astuces").style.backgroundColor = "#FE9A2E";
 			document.getElementById(which+"_astuces").style.visibility = "visible";
 			document.getElementById(which+"_astuces").innerHTML = html;
 		}
@@ -1524,7 +1555,7 @@ function controlerInvariant(statut) {
 					tabAccesCorrection[4] = true;
 
 
-				document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
+				document.getElementById(which+"_astuces").style.backgroundColor = "#FE9A2E";
 				document.getElementById(which+"_astuces").style.visibility = "visible";
 				document.getElementById(which+"_astuces").innerHTML = html;
 			}
@@ -1539,7 +1570,7 @@ function controlerInvariant(statut) {
 			else if(statut == 1)
 				tabAccesCorrection[4] = true;
 
-			document.getElementById(which+"_astuces").style.backgroundColor = "#DD1111";
+			document.getElementById(which+"_astuces").style.backgroundColor = "#FE9A2E";
 			document.getElementById(which+"_astuces").style.visibility = "visible";
 			document.getElementById(which+"_astuces").innerHTML = html;
 		}
@@ -1770,10 +1801,16 @@ function printMatricesInvariants() {
 var correctionActive = false;
 
 function accesCorrection() {
+	if(model.places.length < 1 || model.transitions.length < 1) {
+		alert('Vous ne pouvez pas accéder à la correction. \nEssayer de réfléchir un minimum avant de demander la correction !');
+		return;
+	}
 	var i = 0;
 	while(i < tabAccesCorrection.length) {
-		if(tabAccesCorrection[i] == false)
+		if(tabAccesCorrection[i] == false) {
+			alert('Vous ne pouvez pas accéder à la correction. \nTout les éléments ci-dessus doivent être controlés !');
 			return;
+		}
 		i++;
 	}
 	if(!correctionActive)
@@ -1823,6 +1860,7 @@ function accesCorrection() {
 		stage.setListening(false);
 
 		generateEveryMatrixInputCor();
+		
 	}
 }
 
