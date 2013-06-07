@@ -2,15 +2,15 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-CREATE SCHEMA IF NOT EXISTS `sy08` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
-USE `sy08` ;
+CREATE SCHEMA IF NOT EXISTS `wsy08` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
+USE `wsy08` ;
 
 -- -----------------------------------------------------
 -- Table `sy08`.`sy08_exercice`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `sy08`.`sy08_exercice` ;
+DROP TABLE IF EXISTS `wsy08`.`sy08_exercice` ;
 
-CREATE  TABLE IF NOT EXISTS `sy08`.`sy08_exercice` (
+CREATE  TABLE IF NOT EXISTS `wsy08`.`sy08_exercice` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `intitule` VARCHAR(255) NOT NULL ,
   `enonce` LONGTEXT NOT NULL ,
@@ -27,7 +27,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `sy08`.`sy08_user`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `sy08`.`sy08_user` ;
+DROP TABLE IF EXISTS `wsy08`.`sy08_user` ;
 
 CREATE  TABLE IF NOT EXISTS `sy08`.`sy08_user` (
   `id` INT NOT NULL AUTO_INCREMENT ,
@@ -37,7 +37,7 @@ CREATE  TABLE IF NOT EXISTS `sy08`.`sy08_user` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
-USE `sy08` ;
+USE `wsy08` ;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

@@ -170,10 +170,17 @@ fieldset.fieldset_ajout_exercice
    font-family:Times, serif; /* On modifie la police du texte tapé l'intérieur des champs */;
 }
  
-input:focus,textarea:focus.fieldset_form_connexion  /* Quand le curseur est sur un champ */
+input:focus :not(#button_group input:focus),textarea:focus.fieldset_form_connexion  /* Quand le curseur est sur un champ */
 {
    background-color : #acb7c9;
+}
+
+.activeButton
+{
+	background-color : #acb7c9;
 } 
+
+
 
 .fieldset_form_connexion label
 {

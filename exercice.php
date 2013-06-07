@@ -36,10 +36,9 @@
 		<?php } ?>
 		<b>Resolution du graphe :</b><br />
 		<div id='button_group'>
-			<input class="disable" type='button' value='Ajout Place' name='add_place' onClick='activateAddPlace()' />
-			<input class="disable" type='button' value='Ajout Transition' name='add_transition' onClick='activateAddTransition()' />
-			<input class="disable" type='button' value='Ajout Arc' name='add_arc' onClick='activateAddArc()' />
-			<input class="disable" type='button' value='Desactiver ajout' name='desac_ajout' onClick="desactivateAdd()" />
+			<input type='button' value='Ajout Place' name='add_place' id='add_place' class='add_element'  />
+			<input type='button' value='Ajout Transition' name='add_transition' id='add_transition' class='add_element'  />
+			<input type='button' value='Ajout Arc' name='add_arc' id='add_arc' class='add_element' />
 		</div>
 		<input type="hidden" id="json" name="json" value="">
 		<div id="container"></div>

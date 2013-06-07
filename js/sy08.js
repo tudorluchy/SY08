@@ -1,8 +1,7 @@
-﻿var backgound = new Kinetic.Layer();
+﻿var layer3 = new Kinetic.Layer();
 var layer1 = new Kinetic.Layer();
-var layer2 = new Kinetic.Layer();
-var layer3 = new Kinetic.Layer();
-var stage, stage2;
+var layertmp = new Kinetic.Layer();
+var stage;
 var posx;
 var posy;
 
@@ -878,15 +877,12 @@ function drawLine(layer, i)
 		lineJoin: 'round'
 	});
 
-	group.on('dblclick', function() {
-		idSelected = i;
-		kindOfSelected=3;
-		displayProperties(model.arcs[i].properties,true); 
-
-	},false);
+	
 
 	group.add(ponderation);
 	group.add(redLine);
+	
+	
 	
 
 	var arrow = [];
@@ -924,6 +920,14 @@ function drawLine(layer, i)
 	});
 	group.add(redLine1);
 	group.add(redLine2);
+	
+	
+	group.on('dblclick', function() {
+		idSelected = i;
+		kindOfSelected=3;
+		displayProperties(model.arcs[i].properties,true); 
+
+	},false);
 
 	layer.add(group);
 }
@@ -931,32 +935,52 @@ function drawLine(layer, i)
 
 function refreshLines()
 {
-	recurseClear(layer3,1);
-	//layer3.removeChildren();
-	//layer3.clear();
-	var layertmp = new Kinetic.Layer();
+	//stage.clear();
+	recurseClear(layer3);
+	var l = new Kinetic.Layer();
 	for(var i=0;i<model.arcs.length;i++)
 	{
-		drawLine(layertmp,i);
+		drawLine(l,i);
 	}
-	stage.add(layertmp);
-	layer3=layertmp;
+	
+	stage.add(l);
+	layer3=l;
+}
+
+function refreshLinesIni()
+{
+
+	var l = new Kinetic.Layer();
+	for(var i=0;i<model.arcs.length;i++)
+	{
+		drawLine(l,i);
+	}
+	
+	stage.add(l);
+	layer3=l;
 
 
 }
+
+
 
 
 function redrawAll()
 {
-	stage.clear();
+	//stage.clear();
+	recurseClear(layer1);
+	layertmp = new Kinetic.Layer();
+	refreshLines();
 	redrawPlaces();
 	redrawTransitions();
-	refreshLines();
+	
+	stage.add(layertmp);
+	layer1=layertmp;
 
 
 }
 
-function recurseClear(container,lvl)
+function recurseClear(container)
 {
 
 	if(container instanceof Kinetic.Group || container instanceof Kinetic.Layer || container instanceof Kinetic.Container)
@@ -965,42 +989,42 @@ function recurseClear(container,lvl)
 		var children = container.getChildren();
 		for(var i=0;i<children.length;i++)
 		{
-			recurseClear(children[i],lvl+1);
+			recurseClear(children[i]);
 			
 		}
 	}
-	if(lvl>0)
-		container.destroy();
+	container.destroy();
 	
 }
 
 function redrawPlaces()
 {
 	
-	recurseClear(layer1,1);
+	//recurseClear(layer1);
 	//layer1.removeChildren();
-	var layertmp = new Kinetic.Layer();
+	
 	for(var i=0;i<model.places.length;i++)
 	{
 
 		drawPlace(layertmp,i);
 	}
-	stage.add(layertmp);
-	layer1=layertmp;
+	//stage.add(layertmp);
+	//layer1=layertmp;
 
 }
 
 function redrawTransitions()
 {
 
-	recurseClear(layer2,1);
-	var layertmp = new Kinetic.Layer();
+	//recurseClear(layer2);
+	//layer2.removeChildren();
+	//var layertmp = new Kinetic.Layer();
 	for(var i=0;i<model.transitions.length;i++)
 	{
 		drawTransition(layertmp,i);
 	}
-	stage.add(layertmp);
-	layer2=layertmp;
+	//stage.add(layertmp);
+	//layer2=layertmp;
 }
 
 function resetAccesCorrection() {
@@ -1016,6 +1040,13 @@ $(window).load(function(){
 	$('body').append('<div id="dialog-modal" title="Properties"></div>');
 	$('body').append('<div id="tree"></div>');
 	
+	$('.add_element').click(function(){
+		$('.add_element').removeClass("activeButton");
+		if(activateAddElement($(this).attr('id')))
+			$(this).toggleClass("activeButton");
+        
+    });
+	
 
 	posx=$('#container').findPos().x;
 	posy=$('#container').findPos().y;
@@ -1025,16 +1056,19 @@ $(window).load(function(){
 		width: 600,
 		height: 400
 	});
-
-
-	stage.add(backgound);
-	stage.add(layer1); // les places
-	stage.add(layer2); // les transitions
-	stage.add(layer3); // les arcs
-
-	redrawPlaces();
-	redrawTransitions();
-	refreshLines();
+	
+	if(model.arcs.length>0 || model.transitions.length>0 || model.places.length>0)
+		redrawAll();
+	//redrawTransitions();
+	//refreshLinesIni();
+	//layer1=layertmp;
+	//stage.add(layer1);
+	//redrawPlaces();
+	//redrawTransitions();
+	
+	
+	
+	
 	refreshEveryMatrixResults();
 
 	printMatricesInvariants();
@@ -1209,16 +1243,53 @@ function Tinvariants()
 
 }
 
+
+
+function activateAddElement(id)
+{
+	if(id=='add_place')
+		return activateAddPlace();
+	else if(id=='add_transition')
+		return activateAddTransition();
+	else if(id=='add_arc')
+		return activateAddArc();
+}
+
 function activateAddPlace() {
-	kindOfAdd = 0;
+	if(kindOfAdd!=0)
+		kindOfAdd = 0;
+	else
+	{
+		kindOfAdd = -1;
+		return false;
+	}
+	return true;
+	
+	
 }
 
 function activateAddTransition() {
-	kindOfAdd = 1;
+	if(kindOfAdd!=1)
+		kindOfAdd = 1;
+	else
+	{
+		kindOfAdd = -1;
+		return false;
+	}
+	return true;
+		
+
 }
 
 function activateAddArc() {
-	kindOfAdd = 2;
+	if(kindOfAdd!=2)
+		kindOfAdd = 2;
+	else
+	{
+		kindOfAdd = -1;
+		return false;
+	}
+	return true;
 }
 
 function desactivateAdd() {
