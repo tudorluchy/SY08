@@ -1897,7 +1897,7 @@ function printMatricesInvariants() {
 var correctionActive = false;
 
 function accesCorrection() {
-	/*if(model.places.length < 1 || model.transitions.length < 1) {
+	if(model.places.length < 1 || model.transitions.length < 1) {
 		alert('Vous ne pouvez pas accéder à la correction. \nEssayer de réfléchir un minimum avant de demander la correction !');
 		return;
 	}
@@ -1908,7 +1908,7 @@ function accesCorrection() {
 			return;
 		}
 		i++;
-	}*/
+	}
 	if(!correctionActive)
 	{
 		$('.add_element').removeClass("activeButton");
@@ -1916,7 +1916,8 @@ function accesCorrection() {
 		$('.add_element').attr("disabled", "disabled");
 		correctionActive = true;
 		kindOfAdd = -1;
-		document.getElementById('lien_correction').style.visibility = "visible";
+		if(document.getElementById('lien_correction') != undefined)
+			document.getElementById('lien_correction').style.visibility = "visible";
 		var elements = document.getElementsByClassName('disable');
 		for(var i = 0; i < elements.length; i++) {
 			elements[i].disabled = true;
