@@ -660,8 +660,8 @@ function drawPlace(layer, i)
 					printMatricesInvariants();
 					
 				}
-				place2transTEMP = -1;
-				source = -1;
+				source = i;
+				place2transTEMP = 1;
 			}
 		}
 		else {
@@ -769,12 +769,10 @@ function drawTransition(layer, i)
 					
 					generateInvariantInput(0);
 					generateInvariantInput(1);
-					
-					place2transTEMP = -1;
-					source = -1;
+
 				}
-				place2transTEMP = -1;
-				source = -1;
+				source = i;
+				place2transTEMP = 0;
 			}
 		}
 		else {
