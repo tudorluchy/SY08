@@ -35,7 +35,6 @@
 		<h1 id="titre_exos">Exercices</h1>
 		<a class='lien_droite' href="connexion_admin.php" title=">Accéder au module d'administration">Administration</a>
 		<h2>Les réseaux de Pétri</h2>
-             
 		<?php
 			require_once(dirname(__FILE__).'/base/DB.class.php');
 			DB::Init();
