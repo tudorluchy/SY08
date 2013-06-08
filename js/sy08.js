@@ -1,8 +1,7 @@
-﻿var backgound = new Kinetic.Layer();
-var layer1 = new Kinetic.Layer();
-var layer2 = new Kinetic.Layer();
-var layer3 = new Kinetic.Layer();
-var stage, stage2;
+﻿var layerArcs = new Kinetic.Layer();
+var layerTransitions = new Kinetic.Layer();
+var layerPlaces = new Kinetic.Layer();
+var stage;
 var posx;
 var posy;
 
@@ -555,7 +554,7 @@ function getTransitionsFranchissables(model)
 function drawPlace(layer, i)
 {
 
-
+	var isCurrentSource = (place2transTEMP==1 && source==i);
 	var group = new Kinetic.Group({
 	x: model.places[i].coordx,
 		y: model.places[i].coordy,
@@ -577,7 +576,7 @@ function drawPlace(layer, i)
 	var cercle = new Kinetic.Circle({
 		radius: place_radius,
 		//fill: 'red',
-		stroke: 'black',
+		stroke: isCurrentSource ? 'red' : 'black',
 		strokeWidth: 4,
 		name : i,
 		fillText: "P" + i 
@@ -632,7 +631,7 @@ function drawPlace(layer, i)
 	group.on('click', function() {
 		if(kindOfAdd == 2) {
 			// On d�fini le cercle comme l'�lement premier de l'arc
-			if(place2transTEMP == -1) {
+			if(place2transTEMP == -1 || place2transTEMP==1) {
 				source = i;
 				place2transTEMP = 1;
 			}
@@ -640,18 +639,27 @@ function drawPlace(layer, i)
 				// on ins�re dans le JSON
 				if(model.transitions[source]!=undefined)
 				{
-					if(detectArc(source, i) != 0) {
+					if(detectArc(i, source) != 0) {
 						for(var z = 0; z < model.arcs.length; z++) {
-							if(model.arcs[z].source==source && model.arcs[z].dest==i && model.arcs[z].place2trans==1)
+							if(model.arcs[z].source==i && model.arcs[z].dest==source && model.arcs[z].place2trans==1)
 							{
+								model.arcs[z].source=source;
+								model.arcs[z].dest=i;
 								model.arcs[z].place2trans = 0;
 								break;
+							}
+							else if(model.arcs[z].source==source && model.arcs[z].dest==i && model.arcs[z].place2trans==0)
+							{
+								source = i;
+								place2transTEMP = 1;
+								redrawAll();
+								return;
 							}
 						}
 					}
 					else
 						createArc(0,source,i,1);
-					refreshLines();
+					
 					
 					generateInvariantInput(0);
 					generateInvariantInput(1);
@@ -662,6 +670,7 @@ function drawPlace(layer, i)
 				place2transTEMP = -1;
 				source = -1;
 			}
+			redrawAll();
 		}
 		else {
 			// Sinon on affiche les caract�ristiques de l'�l�ments (� voir si on le fait ou pas)
@@ -680,11 +689,12 @@ function drawPlace(layer, i)
 
 function drawTransition(layer, i)
 {
+	var isCurrentSource = (place2transTEMP==0 && source==i);
 	var rec = new Kinetic.Rect({
 		width: transition_width,
 		height: transition_height,
 		//fill: 'red',
-		stroke: 'black',
+		stroke: isCurrentSource ? 'red' : 'black',
 		strokeWidth: 4,
 
 		name : i
@@ -741,7 +751,7 @@ function drawTransition(layer, i)
 	group.on('click', function() {
 		if(kindOfAdd == 2) {
 			// On d�fini le cercle comme l'�lement premier de l'arc
-			if(place2transTEMP == -1) {
+			if(place2transTEMP == -1 || place2transTEMP==0) {
 				source = i;
 				place2transTEMP = 0;
 			}
@@ -751,28 +761,35 @@ function drawTransition(layer, i)
 					// on ins�re dans le JSON
 					
 					// Si l'arc existe deja
-					if(detectArc(source, i) != 0) {
+					if(detectArc(source,i ) != 0) {
 						for(var z = 0; z < model.arcs.length; z++) {
-							if(model.arcs[z].source==source && model.arcs[z].dest==i && model.arcs[z].place2trans==0)
+							if(model.arcs[z].source==i && model.arcs[z].dest==source && model.arcs[z].place2trans==0)
 							{
+								model.arcs[z].source=source;
+								model.arcs[z].dest=i;
 								model.arcs[z].place2trans = 1;
 								break;
+							}
+							else if(model.arcs[z].source==source && model.arcs[z].dest==i && model.arcs[z].place2trans==1)
+							{
+								source = i;
+								place2transTEMP = 0;
+								redrawAll();
+								return;
 							}
 						}
 					}
 					else
 						createArc(1,source,i,1);
-					refreshLines();
 					
 					generateInvariantInput(0);
 					generateInvariantInput(1);
-					
-					place2transTEMP = -1;
-					source = -1;
+
 				}
 				place2transTEMP = -1;
 				source = -1;
 			}
+			redrawAll();
 		}
 		else {
 			// Sinon on affiche les caract�ristiques de l'�l�ments (� voir si on le fait ou pas)
@@ -878,15 +895,12 @@ function drawLine(layer, i)
 		lineJoin: 'round'
 	});
 
-	group.on('dblclick', function() {
-		idSelected = i;
-		kindOfSelected=3;
-		displayProperties(model.arcs[i].properties,true); 
-
-	},false);
+	
 
 	group.add(ponderation);
 	group.add(redLine);
+	
+	
 	
 
 	var arrow = [];
@@ -924,39 +938,38 @@ function drawLine(layer, i)
 	});
 	group.add(redLine1);
 	group.add(redLine2);
+	
+	
+	group.on('dblclick', function() {
+		idSelected = i;
+		kindOfSelected=3;
+		displayProperties(model.arcs[i].properties,true); 
+
+	},false);
 
 	layer.add(group);
 }
 
 
-function refreshLines()
-{
-	recurseClear(layer3,1);
-	//layer3.removeChildren();
-	//layer3.clear();
-	var layertmp = new Kinetic.Layer();
-	for(var i=0;i<model.arcs.length;i++)
-	{
-		drawLine(layertmp,i);
-	}
-	stage.add(layertmp);
-	layer3=layertmp;
 
 
-}
+
+
+
 
 
 function redrawAll()
 {
-	stage.clear();
+
+	refreshLines();
 	redrawPlaces();
 	redrawTransitions();
-	refreshLines();
+	
 
 
 }
 
-function recurseClear(container,lvl)
+function recurseClear(container)
 {
 
 	if(container instanceof Kinetic.Group || container instanceof Kinetic.Layer || container instanceof Kinetic.Container)
@@ -965,42 +978,53 @@ function recurseClear(container,lvl)
 		var children = container.getChildren();
 		for(var i=0;i<children.length;i++)
 		{
-			recurseClear(children[i],lvl+1);
+			recurseClear(children[i]);
 			
 		}
 	}
-	if(lvl>0)
-		container.destroy();
+	container.destroy();
 	
+}
+
+
+function refreshLines()
+{
+	recurseClear(layerArcs);
+	var l = new Kinetic.Layer();
+	for(var i=0;i<model.arcs.length;i++)
+	{
+		drawLine(l,i);
+	}
+	
+	stage.add(l);
+	layerArcs=l;
 }
 
 function redrawPlaces()
 {
-	
-	recurseClear(layer1,1);
-	//layer1.removeChildren();
-	var layertmp = new Kinetic.Layer();
+	recurseClear(layerPlaces);
+	var l = new Kinetic.Layer();
 	for(var i=0;i<model.places.length;i++)
 	{
 
-		drawPlace(layertmp,i);
+		drawPlace(l,i);
 	}
-	stage.add(layertmp);
-	layer1=layertmp;
+	stage.add(l);
+	layerPlaces=l;
 
 }
 
 function redrawTransitions()
 {
 
-	recurseClear(layer2,1);
-	var layertmp = new Kinetic.Layer();
+	recurseClear(layerTransitions);
+	var l = new Kinetic.Layer();
 	for(var i=0;i<model.transitions.length;i++)
 	{
-		drawTransition(layertmp,i);
+		drawTransition(l,i);
 	}
-	stage.add(layertmp);
-	layer2=layertmp;
+	stage.add(l);
+	layerTransitions=l;
 }
 
 function resetAccesCorrection() {
@@ -1016,6 +1040,14 @@ $(window).load(function(){
 	$('body').append('<div id="dialog-modal" title="Properties"></div>');
 	$('body').append('<div id="tree"></div>');
 	
+	$('.add_element').click(function(){
+		$('.add_element').removeClass("activeButton");
+		if(activateAddElement($(this).attr('id')))
+			$(this).toggleClass("activeButton");
+		redrawAll();
+        
+    });
+	
 
 	posx=$('#container').findPos().x;
 	posy=$('#container').findPos().y;
@@ -1025,16 +1057,19 @@ $(window).load(function(){
 		width: 600,
 		height: 400
 	});
-
-
-	stage.add(backgound);
-	stage.add(layer1); // les places
-	stage.add(layer2); // les transitions
-	stage.add(layer3); // les arcs
-
-	redrawPlaces();
-	redrawTransitions();
-	refreshLines();
+	
+	if(model.arcs.length>0 || model.transitions.length>0 || model.places.length>0)
+		redrawAll();
+	//redrawTransitions();
+	//refreshLinesIni();
+	//layer1=layertmp;
+	//stage.add(layer1);
+	//redrawPlaces();
+	//redrawTransitions();
+	
+	
+	
+	
 	refreshEveryMatrixResults();
 
 	printMatricesInvariants();
@@ -1187,6 +1222,8 @@ function eraseElement()
 	$( "#dialog-modal" ).dialog("close" );
 	redrawAll();
 	refreshEveryMatrixResults();
+	generateInvariantInput(0);
+	generateInvariantInput(1);
 	printMatricesInvariants();
 }
 
@@ -1209,16 +1246,72 @@ function Tinvariants()
 
 }
 
+
+
+function activateAddElement(id)
+{
+	if(id=='add_place')
+		return activateAddPlace();
+	else if(id=='add_transition')
+		return activateAddTransition();
+	else if(id=='add_arc')
+		return activateAddArc();
+}
+
 function activateAddPlace() {
-	kindOfAdd = 0;
+	if(kindOfAdd!=0)
+	{
+		kindOfAdd = 0;
+		place2transTEMP = -1;
+		source = -1;
+	}
+	else
+	{
+		kindOfAdd = -1;
+		place2transTEMP = -1;
+		source = -1;
+		return false;
+	}
+	return true;
+	
+	
 }
 
 function activateAddTransition() {
-	kindOfAdd = 1;
+	if(kindOfAdd!=1)
+	{
+		kindOfAdd = 1;
+		place2transTEMP = -1;
+		source = -1;
+		
+	}
+	else
+	{
+		kindOfAdd = -1;
+		place2transTEMP = -1;
+		source = -1;
+		return false;
+	}
+	return true;
+		
+
 }
 
 function activateAddArc() {
-	kindOfAdd = 2;
+	if(kindOfAdd!=2)
+	{
+		kindOfAdd = 2;
+		place2transTEMP = -1;
+		source = -1;
+	}
+	else
+	{
+		kindOfAdd = -1;
+		place2transTEMP = -1;
+		source = -1;
+		return false;
+	}
+	return true;
 }
 
 function desactivateAdd() {
@@ -1363,11 +1456,14 @@ function generateInvariantInput(statut) {
 			var nbCol = res[0].length;
 
 			for(var i=0;i<nbCol;i++) {
-				html += "<td>T"+(i+1)+"</td>";
+				if(statut == 0 || statut == 2)
+					html += "<td>T"+(i+1)+"</td>";
+				else if(statut == 1 || statut == 3)
+					html += "<td>P"+(i+1)+"</td>";
 			}
 			html+= "</tr>";
 			for(var i=0;i<nbLig;i++) {
-				html += "<tr><td>P"+(i+1)+"</td>";
+				html += "<tr><td>Pt"+(i+1)+"</td>";
 				for(var j=0;j<nbCol;j++) {
 					html += "<td><input class=\"disable\" type=\"text\" style=\"width:30px;\" value=\"0\" id=\""+which+"_"+i+"_"+j+"\"/></td>";
 				}
@@ -1828,14 +1924,14 @@ function accesCorrection() {
 			width: 600,
 			height: 400
 		});
-		stage2.add(backgound);
+		//stage2.add(backgound);
 		//copie des layers sinon ca bug et lorsqu'on modifie le model apres, et bien y a des impacts sur le résultat d'avant alors que ce n'est pas souhaité, on veut que cela reste intacte
-		var layer1Copie = layer1.clone();
-		var layer2Copie = layer2.clone();
-		var layer3Copie = layer3.clone();
-		stage2.add(layer1Copie); // les places
-		stage2.add(layer2Copie); // les transitions
-		stage2.add(layer3Copie); // les arcs
+		var layerPlacesCopie = layerPlaces.clone();
+		var layerTransitionsCopie = layerTransitions.clone();
+		var layerArcsCopie = layerArcs.clone();
+		stage2.add(layerPlacesCopie); // les places
+		stage2.add(layerTransitionsCopie); // les transitions
+		stage2.add(layerArcsCopie); // les arcs
 
 		stage2.setListening(false);
 		document.getElementById('container').removeEventListener ('click',	containerEventListener, false);
@@ -1849,16 +1945,13 @@ function accesCorrection() {
 		var model2 = {places:[{coordx:355.60975609756,coordy:119.45945945946,properties : {marking :1}},{coordx:460.9756097561,coordy:211.35135135135,properties : {marking :1}},{coordx:250.24390243902,coordy:211.35135135135,properties : {marking :1}},{coordx:540,coordy:82.702702702703,properties : {marking :1}},{coordx:250.24390243902,coordy:303.24324324324,properties : {marking :1}}],transitions:[{coordx:460.9756097561,coordy:137.83783783784},{coordx:460.9756097561,coordy:266.48648648649},{coordx:302.92682926829,coordy:156.21621621622},{coordx:250.24390243902,coordy:266.48648648649},{coordx:250.24390243902,coordy:340}],arcs:[{place2trans:1,source:0,dest:0,properties : {value :1}},{place2trans:1,source:0,dest:2,properties : {value :1}},{place2trans:1,source:3,dest:0,properties : {value :1}},{place2trans:0,source:0,dest:1,properties : {value :1}},{place2trans:1,source:1,dest:1,properties : {value :1}},{place2trans:0,source:1,dest:3,properties : {value :1}},{place2trans:0,source:2,dest:2,properties : {value :1}},{place2trans:1,source:2,dest:3,properties : {value :1}},{place2trans:0,source:3,dest:4,properties : {value :1}},{place2trans:1,source:4,dest:4,properties : {value :1}},{place2trans:0,source:4,dest:0,properties : {value :1}},{place2trans:0,source:1,dest:2,properties : {value :1}},{place2trans:0,source:2,dest:3,properties : {value :1}},{place2trans:1,source:3,dest:3,properties : {value :1}}]};
 		model = model2;
 
-		redrawPlaces();
-		redrawTransitions();
-		refreshLines();
+		redrawAll();
 
-		stage.add(backgound);
-		stage.add(layer1); // les places
-		stage.add(layer2); // les transitions
-		stage.add(layer3); // les arcs
+		//Est ce que ça sert à quelque chose ? Je commente pour le moment
+		//stage.add(layerPlaces); // les places et transitions
+		//stage.add(layerTransitions); // les transitions
+		//stage.add(layerArcs); // les arcs
 		stage.setListening(false);
-
 		generateEveryMatrixInputCor();
 		
 	}
