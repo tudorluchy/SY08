@@ -29,6 +29,8 @@
 				} else {
 					if (isset($_POST['json'])) {
                         $json_final = $_POST['json'];
+                    } else {
+                        $json_final = '{ places : [], transitions : [], arc : [] }';
                     }
 				}
                 if (isset($_POST['actif']) &&  $_POST['actif'] == 'on') {

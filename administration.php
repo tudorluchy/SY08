@@ -71,10 +71,15 @@ if (!isset($_SESSION['login'])) {
                         if (!empty($json)) {	
                             $json_final = $json;
                         } else {
-                            $json_final = $_POST['json'];
+                            if (isset($_POST['json'])) {
+                                $json_final = $_POST['json'];
+                            } else {
+                                $json_final = '{ places : [], transitions : [], arc : [] }';
+                            }
                         }
                         $req = "INSERT INTO sy08_exercice (intitule, enonce, actif, image, fichier, difficulte, json, date) 
                         VALUES ('".$_POST['intitule']."', '".$_POST['enonce']."', 1, '".$_FILES['image_exo']['name']."', '".$_FILES['fichier_exo']['name']."','".$_POST['difficulte']."', '".$json_final."', NOW())";
+                        echo $req;
                         $res = DB::Sql($req);
                         if ($res) {
                             echo "<ul><li>Exercice bien ajouté!</li></ul>";
