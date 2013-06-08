@@ -82,7 +82,10 @@
                 <?php if (!empty($res[0]['image']) && file_exists('upload_images/'.$res[0]['image'])) { ?>
 					<label>Image :</label><img title='' src='upload_images/<?php echo $res[0]['image']; ?>'/><br />
 				<?php } ?>
-				<label>Importer une image</label>
+                <?php if (!empty($res[0]['fichier']) && file_exists('upload_fichiers/'.$res[0]['fichier'])) { ?>
+                    <label>Fichier de correction : </label><a id="lien_correction" href="upload_fichiers/<?php echo $res[0]['fichier']; ?>">lien</a><br />
+                <?php } ?>
+                <label>Importer une image</label>
 				<input type="hidden" name="MAX_FILE_SIZE" value="10097152">     
 				<input type="file" name="image_exo"> <br/>
 				<span id="image_info"></span>

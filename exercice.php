@@ -1,3 +1,16 @@
+<?php
+    require_once(dirname(__FILE__).'/base/DB.class.php');
+    DB::Init();
+    // effectuer exercice
+    if ($_GET['action'] == 'effectuer' && $_GET['id'] > 0) {
+        $req = 'SELECT * FROM sy08_exercice WHERE id = '.$_GET['id'];
+        $res = DB::SqlToArray($req);
+    } else {
+        header('Location: index.php');
+    }
+    // date : <span class="exo_date">'.date_format(date_create($res[0]['date']), 'd/m/Y H:i').'</span>
+    DB::Close();
+?>
 <!DOCTYPE HTML>
 <html>
 	<head>
@@ -12,19 +25,6 @@
 		<link href="js/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.css" rel="stylesheet">
 	</head>
 	<body>	
-    <?php
-        require_once(dirname(__FILE__).'/base/DB.class.php');
-        DB::Init();
-        // effectuer exercice
-        if ($_GET['action'] == 'effectuer' && $_GET['id'] > 0) {
-            $req = 'SELECT * FROM sy08_exercice WHERE id = '.$_GET['id'];
-            $res = DB::SqlToArray($req);
-        } else {
-            header('Location: index.php');
-        }
-        // date : <span class="exo_date">'.date_format(date_create($res[0]['date']), 'd/m/Y H:i').'</span>
-        DB::Close();
-    ?>
 	<script language="JavaScript" type="text/javascript">
 		var model2 = <?php echo $res[0]['json']; ?>;
 	</script>
