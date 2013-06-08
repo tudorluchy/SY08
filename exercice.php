@@ -103,10 +103,10 @@
 			</tr>
 		</table>
 		<input class="disable" type="button" value="Accéder à la correction" onClick="accesCorrection();"/>
-		<div id="correction" class="invisible" style="border-top: 1px solid red;">
+		<div id="correction" style="border-top: 1px solid red;">
             <br />
             <?php if (!empty($res[0]['fichier']) && file_exists('upload_fichiers/'.$res[0]['fichier'])) { ?>
-                <a class="invisible" href="upload_fichiers/<?php echo $res[0]['fichier']; ?>">Fichier d'aide lié à la correction</a> 
+                <a id="lien_correction" class="invisible" href="upload_fichiers/<?php echo $res[0]['fichier']; ?>">Fichier d'aide lié à la correction</a> 
             <?php } ?>
         </div>
 	</div>
