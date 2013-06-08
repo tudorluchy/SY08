@@ -18,9 +18,6 @@ if (isset($_POST['login']) && isset($_POST['pass'])) {
         $erreur = 'Au moins un des champs est vide.'; 
     } 
 }  
-?>
-<h2><a href="index.php" title="Retour à la liste des exercices">Retour à la liste des exercices</a></h2>
-<?php
 if (isset($_SESSION['login'])) { 
     header('Location: administration.php');
 }
@@ -32,6 +29,7 @@ if (isset($_SESSION['login'])) {
 		<link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
     <body>
+        <h2><a href="index.php" title="Retour à la liste des exercices">Retour à la liste des exercices</a></h2>
         <form action="#" method="post">
             <fieldset class="fieldset_form_connexion">
             <legend>Connexion à l'espace d'administration</legend>
@@ -41,7 +39,7 @@ if (isset($_SESSION['login'])) {
             </fieldset>
         </form>
         <?php
-        if (isset($erreur)) echo '<br />',$erreur;  
+            if (isset($erreur)) echo '<br />',$erreur;  
         ?>
     </body>
 </html>
