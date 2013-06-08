@@ -631,7 +631,7 @@ function drawPlace(layer, i)
 	group.on('click', function() {
 		if(kindOfAdd == 2) {
 			// On d�fini le cercle comme l'�lement premier de l'arc
-			if(place2transTEMP == -1) {
+			if(place2transTEMP == -1 || place2transTEMP==1) {
 				source = i;
 				place2transTEMP = 1;
 			}
@@ -639,10 +639,12 @@ function drawPlace(layer, i)
 				// on ins�re dans le JSON
 				if(model.transitions[source]!=undefined)
 				{
-					if(detectArc(source, i) != 0) {
+					if(detectArc(i, source) != 0) {
 						for(var z = 0; z < model.arcs.length; z++) {
-							if(model.arcs[z].source==source && model.arcs[z].dest==i && model.arcs[z].place2trans==1)
+							if(model.arcs[z].source==i && model.arcs[z].dest==source && model.arcs[z].place2trans==1)
 							{
+								model.arcs[z].source=source;
+								model.arcs[z].dest=i;
 								model.arcs[z].place2trans = 0;
 								break;
 							}
@@ -740,7 +742,7 @@ function drawTransition(layer, i)
 	group.on('click', function() {
 		if(kindOfAdd == 2) {
 			// On d�fini le cercle comme l'�lement premier de l'arc
-			if(place2transTEMP == -1) {
+			if(place2transTEMP == -1 || place2transTEMP==0) {
 				source = i;
 				place2transTEMP = 0;
 			}
@@ -750,10 +752,12 @@ function drawTransition(layer, i)
 					// on ins�re dans le JSON
 					
 					// Si l'arc existe deja
-					if(detectArc(source, i) != 0) {
+					if(detectArc(source,i ) != 0) {
 						for(var z = 0; z < model.arcs.length; z++) {
-							if(model.arcs[z].source==source && model.arcs[z].dest==i && model.arcs[z].place2trans==0)
+							if(model.arcs[z].source==i && model.arcs[z].dest==source && model.arcs[z].place2trans==0)
 							{
+								model.arcs[z].source=source;
+								model.arcs[z].dest=i;
 								model.arcs[z].place2trans = 1;
 								break;
 							}
@@ -1257,10 +1261,16 @@ function activateAddElement(id)
 
 function activateAddPlace() {
 	if(kindOfAdd!=0)
+	{
 		kindOfAdd = 0;
+		place2transTEMP = -1;
+		source = -1;
+	}
 	else
 	{
 		kindOfAdd = -1;
+		place2transTEMP = -1;
+		source = -1;
 		return false;
 	}
 	return true;
@@ -1270,10 +1280,17 @@ function activateAddPlace() {
 
 function activateAddTransition() {
 	if(kindOfAdd!=1)
+	{
 		kindOfAdd = 1;
+		place2transTEMP = -1;
+		source = -1;
+		
+	}
 	else
 	{
 		kindOfAdd = -1;
+		place2transTEMP = -1;
+		source = -1;
 		return false;
 	}
 	return true;
@@ -1283,10 +1300,16 @@ function activateAddTransition() {
 
 function activateAddArc() {
 	if(kindOfAdd!=2)
+	{
 		kindOfAdd = 2;
+		place2transTEMP = -1;
+		source = -1;
+	}
 	else
 	{
 		kindOfAdd = -1;
+		place2transTEMP = -1;
+		source = -1;
 		return false;
 	}
 	return true;
