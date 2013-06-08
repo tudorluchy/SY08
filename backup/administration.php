@@ -1,197 +1,128 @@
+<?php
+session_start();  
+if (!isset($_SESSION['login'])) { 
+   header('Location: index.php'); 
+   exit();  
+}  
+?>
 <!DOCTYPE HTML>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-		<script type="text/javascript" src="js/kinetic.js"></script>
 		<script type="text/javascript" src="js/jquery.js"></script>
+		<script src="js/jquery-ui/js/jquery-ui-1.10.3.custom.js"></script>
+		<script type="text/javascript" src="js/kinetic.js"></script>
 		<script type="text/javascript" src="js/sy08.js"></script>
 		<script type="text/javascript" src="js/matrix.js"></script>
+		<script type="text/javascript" src="js/verification_form.js"></script>
+        <script language="JavaScript" type="text/javascript" src="js/DataTables/media/js/jquery.dataTables.js"></script>
+        <link rel="stylesheet" type="text/css" href="js/DataTables/media/css/jquery.dataTables.css">
 		<link rel="stylesheet" type="text/css" href="css/style.css">
-		<script language="JavaScript" type="text/javascript">
-			// suppresion element id
-			function removeElement(id) {
-				var element = document.getElementById(id);
-				element.parentNode.removeChild(element);
-			}
-
-			// suppresion exercice
-			function goto_confirm(url, exo) {
-			  if (confirm("Etes-vous sur de vouloir supprimer cet exercice ?")) {
-				 // document.location.href = url;
-				 exo = '.'+exo;
-				 $(exo).remove();
-			  }
-			  return false; //pour ne pas revenir au début de la page
-			}
-			
-			// surligne le champ d'un formulaire
-			function surligne(champ, erreur){
-			   if(erreur)
-				  champ.style.backgroundColor = "#fba";
-			   else
-				  champ.style.backgroundColor = "";
-			}
-			
-			// verification intitule
-			function verifIntitule(champ)
-			{
-			   if(champ.value.length < 2 || champ.value.length > 100)
-			   {
-				  surligne(champ, true);
-				  return false;
-			   }
-			   else
-			   {
-				  surligne(champ, false);
-				  return true;
-			   }
-			}
-			
-			// verification enonce
-			function verifEnonce(champ)
-			{
-			   if(champ.value.length < 2 || champ.value.length > 8000)
-			   {
-				  surligne(champ, true);
-				  return false;
-			   }
-			   else
-			   {
-				  surligne(champ, false);
-				  return true;
-			   }
-			}
-			
-			// submit form
-			function verifForm(f)
-			{
-			   var intituleOk = verifIntitule(f.intitule);
-			   var enonceOk = verifEnonce(f.enonce);
-				
-			   if (intituleOk && enonceOk) {
-				  return true;
-			   } else {
-				  alert("Veuillez remplir correctement tous les champs");
-				  return false;
-			   }
-			}
-		</script>
+		<link href="js/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.css" rel="stylesheet">
+        <script language="JavaScript" type="text/javascript">  
+            $(document).ready(function() {
+                $('.table_exo').dataTable({
+                    "bJQueryUI": true,
+                    "bPaginate": true,
+                    "aaSorting": [[ 1, "desc" ]],
+                     "oLanguage": {
+                        "sLengthMenu": "Afficher _MENU_ entrées par page",
+                        "sZeroRecords": "Rien trouvé. Désolé.",
+                        "sInfo": "Afficher _START_ à _END_ de _TOTAL_ lignes",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 records",
+                        "sInfoFiltered": "(filtré depuis _MAX_ total lignes)",
+                        "sSearch" : "Rechercher"
+                    },
+                    "aoColumnDefs": [
+                        { 'bSortable': false, 'aTargets': [ 4, 5 ] }
+                     ]
+                });
+            });
+        </script> 
 	</head>
 	<body>	
 	<?php	
+		require_once(dirname(__FILE__).'/base/DB.class.php');
+		DB::Init();
+		// post form
 		if (isset($_POST["intitule"])) {
-			// image exo
-			if (isset($_FILES["image_exo"]["name"]) && !empty($_FILES["image_exo"]["name"])) {
-				// Copie dans le repertoire du script avec un nom
-				// incluant l'heure a la seconde pres 
-				$repertoireDestination = "upload_images/";
-				$nomDestination = $_FILES["image_exo"]["name"];
-
-				$allowedExts = array("gif", "jpeg", "jpg", "png");
-				$extension = end(explode(".", $_FILES["image_exo"]["name"]));
-				echo "<ul class='upload_info'>";
-				if ((($_FILES["image_exo"]["type"] == "image/gif") 
-					|| ($_FILES["image_exo"]["type"] == "image/jpeg")
-					|| ($_FILES["image_exo"]["type"] == "image/jpg")
-					|| ($_FILES["image_exo"]["type"] == "image/pjpeg")
-					|| ($_FILES["image_exo"]["type"] == "image/x-png")
-					|| ($_FILES["image_exo"]["type"] == "image/png"))
-					&& ($_FILES["image_exo"]["size"] < 2097152)
-					&& in_array($extension, $allowedExts)) {
-						if ($_FILES["image_exo"]["error"] > 0) {
-							echo "<li>Return Code: " . $_FILES["image_exo"]["error"]. "</li>";
-						} else {
-							echo "<li>Upload: " . $_FILES["image_exo"]["name"] . "</li>";
-							echo "<li>Type: " . $_FILES["image_exo"]["type"] . "</li>";
-							echo "<li>Size: " . ($_FILES["image_exo"]["size"] / 1024) . " kB</li>";
-							echo "<li>Temp file: " . $_FILES["image_exo"]["tmp_name"] . "</li>";
-							
-							if (!is_dir($repertoireDestination)) {
-								if (!@mkdir($repertoireDestination, 0777)) {
-									$error = error_get_last();
-									// echo $error['message'];
-								}
-							}
-							if (file_exists($repertoireDestination.$nomDestination)){
-								echo "<li>".$nomDestination . " already exists.</li>";
-							} else {
-							  move_uploaded_file($_FILES["image_exo"]["tmp_name"], $repertoireDestination.$nomDestination);
-							  echo "<li>Stored in: " . $repertoireDestination.$nomDestination."</li>";
-							}
-						}
-					} else {
-						echo "<li>Invalid file</li>";
-					}
-					echo "</ul>";
-			}
-			
-			// fichier rdp
-			if (isset($_FILES["fichier_rdp"]["name"]) && !empty($_FILES["fichier_rdp"]["name"])) {
-				// Copie dans le repertoire du script avec un nom
-				// incluant l'heure a la seconde pres 
-				$repertoireDestination = "upload_fichiersRDP/";
-				$nomDestination = $_FILES["fichier_rdp"]["name"];
-
-				$allowedExts = array("rdp", "RDP");
-				$extension = end(explode(".", $_FILES["fichier_rdp"]["name"]));
-				echo "<ul class='upload_info'>";
-				if (($_FILES["fichier_rdp"]["size"] < 2097152)
-					&& in_array($extension, $allowedExts)) {
-						if ($_FILES["fichier_rdp"]["error"] > 0) {
-							echo "<li>Return Code: " . $_FILES["fichier_rdp"]["error"]. "</li>";
-						} else {
-							echo "<li>Upload: " . $_FILES["fichier_rdp"]["name"] . "</li>";
-							echo "<li>Type: " . $_FILES["fichier_rdp"]["type"] . "</li>";
-							echo "<li>Size: " . ($_FILES["fichier_rdp"]["size"] / 1024) . " kB</li>";
-							echo "<li>Temp file: " . $_FILES["fichier_rdp"]["tmp_name"] . "</li>";
-							
-							if (!is_dir($repertoireDestination)) {
-								if (!@mkdir($repertoireDestination, 0777)) {
-									$error = error_get_last();
-									// echo $error['message'];
-								}
-							}
-							if (file_exists($repertoireDestination.$nomDestination)){
-								echo "<li>".$nomDestination . " already exists.</li>";
-							} else {
-							  move_uploaded_file($_FILES["fichier_rdp"]["tmp_name"], $repertoireDestination.$nomDestination);
-							  echo "<li>Stored in: " . $repertoireDestination.$nomDestination."</li>";
-							}
-						}
-					} else {
-						echo "<li>Invalid file</li>";
-					}
-					echo "</ul>";
-			}
-		}
+			$json = '';
+            $save = true;
+			require_once(dirname(__FILE__).'/verif_files.php');
+		} else {
+            $save = false;
+        }
 	?>
 	<div id="corps_modif">
-		<h3>Modification des exercices</h3>
-		<b>Voici la liste des énoncés qui sont disponible actuellement</b>
-		<div class="exo">
-			<span class="exo_titre exo_remove1">Exercice 1 : Intitulé de l'exercice</span> <a class="exo_remove1" href="#"><img class="exo_remove1" src='img/edit.png' title='Modifier cet exercice'/></a> <a class="exo_remove1" href="#>" onclick="return goto_confirm('#', 'exo_remove1');"><img class="exo_remove1" src='img/delete.png' title='Supprimer cet exercice'/></a>
-		</div>
-		<div class="exo">
-			<span class="exo_titre exo_remove2">Exercice 2 : Intitulé de l'exercice</span> <a class="exo_remove2" href="#>"><img class="exo_remove2" src='img/edit.png' title='Modifier cet exercice'/></a> <a class="exo_remove2" href="#>" onclick="return goto_confirm('#', 'exo_remove2');"><img class="exo_remove2" src='img/delete.png' title='Supprimer cet exercice'/></a>
-		</div>
-	</div>
+		<h2>Modification des exercices <a class='lien_droite' href="index.php" title="Aller à la liste des exercices">Liste des exercices</a></h2>
+		<?php
+			// action
+			if (isset($_REQUEST['action'])) {
+				// delete exercice
+				if ($_GET['action'] == 'delete') {
+					$req = 'DELETE FROM sy08_exercice WHERE id = '.$_GET['id'];
+                    $res = DB::Sql($req);
+				// edit exercice
+				} else if ($_GET['action'] == 'edit') {
+					header('Location: edit.php?id='.$_GET['id']); 
+				// save exercice
+				} else if ($_GET['action'] == 'save') {
+                    if ($save) {
+                        if (!empty($json)) {	
+                            $json_final = $json;
+                        } else {
+                            $json_final = $_POST['json'];
+                        }
+                        $req = "INSERT INTO sy08_exercice (intitule, enonce, actif, image, fichier, difficulte, json, date) 
+                        VALUES ('".$_POST['intitule']."', '".$_POST['enonce']."', 1, '".$_FILES['image_exo']['name']."', '".$_FILES['fichier_exo']['name']."','".$_POST['difficulte']."', '".$json_final."', NOW())";
+                        $res = DB::Sql($req);
+                        if ($res) {
+                            echo "<ul><li>Exercice bien ajouté!</li></ul>";
+                        }
+                    }
+                }
+			} 
+			// affichage exos
+            $req = "SELECT * FROM sy08_exercice ORDER BY date DESC";
+			$res = DB::SqlToArray($req);
+            DB::Close();
+            echo "<table class='table_exo'>";
+            echo "<thead><tr><th>Exercice</th><th>Date d'ajout</th><th>Difficulte</th><th>Actif</th><th>Edition</th><th>Suppresion</th></tr></thead>";
+            echo "<tbody>";
+            foreach($res as $ligne) {
+                echo "<tr>";
+                echo "<td>".$ligne['intitule']."</td>";
+				echo "<td>".date_format(date_create($ligne['date']), 'd/m/Y H:i')."</td>"; 
+                echo "<td>".$ligne['difficulte']."</td>";
+                echo "<td>"; if ($ligne['actif']) echo "Oui"; else echo "Non"; echo "</td>";
+				echo "<td><a href='edit.php?action=edit&id=".$ligne['id']."'><img src='img/edit.png' title='Modifier cet exercice'/></a></td>";
+                echo "<td><a href='?action=delete&id=".$ligne['id']."'><img src='img/delete.png' title='Supprimer cet exercice'/></a></td>";
+                echo "</tr>";
+            }
+            echo "</tbody>";
+            echo "</table>";
+        ?>
+    </div>
 	<div id="corps_form_ajout">
-		<h3>Ajout d'un exercice</h3>
-		<form name="ajout_exercice" method="POST" action="#" enctype="multipart/form-data" onsubmit="return verifForm(this)">
+		<h2>Ajout d'un exercice</h2>
+		<form name="ajout_exercice" method="POST" action="?action=save" enctype="multipart/form-data" onsubmit="return verifForm(this)">
 			<fieldset class="fieldset_ajout_exercice">
-				<label>Intitule de l'énonce :</label><input type='text' name='intitule' title='Intitule' onblur="verifIntitule(this)"/><br />
-				<label>L'énoncé :</label><textarea name='enonce' title='Enonce' rows="8" cols="100" onblur="verifEnonce(this)"></textarea><br />
+				<label>Intitule de l'énonce :</label><input type='text' name='intitule' title='Intitule' onblur="verifIntitule(this)" value="<?php if(isset($_POST['intitule'])){echo $_POST['intitule'];}?>"><br />
+				<label>L'énoncé :</label><textarea name='enonce' title='Enonce' rows="8" cols="100" onblur="verifEnonce(this)"><?php if(isset($_POST['enonce'])){echo $_POST['enonce'];} ?></textarea><br />
 				<label>Importer une image</label>
-				<input type="hidden" name="MAX_FILE_SIZE" value="2097152">     
+				<input type="hidden" name="MAX_FILE_SIZE" value="10097152">     
 				<input type="file" name="image_exo"> <br/>
 				<span id="image_info"></span>
+                <label>Importer un fichier</label>
+				<input type="hidden" name="MAX_FILE_SIZE" value="10097152">     
+				<input type="file" name="fichier_exo"> <br/>
 				<label>Niveau de difficulté</label>
-				<select>
+				<select name='difficulte'>
 					<option value="+++">+++</option>
 					<option selected value="++">++</option>
 					<option value="+">+</option>
-				</select><br/ ><br/ >
-				<b>Resolution du graphe :</b><br/ >
+				</select><br/><br/>
+				<b>Resolution du graphe :</b><br/>
 				<div id='button_group'>
 					<input type='button' value='Ajout Place' name='add_place' onClick='activateAddPlace()' />
 					<input type='button' value='Ajout Transition' name='add_transition' onClick='activateAddTransition()' />
@@ -202,8 +133,31 @@
 						<input type="file" name="fichier_rdp">
 					</span>
 				</div>
+				<input type="hidden" id="json" name="json" value="">
 				<div id="container"></div>
-				<div id="results"></div>
+				<div id="results">
+					<div id="results_1">
+						<h3>Resultat W</h3>
+						<div id="matrice_w_results"></div>
+					</div>
+					<div id="results_2">
+					<h3>Resultat W+</h3>
+						<div id="matrice_wplus_results"></div>
+					</div>					
+					<div id="results_3">
+					<h3>Resultat W-</h3>
+						<div id="matrice_wmoins_results"></div>
+					</div>
+					<div id="results_4">
+					<h3>P invariants</h3>
+						<div id="matrice_Pinvariants_results"></div>
+					</div>
+					<div id="results_4">
+					<h3>T invariants</h3>
+						<div id="matrice_Tinvariants_results"></div>
+					</div>
+				</div>
+				<div id="arbreDeCouverture"><input type="button" id="arbre_couverture_button" value="Afficher arbre de couverture" onClick="arbreDeCouverture('arbreDeCouverture_content'); document.getElementById('arbre_couverture_button').value='Actualiser'"/><div id="arbreDeCouverture_content"></div></div>
 				<input class="valider" type='submit' value='Valider'>
 			</fieldset>	
 		</form>

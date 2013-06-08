@@ -42,9 +42,11 @@
             $req = "SELECT * FROM sy08_exercice ORDER BY date DESC";
 			$res = DB::SqlToArray($req);
             DB::Close();
+            $nb_ex = 0;
             echo '<div id="liste_exercices">';
             foreach($res as $ligne) {
                 if ($ligne['actif']) {
+                    $nb_ex++;
                     echo '<div class="exo_selection">';
                     echo '<hr class="hr_go">';       
                     echo '<span class="exo_titre_bis">Exercice : '.$ligne['intitule'].'</span><br />';
@@ -57,7 +59,7 @@
 			}
             echo "</div>";
             // affiche la pagination
-            if (count($res) > 0) {
+            if ($nb_ex > 0) {
                 echo '<div class="page_navigation"></div>';
             }
 		?>	

@@ -33,29 +33,35 @@
 	<body>	
 	<div id="corps_selection">
 		<h1 id="titre_exos">Exercices</h1>
-		Sur cette page vous ai présenté un ensemble d'exercices.
-		<h2>Les réseaux de Pétri <a class='lien_droite' href="administration.php" title="Aller à l'administration">Administration</a></h2>
+		Sur cette page vous ai présenté un ensemble d'exercices. <a class='lien_droite' href="connexion_admin.php" title=">Accéder au module d'administration">Administration</a>
+		<h2>Les réseaux de Pétri</h2>
              
 		<?php
-			ini_set('display_errors', 1);
 			require_once(dirname(__FILE__).'/base/DB.class.php');
 			DB::Init();
             $req = "SELECT * FROM sy08_exercice ORDER BY date DESC";
 			$res = DB::SqlToArray($req);
             DB::Close();
+            $nb_ex = 0;
             echo '<div id="liste_exercices">';
             foreach($res as $ligne) {
                 if ($ligne['actif']) {
+                    $nb_ex++;
                     echo '<div class="exo_selection">';
-                    echo '<span class="exo_titre_bis">Exercice : '.$ligne['intitule'].'</span><br/>';
+                    echo '<hr class="hr_go">';       
+                    echo '<span class="exo_titre_bis">Exercice : '.$ligne['intitule'].'</span><br />';
                     echo '<span class="exo_enonce">'.$ligne['enonce'].'</span>';
                     echo '<a href="exercice.php?action=effectuer&id='.$ligne['id'].'"><img class="go" src="img/go.png" title="Start exercice!"/></a> <br />';
                     echo '<b>Niveau de difficulté : '.$ligne['difficulte'].'</b>';
+                    echo '<hr class="hr_go">';
                     echo '</div>';
                 }
 			}
             echo "</div>";
-            echo '<div class="page_navigation"></div>';
+            // affiche la pagination
+            if ($nb_ex > 0) {
+                echo '<div class="page_navigation"></div>';
+            }
 		?>	
 	</div>	
 	</body>
