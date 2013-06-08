@@ -71,7 +71,7 @@ if (isset($_FILES["fichier_rdp"]["name"]) && !empty($_FILES["fichier_rdp"]["name
 				if (!is_dir($repertoireDestination)) {
 					if (!@mkdir($repertoireDestination, 0777)) {
 						$error = error_get_last();
-						// echo $error['message'];
+						echo $error['message'];
 						$save = false;
 					}
 				}
@@ -82,13 +82,11 @@ if (isset($_FILES["fichier_rdp"]["name"]) && !empty($_FILES["fichier_rdp"]["name
 				if (file_exists($repertoireDestination.$nomDestination)){
 					echo "<li>".$nomDestination . " already exists.</li>";
 					$json = convert($repertoireDestination.$nomDestination);
-                    echo $json;
 					unlink($repertoireDestination.$nomDestination);
 				} else {
 					move_uploaded_file($_FILES["fichier_rdp"]["tmp_name"], $repertoireDestination.$nomDestination);
 					echo "<li>Stored in: " . $repertoireDestination.$nomDestination."</li>";
-					$json = convert($repertoireDestination.$nomDestination);
-                    echo $json;
+                    $json = convert($repertoireDestination.$nomDestination);
 					unlink($repertoireDestination.$nomDestination);
 				}
 			}

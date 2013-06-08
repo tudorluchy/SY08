@@ -101,7 +101,10 @@
 		$MAX_Y = 340;
 		
 		// parse RDP
-		$array = parse_ini_file($file, true);
+        if (($array = @parse_ini_file($file, true)) == false) {
+            echo "Erreur parse_ini_file";
+        }
+        
 		// afficher RDP
 		//var_dump($array);
 		
@@ -262,7 +265,7 @@
 		// encodage json
 		$res_json = json_encode($good_array);
 		$res_json = str_replace('"','', $res_json);
-        $res_json_joli = pretty_json($res_json); 
+        //$res_json_joli = pretty_json($res_json); 
 	
 		// affichage json
 		//echo '<b>Resultat JSON pas joli</b> : <br/><br/>'.$res_json;

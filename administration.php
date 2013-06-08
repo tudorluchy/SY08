@@ -68,7 +68,7 @@ if (!isset($_SESSION['login'])) {
 				// save exercice
 				} else if ($_GET['action'] == 'save') {
                     if ($save) {
-                        if (!empty($json)) {	
+                        if (!empty($json) && $json != '[]') {	
                             $json_final = $json;
                         } else {
                             if (isset($_POST['json'])) {

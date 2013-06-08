@@ -24,15 +24,15 @@
 		if (isset($_GET['action']) && $_GET['id'] > 0) {    
 			// save
 			if ($_GET['action'] == 'save') {
-				if (!empty($json)) {
-					$json_final = $json;
-				} else {
-					if (isset($_POST['json'])) {
-                        $json_final = $_POST['json'];
-                    } else {
-                        $json_final = '{ places : [], transitions : [], arc : [] }';
-                    }
-				}
+                if (!empty($json) && $json != '[]') {	
+                     $json_final = $json;
+                 } else {
+                     if (isset($_POST['json'])) {
+                         $json_final = $_POST['json'];
+                     } else {
+                         $json_final = '{ places : [], transitions : [], arc : [] }';
+                     }
+                 }
                 if (isset($_POST['actif']) &&  $_POST['actif'] == 'on') {
                     $actif = 1;
                 } else {
