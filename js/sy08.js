@@ -1916,7 +1916,8 @@ function accesCorrection() {
 		$('.add_element').attr("disabled", "disabled");
 		correctionActive = true;
 		kindOfAdd = -1;
-		document.getElementById('lien_correction').style.visibility = "visible";
+		if(document.getElementById('lien_correction') != undefined)
+			document.getElementById('lien_correction').style.visibility = "visible";
 		var elements = document.getElementsByClassName('disable');
 		for(var i = 0; i < elements.length; i++) {
 			elements[i].disabled = true;
