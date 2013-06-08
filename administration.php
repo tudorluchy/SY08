@@ -136,6 +136,7 @@ if (!isset($_SESSION['login'])) {
 				<input type="hidden" id="json" name="json" value="">
 				<div id="container"></div>
 				<div id="results">
+					<div id="results_0"></div>
 					<div id="results_1">
 						<h3>Resultat W</h3>
 						<div id="matrice_w_results"></div>
