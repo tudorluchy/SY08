@@ -121,6 +121,10 @@ ul.upload_info {
  
 .lab_rdp {
 	float : right;
+	margin-right: 20px;
+	padding-right: 20px;
+	
+}
 }
 
 .fieldset_ajout_exercice {
@@ -311,6 +315,10 @@ fieldset.fieldset_form_connexion
 	background-color: white;
 }
 
+#results_0 {
+	float: left;
+	width: 400px;
+}
 #results_1 {
 	float: left;
 	width: 300px;
