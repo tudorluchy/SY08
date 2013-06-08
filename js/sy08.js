@@ -1043,7 +1043,7 @@ $(window).load(function(){
 	$('.add_element').click(function(){
 		$('.add_element').removeClass("activeButton");
 		if(activateAddElement($(this).attr('id')))
-			$(this).toggleClass("activeButton");
+			$(this).addClass("activeButton");
 		redrawAll();
         
     });
