@@ -1911,6 +1911,9 @@ function accesCorrection() {
 	}*/
 	if(!correctionActive)
 	{
+		$('.add_element').removeClass("activeButton");
+		$('.add_element').unbind('click');
+		$('.add_element').attr("disabled", "disabled");
 		correctionActive = true;
 		kindOfAdd = -1;
 		document.getElementById('lien_correction').style.visibility = "visible";
