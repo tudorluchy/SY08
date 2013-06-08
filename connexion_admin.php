@@ -35,8 +35,8 @@ if (isset($_SESSION['login'])) {
         <form action="#" method="post">
             <fieldset class="fieldset_form_connexion">
             <legend>Connexion à l'espace d'administration</legend>
-                <label>Login : </label><input type="text" name="login" value="<?php if (isset($_POST['login'])) echo htmlentities(trim($_POST['login'])); ?>"><br />
-                <label>Mot de passe : </label><input type="password" name="pass" value="<?php if (isset($_POST['pass'])) echo htmlentities(trim($_POST['pass'])); ?>"><br />
+                <label>Login : </label><input type="text" name="login" value="<?php if (isset($_POST['login'])) echo $_POST['login']; ?>"><br />
+                <label>Mot de passe : </label><input type="password" name="pass" value="<?php if (isset($_POST['pass'])) echo $_POST['pass']; ?>"><br />
                 <input type="submit" name="connexion" value="Connexion">
             </fieldset>
         </form>
