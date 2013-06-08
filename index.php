@@ -33,7 +33,7 @@
 	<body>	
 	<div id="corps_selection">
 		<h1 id="titre_exos">Exercices</h1>
-		Sur cette page vous ai présenté un ensemble d'exercices. <a class='lien_droite' href="connexion_admin.php" title=">Accéder au module d'administration">Administration</a>
+		<a class='lien_droite' href="connexion_admin.php" title=">Accéder au module d'administration">Administration</a>
 		<h2>Les réseaux de Pétri</h2>
              
 		<?php

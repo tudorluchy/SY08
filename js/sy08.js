@@ -1434,11 +1434,14 @@ function generateInvariantInput(statut) {
 			var nbCol = res[0].length;
 
 			for(var i=0;i<nbCol;i++) {
-				html += "<td>T"+(i+1)+"</td>";
+				if(statut == 0 || statut == 2)
+					html += "<td>T"+(i+1)+"</td>";
+				else if(statut == 1 || statut == 3)
+					html += "<td>P"+(i+1)+"</td>";
 			}
 			html+= "</tr>";
 			for(var i=0;i<nbLig;i++) {
-				html += "<tr><td>P"+(i+1)+"</td>";
+				html += "<tr><td>Pt"+(i+1)+"</td>";
 				for(var j=0;j<nbCol;j++) {
 					html += "<td><input class=\"disable\" type=\"text\" style=\"width:30px;\" value=\"0\" id=\""+which+"_"+i+"_"+j+"\"/></td>";
 				}
@@ -1899,13 +1902,13 @@ function accesCorrection() {
 			width: 600,
 			height: 400
 		});
-		stage2.add(backgound);
+		//stage2.add(backgound);
 		//copie des layers sinon ca bug et lorsqu'on modifie le model apres, et bien y a des impacts sur le résultat d'avant alors que ce n'est pas souhaité, on veut que cela reste intacte
 		var layer1Copie = layer1.clone();
-		var layer2Copie = layer2.clone();
+		//var layer2Copie = layer2.clone();
 		var layer3Copie = layer3.clone();
 		stage2.add(layer1Copie); // les places
-		stage2.add(layer2Copie); // les transitions
+		//stage2.add(layer2Copie); // les transitions
 		stage2.add(layer3Copie); // les arcs
 
 		stage2.setListening(false);
@@ -1920,16 +1923,13 @@ function accesCorrection() {
 		var model2 = {places:[{coordx:355.60975609756,coordy:119.45945945946,properties : {marking :1}},{coordx:460.9756097561,coordy:211.35135135135,properties : {marking :1}},{coordx:250.24390243902,coordy:211.35135135135,properties : {marking :1}},{coordx:540,coordy:82.702702702703,properties : {marking :1}},{coordx:250.24390243902,coordy:303.24324324324,properties : {marking :1}}],transitions:[{coordx:460.9756097561,coordy:137.83783783784},{coordx:460.9756097561,coordy:266.48648648649},{coordx:302.92682926829,coordy:156.21621621622},{coordx:250.24390243902,coordy:266.48648648649},{coordx:250.24390243902,coordy:340}],arcs:[{place2trans:1,source:0,dest:0,properties : {value :1}},{place2trans:1,source:0,dest:2,properties : {value :1}},{place2trans:1,source:3,dest:0,properties : {value :1}},{place2trans:0,source:0,dest:1,properties : {value :1}},{place2trans:1,source:1,dest:1,properties : {value :1}},{place2trans:0,source:1,dest:3,properties : {value :1}},{place2trans:0,source:2,dest:2,properties : {value :1}},{place2trans:1,source:2,dest:3,properties : {value :1}},{place2trans:0,source:3,dest:4,properties : {value :1}},{place2trans:1,source:4,dest:4,properties : {value :1}},{place2trans:0,source:4,dest:0,properties : {value :1}},{place2trans:0,source:1,dest:2,properties : {value :1}},{place2trans:0,source:2,dest:3,properties : {value :1}},{place2trans:1,source:3,dest:3,properties : {value :1}}]};
 		model = model2;
 
-		redrawPlaces();
-		redrawTransitions();
-		refreshLines();
+		redrawAll();
 
-		stage.add(backgound);
-		stage.add(layer1); // les places
-		stage.add(layer2); // les transitions
+		//stage.add(backgound);
+		stage.add(layer1); // les places et transitions
+		//stage.add(layer2); // les transitions
 		stage.add(layer3); // les arcs
 		stage.setListening(false);
-
 		generateEveryMatrixInputCor();
 		
 	}
