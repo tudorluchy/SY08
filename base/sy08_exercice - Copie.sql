@@ -30,7 +30,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `wsy08`.`sy08_user` ;
 
-CREATE  TABLE IF NOT EXISTS `sy08`.`sy08_user` (
+CREATE  TABLE IF NOT EXISTS `wsy08`.`sy08_user` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `login` VARCHAR(255) NOT NULL ,
   `mdp` VARCHAR(255) NOT NULL ,

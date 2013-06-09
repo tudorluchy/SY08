@@ -1,13 +1,13 @@
 <?php
 require_once(dirname(__FILE__).'/base/DB.class.php');
 DB::Init();
+session_start();
 if (isset($_POST['login']) && isset($_POST['pass'])) { 
     if (!empty($_POST['login']) && !empty($_POST['pass'])) {
         $sql = 'SELECT count(*) as nb FROM sy08_user WHERE login="'.$_POST['login'].'" AND mdp="'.$_POST['pass'].'"'; 
         $data = DB::SqlToArray($sql);
         DB::Close();
         if ($data[0]['nb'] == 1) { 
-           session_start(); 
            $_SESSION['login'] = $_POST['login']; 
         } elseif ($data[0]['nb'] == 0) { 
            $erreur = 'Compte non reconnu.'; 
