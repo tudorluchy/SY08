@@ -91,7 +91,7 @@ if (!isset($_SESSION['login'])) {
 			$res = DB::SqlToArray($req);
             DB::Close();
             echo "<table class='table_exo'>";
-            echo "<thead><tr><th>Exercice</th><th>Date d'ajout</th><th>Difficulte</th><th>Actif</th><th>Edition</th><th>Suppresion</th></tr></thead>";
+            echo "<thead><tr><th>Exercice</th><th>Date d'ajout</th><th>Difficulte</th><th>Actif</th><th>Compteur</th><th>Edition</th><th>Suppresion</th></tr></thead>";
             echo "<tbody>";
             foreach($res as $ligne) {
                 echo "<tr>";
@@ -99,6 +99,7 @@ if (!isset($_SESSION['login'])) {
 				echo "<td>".date_format(date_create($ligne['date']), 'd/m/Y H:i')."</td>"; 
                 echo "<td>".$ligne['difficulte']."</td>";
                 echo "<td>"; if ($ligne['actif']) echo "Oui"; else echo "Non"; echo "</td>";
+				echo "<td>".$ligne['nb_effectue']."</td>";
 				echo "<td><a href='edit.php?action=edit&id=".$ligne['id']."'><img src='img/edit.png' title='Modifier cet exercice'/></a></td>";
                 echo "<td><a href='?action=delete&id=".$ligne['id']."'><img src='img/delete.png' title='Supprimer cet exercice'/></a></td>";
                 echo "</tr>";

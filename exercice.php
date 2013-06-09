@@ -5,6 +5,8 @@
     if ($_GET['action'] == 'effectuer' && $_GET['id'] > 0) {
         $req = 'SELECT * FROM sy08_exercice WHERE id = '.$_GET['id'];
         $res = DB::SqlToArray($req);
+		$increment = 'UPDATE sy08_exercice SET nb_effectue=nb_effectue+1 where id = '.$_GET['id'];
+		DB::Sql($increment);
     } else {
         header('Location: index.php');
     }

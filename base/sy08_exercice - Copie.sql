@@ -20,6 +20,7 @@ CREATE  TABLE IF NOT EXISTS `wsy08`.`sy08_exercice` (
   `difficulte` ENUM('+','++','+++') NOT NULL ,
   `json` LONGTEXT NOT NULL ,
   `date` DATETIME NULL ,
+  `nb_effectue` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 

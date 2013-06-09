@@ -50,6 +50,11 @@
                 } else if (!empty ($_FILES['fichier_exo']['name'])){
                     $sql_fichier = " , fichier = '".$_FILES['fichier_exo']['name']."'";;
                 }
+				
+				$sql_compteur = "";
+                if (isset($_POST['reinit_compteur']) &&  $_POST['reinit_compteur'] == 'on') 
+                    $sql_compteur  = ", nb_effectue = 0";
+				
                 $req = "UPDATE sy08_exercice SET intitule = '".$_POST['intitule']."', enonce = '".$_POST['enonce']."' , actif = ".$actif.", difficulte = '".$_POST['difficulte']."' , json = '".$json_final."'";
                 if ($sql_image != "") {
                     $req .= $sql_image;
@@ -57,6 +62,10 @@
                 if ($sql_fichier != "") {
                     $req .= $sql_fichier;    
                 }
+				if ($sql_compteur != "") {
+                    $req .= $sql_compteur;    
+                }
+				
                 $req .= " WHERE id = ".$_GET['id'];
                 //echo $req;
                 DB::Sql($req);
@@ -102,7 +111,8 @@
 				</select><br />
                 <label>Actif</label><input type="checkbox" name="actif" <?php if ($res[0]['actif'] == '1') echo "checked='true'";?>/><br />
                 <label>Enlever l'image</label><input type="checkbox" name="enlever_image" <?php if ($res[0]['image'] == '1') echo "checked='false'";?>/><br />
-                <label>Enlever le fichier</label><input type="checkbox" name="enlever_fichier" <?php if ($res[0]['fichier'] == '1') echo "checked='false'";?>/>
+                <label>Enlever le fichier</label><input type="checkbox" name="enlever_fichier" <?php if ($res[0]['fichier'] == '1') echo "checked='false'";?>/></br>
+				Exercice effectué <?php echo $res[0]['nb_effectue']; ?> fois par les étudiants</br><label>Réinitialiser le compteur</label><input type="checkbox" name="reinit_compteur"/>
                 <br /><br />
 				<b>Resolution du graphe :</b><br />
 				<div id='button_group'>
