@@ -114,7 +114,7 @@
                     <label>Enlever l'image</label><input type="checkbox" name="enlever_image" <?php if ($res[0]['image'] == '1') echo "checked='false'";?>/><br />
                 <?php } ?>
                 <?php if (!empty($res[0]['fichier']) && file_exists('upload_fichiers/'.$res[0]['fichier'])) { ?>
-                    <label>Enlever le fichier</label><input type="checkbox" name="enlever_fichier" <?php if ($res[0]['fichier'] == '1') echo "checked='false'";?>/>
+                    <label>Enlever le fichier</label><input type="checkbox" name="enlever_fichier" <?php if ($res[0]['fichier'] == '1') echo "checked='false'";?>/><br />
                 <?php } ?>
 				<label>Réinitialiser le compteur</label><input type="checkbox" name="reinit_compteur"/> (Exercice effectué <?php echo $res[0]['nb_effectue']; ?> fois par les étudiants)
                 <br /><br />
