@@ -17,6 +17,7 @@ var predecesseurs = [];
 var transitionsFranchies; // Pour quasi vivant : Toutes les transitions sont franchies
 var sauf; //borne un 1 pour tout marquage
 var borne; //pas de w
+var blocage;
 
 var tabAccesCorrection = new Array(6);
 
@@ -1755,9 +1756,105 @@ function controlerProprietes() {
 function controlerProprietesCorrection() {
 	var astuce = "";
 
+	if (!(formu_prop.rdpborne[0].checked || formu_prop.rdpborne[1].checked) ||
+		!(formu_prop.rdpSauf[0].checked || formu_prop.rdpSauf[1].checked) ||
+		!(formu_prop.rdpQuasiVivant[0].checked || formu_prop.rdpQuasiVivant[1].checked) ||
+		!(formu_prop.rdpBlocage[0].checked || formu_prop.rdpBlocage[1].checked )) {
+
+		document.getElementById("proprietes_astuces_comp2").style.display = 'none';
+		document.getElementById("proprietes_astuces").style.backgroundColor = "#DD1111";
+		document.getElementById("proprietes_astuces").style.visibility = "visible";
+		document.getElementById("proprietes_astuces_comp").innerHTML = "Veuillez renseigner l'ensemble des propriétés !";		
+	}
+	else {
+		document.getElementById("proprietes_astuces_comp2").style.display = 'inherit';
+		var saufTMP = false;
+		var borneTMP = false;
+		var quasivivantTMP = false;
+		var blocageTMP = false;
+		var allIsCorrect = true;
+
+		if(formu_prop.rdpborne[0].checked)
+			var borneTMP = true;
+		if(formu_prop.rdpSauf[0].checked)
+			var saufTMP = true;
+		if(formu_prop.rdpQuasiVivant[0].checked)
+			var quasivivantTMP = true;
+		if(formu_prop.rdpBlocage[0].checked)
+			var blocageTMP = true;
+
+		arbreDeCouverture("#tree");
+		if(borne != borneTMP) {
+			if(borne)
+				astuce += "Incorrect : le rdp est borné !<br/>";
+			else
+				astuce += "Incorrect : Le rdp est non borné.<br/>";
+			allIsCorrect = false;
+		}
+		else {
+			if(borne)
+				astuce += "Correct : Le rdp est bien borné.<br/>";
+			else
+				astuce += "Correct : Le rdp est bien non borné.<br/>";
+		}
+		if(sauf != saufTMP) {
+			if(sauf)
+				astuce += "Incorrect : le rdp est sauf !<br/>";
+			else
+				astuce += "Incorrect : Le rdp est non sauf.<br/>";
+			allIsCorrect = false;
+		}
+		else {
+			if(sauf)
+				astuce += "Correct : Le rdp est bien sauf.<br/>";
+			else
+				astuce += "Correct : Le rdp est bien non sauf.<br/>";
+		}
+		if(quasivivant != quasivivantTMP) {
+			if(quasivivant)
+				astuce += "Incorrect : le rdp est quasi vivant !<br/>";
+			else
+				astuce += "Incorrect : Le rdp est non quasi vivant.<br/>";
+			allIsCorrect = false;
+		}
+		else{
+			if(quasivivant)
+				astuce += "Correct : Le rdp est bien quasi vivant.<br/>";
+			else
+				astuce += "Correct : Le rdp est bien non quasi vivant.<br/>";
+		}
+		if(blocage != blocageTMP) {
+			if(blocage)
+				astuce += "Incorrect : le rdp est en situation de blocage !<br/>";
+			else
+				astuce += "Incorrect : Le rdp n'est pas en situation de blocage.<br/>";
+			allIsCorrect = false;
+		}
+		else{
+			if(quasivivant)
+				astuce += "Correct : Le rdp est bien en situation de blocage.<br/>";
+			else
+				astuce += "Correct : Le rdp est bien en situation de non blocage.<br/>";
+		}
+
+		if(allIsCorrect) {
+			document.getElementById("proprietes_astuces").style.backgroundColor = "#119911";
+			tabAccesCorrection[5] = true;
+		}
+		else
+			document.getElementById("proprietes_astuces").style.backgroundColor = "#DD1111";
+		document.getElementById("proprietes_astuces").style.visibility = "visible";
+		document.getElementById("proprietes_astuces_comp").innerHTML = astuce;
+	}
+}
+
+function controlerProprietesCorrection() {
+	var astuce = "";
+
 	if (!(formu_prop_cor.rdpBorne_cor[0].checked || formu_prop_cor.rdpBorne_cor[1].checked) ||
 		!(formu_prop_cor.rdpSauf_cor[0].checked || formu_prop_cor.rdpSauf_cor[1].checked) ||
-		!(formu_prop_cor.rdpQuasiVivant_cor[0].checked || formu_prop_cor.rdpQuasiVivant_cor[1].checked)) {
+		!(formu_prop_cor.rdpQuasiVivant_cor[0].checked || formu_prop_cor.rdpQuasiVivant_cor[1].checked) ||
+		!(formu_prop_cor.rdpBlocage_cor[0].checked || formu_prop_cor.rdpBlocage_cor[1].checked)) {
 		
 		document.getElementById("proprietes_astuces_cor_comp2").style.display = 'none';
 		document.getElementById("proprietes_astuces_cor").style.backgroundColor = "#DD1111";
@@ -1769,6 +1866,7 @@ function controlerProprietesCorrection() {
 		var saufTMP = false;
 		var borneTMP = false;
 		var quasivivantTMP = false;
+		var blocageTMP = false;
 		var allIsCorrect = true;
 
 		if(formu_prop_cor.rdpBorne_cor[0].checked)
@@ -1777,6 +1875,8 @@ function controlerProprietesCorrection() {
 			var saufTMP = true;
 		if(formu_prop_cor.rdpQuasiVivant_cor[0].checked)
 			var quasivivantTMP = true;
+		if(formu_prop.rdpBlocage_cor[0].checked)
+			var blocageTMP = true;
 
 		arbreDeCouverture("#treeCorrection");
 		if(borne != borneTMP) {
@@ -1818,7 +1918,20 @@ function controlerProprietesCorrection() {
 			else
 				astuce += "Correct : Le rdp est bien non quasi vivant.<br/>";
 		}
-
+		if(blocage != blocageTMP) {
+			if(blocage)
+				astuce += "Incorrect : le rdp est en situation de blocage !<br/>";
+			else
+				astuce += "Incorrect : Le rdp n'est pas en situation de blocage.<br/>";
+			allIsCorrect = false;
+		}
+		else{
+			if(quasivivant)
+				astuce += "Correct : Le rdp est bien en situation de blocage.<br/>";
+			else
+				astuce += "Correct : Le rdp est bien en situation de non blocage.<br/>";
+		}
+		
 		astuce += "";
 		if(allIsCorrect)
 			document.getElementById("proprietes_astuces_cor").style.backgroundColor = "#119911";
@@ -1826,70 +1939,6 @@ function controlerProprietesCorrection() {
 			document.getElementById("proprietes_astuces_cor").style.backgroundColor = "#DD1111";
 		document.getElementById("proprietes_astuces_cor").style.visibility = "visible";
 		document.getElementById("proprietes_astuces_cor_comp").innerHTML = astuce;
-	}
-}
-
-
-function printMatricesInvariants() {
-	var res = Pinvariants();
-	var res2 = Tinvariants();
-
-	if(document.getElementById("matrice_Pinvariants_results") != null)
-	{
-		if(res !== undefined) {
-			if(res.length > 0) {
-				var html = "<table class=\"matrice_Pinvariants_results\"><tr><td></td>";
-
-				for(var i=0;i<res[0].length;i++) {
-					html += "<td class=\"matrice_results_1\">P"+(i+1)+"</td>";
-				}
-				html+= "</tr>";
-
-				for(var i=0;i<res.length;i++) {
-					html += "<tr><td class=\"matrice_results_1\">Pt"+(i+1)+"</td>";
-					for(var j=0;j<res[i].length;j++) {
-						html += "<td class=\"matrice_results_2\">"+res[i][j]+"</td>";
-					}
-					html += "</tr>";
-				}
-				html += "</table>";
-				if(document.getElementById("matrice_Pinvariants_results") != null)
-					document.getElementById("matrice_Pinvariants_results").innerHTML = html;
-			}
-			else
-				document.getElementById("matrice_Pinvariants_results").innerHTML = "";
-		}
-		else
-			document.getElementById("matrice_Pinvariants_results").innerHTML = "";
-	}
-
-	if(document.getElementById("matrice_Tinvariants_results") != null)
-	{
-		if(res2 !== undefined) {
-			if(res2.length > 0) {
-				var html = "<table class=\"matrice_Tinvariants_results_1\"><tr><td></td>";
-
-				for(var i=0;i<res2[0].length;i++) {
-					html += "<td class=\"matrice_results_1\">T"+(i+1)+"</td>";
-				}
-				html+= "</tr>";
-
-				for(var i=0;i<res2.length;i++) {
-					html += "<tr><td class=\"matrice_results_1\">Pt"+(i+1)+"</td>";
-					for(var j=0;j<res2[i].length;j++) {
-						html += "<td class=\"matrice_results_2\">"+res2[i][j]+"</td>";
-					}
-					html += "</tr>";
-				}
-				html += "</table>";
-				if(document.getElementById("matrice_Tinvariants_results") != null)
-					document.getElementById("matrice_Tinvariants_results").innerHTML = html;
-			}
-			else
-				document.getElementById("matrice_Tinvariants_results").innerHTML = "";
-		}
-		else
-			document.getElementById("matrice_Tinvariants_results").innerHTML = "";
 	}
 }
 

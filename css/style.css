@@ -31,9 +31,20 @@ body
 	float: left;
 }
 
+#legende {
+	float: left;
+	width: 300px;
+	margin: 15px;
+	text-align: justify;
+}
+
 #message_avertissement {
 	float: left;
 	color: red;
+	font-weight: bold;
+}
+#message_correction {
+	color : red;
 	font-weight: bold;
 }
 
