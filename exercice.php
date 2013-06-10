@@ -5,6 +5,8 @@
     if ($_GET['action'] == 'effectuer' && $_GET['id'] > 0) {
         $req = 'SELECT * FROM sy08_exercice WHERE id = '.$_GET['id'];
         $res = DB::SqlToArray($req);
+		$increment = 'UPDATE sy08_exercice SET nb_effectue=nb_effectue+1 where id = '.$_GET['id'];
+		DB::Sql($increment);
     } else {
         header('Location: index.php');
     }
@@ -42,8 +44,13 @@
 		</div>
 		<input type="hidden" id="json" name="json" value="">
 		<div id="container"></div>
+		<div id="legende"><u>Légende:</u><br/><br/>
+			Double-cliquer sur une place/transition pour accéder à ces propriétés. (Aucun bouton d'ajout ne doit être sélectionné) <br/><br/>
+			La suppression d'un élément est disponible en double cliquant sur celui-ci. <br/><br/>
+		</div>
 		<div id="message_avertissement">Veuillez noter que si vous ajouter des places ou transitions alors que des modifications ont été effectuées sur les matrices ci-dessous, ces modifications seront perdues !
-			Assurez-vous donc que votre graphe est correct avant de passer à la prochaine étape.</div>
+			Assurez-vous donc que votre graphe est correct avant de passer à la prochaine étape.
+		</div>
 		<table>
 			<tr><td><h3>Calculer W+</h3></td></tr>
 			<tr>
@@ -95,6 +102,11 @@
 							<td><input type="radio" class="disable radio_button" name="rdpQuasiVivant" value="oui">Oui</td>
 							<td><input type="radio" class="disable radio_button" name="rdpQuasiVivant" value="non">Non</td>					
 						</tr>
+						<tr>
+							<td style="min-width:200px;">Existe-t-il au moins une situation de blocage ?</td>
+							<td><input type="radio" class="disable radio_button" name="rdpBlocage" value="oui">Oui</td>
+							<td><input type="radio" class="disable radio_button" name="rdpBlocage" value="non">Non</td>					
+						</tr>
 						</table>
 					</form>
 				</div></td>
@@ -102,6 +114,7 @@
 				<td><div id="proprietes_astuces" class="astuces"><div id="proprietes_astuces_comp"></div><div id="proprietes_astuces_comp2">Arbre de couverture s'il existe : <input type="button" value="Afficher/Masquer" onClick="expandDiv(0);" /><div id="tree"></div></div></div></td>
 			</tr>
 		</table>
+		<div>Pensez à cliquer sur chacun des boutons "controler" avant de cliquer sur correction.</div>
 		<input class="disable" type="button" value="Accéder à la correction" onClick="accesCorrection();"/>
 		<div id="correction" style="border-top: 1px solid red;">           
         </div>

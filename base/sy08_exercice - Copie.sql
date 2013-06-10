@@ -20,6 +20,7 @@ CREATE  TABLE IF NOT EXISTS `wsy08`.`sy08_exercice` (
   `difficulte` ENUM('+','++','+++') NOT NULL ,
   `json` LONGTEXT NOT NULL ,
   `date` DATETIME NULL ,
+  `nb_effectue` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
@@ -29,7 +30,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `wsy08`.`sy08_user` ;
 
-CREATE  TABLE IF NOT EXISTS `sy08`.`sy08_user` (
+CREATE  TABLE IF NOT EXISTS `wsy08`.`sy08_user` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `login` VARCHAR(255) NOT NULL ,
   `mdp` VARCHAR(255) NOT NULL ,
