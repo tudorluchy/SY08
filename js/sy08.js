@@ -353,6 +353,7 @@ function arbreDeCouverture(idElementAffichage)
 	predecesseurs.push(m0);
 
 	borne=true;
+	blocage=false;
 	if(Math.max.apply(Math, m0)<=1)
 		sauf=true;
 	else
@@ -404,6 +405,11 @@ function makeMeATree(model,level, idElementAffichage)
 	if(level==0)
 		$(idElementAffichage).append(oldMarquage+"</br>");
 
+	if(trFranchissables.length==0)
+	{
+		$(idElementAffichage).append("Blocage");
+		bloquage=true;
+	}
 	for(var i=0; i<trFranchissables.length; i++) {
 		if(transitionsFranchies.indexOf(trFranchissables[i])==-1)
 			transitionsFranchies.push(trFranchissables[i]);
@@ -413,13 +419,16 @@ function makeMeATree(model,level, idElementAffichage)
 
 		if(resModel!=false)
 		{
-
+			$(idElementAffichage).append("</br>");
 			var newMarquage = getMarquage(resModel);
 			for(var j=0;j<4*level;j++)
 				$(idElementAffichage).append("&nbsp;");
 			$(idElementAffichage).append("|___");
-			$(idElementAffichage).append(newMarquage+"</br>");
-			makeMeATree(resModel,level+1, idElementAffichage);
+			$(idElementAffichage).append(newMarquage+" (T"+trFranchissables[i]+1+")");
+			
+			
+			if(isNotOld(newMarquage))
+				makeMeATree(resModel,level+1, idElementAffichage);
 		}
 	}
 
@@ -477,8 +486,8 @@ function franchirTransition(model,transition)
 		sauf=false;
 	}
 	newMarquage=newMarquageNB;
-	if(isNotOld(newMarquage))
-	{
+	//if(isNotOld(newMarquage))
+	//{
 
 
 		marquages.push(newMarquage);
@@ -488,8 +497,8 @@ function franchirTransition(model,transition)
 		if(Math.max.apply(Math, newMarquage)>1)
 			sauf=false;
 		return model;
-	}
-	return false;
+	//}
+	//return false;
 
 
 
@@ -529,18 +538,21 @@ function getTransitionsFranchissables(model)
 		var okPost = false;
 		for(var j =0;j<getNbRows(oMoins);j++)
 		{
-			if(oPlus[j][i]!=0)
-				okPost=true;
-			if(oMoins[j][i]!=0)
-				okPre2=true;
-			if(model.places[j].properties['marking']<oMoins[j][i] && model.places[j].properties['marking']!="w")
-			{			
+			//if(oPlus[j][i]!=0)
+			//	okPost=true;
+			//if(oMoins[j][i]!=0)
+			//	okPre2=true;
+			if(model.places[j].properties['marking']!="w")
+			{
+				if(model.places[j].properties['marking']<oMoins[j][i] )
+				{			
 
-				okPre= false;
+					okPre= false;
+				}
 			}
 
 		}
-		if(okPre && okPost && okPre2)
+		if(okPre )
 			res.push(i);
 
 
@@ -2136,6 +2148,8 @@ function insertionCode() {
 	"</table>";
 	document.getElementById('correction').innerHTML = html;
 }
+
+
 
 var treeAffichageActiver = false;
 var treeCorrectionAffichageActiver = false;
