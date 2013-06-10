@@ -91,9 +91,9 @@
 				<input type="hidden" name="MAX_FILE_SIZE" value="10097152">     
 				<input type="file" name="image_exo"> <br/>
 				<span id="image_info"></span>
-                <label>Importer un fichier</label>
+                <label>Importer un fichier de correction</label>
 				<input type="hidden" name="MAX_FILE_SIZE" value="10097152">     
-				<input type="file" name="fichier_exo"> <br/>
+				<input type="file" name="fichier_exo"> <br/><br/>
 				<label>Niveau de difficulté</label>
 				<select name='difficulte'>
 					<option <?php if ($res[0]['difficulte'] == '+++') echo 'selected'; ?> value="+++">+++</option>
@@ -101,8 +101,12 @@
 					<option <?php if ($res[0]['difficulte'] == '+') echo 'selected'; ?> value="+">+</option>
 				</select><br />
                 <label>Actif</label><input type="checkbox" name="actif" <?php if ($res[0]['actif'] == '1') echo "checked='true'";?>/><br />
-                <label>Enlever l'image</label><input type="checkbox" name="enlever_image" <?php if ($res[0]['image'] == '1') echo "checked='false'";?>/><br />
-                <label>Enlever le fichier</label><input type="checkbox" name="enlever_fichier" <?php if ($res[0]['fichier'] == '1') echo "checked='false'";?>/>
+                <?php if (!empty($res[0]['image']) && file_exists('upload_images/'.$res[0]['image'])) { ?>
+                    <label>Enlever l'image</label><input type="checkbox" name="enlever_image" <?php if ($res[0]['image'] == '1') echo "checked='false'";?>/><br />
+                <?php } ?>
+                <?php if (!empty($res[0]['fichier']) && file_exists('upload_fichiers/'.$res[0]['fichier'])) { ?>
+                    <label>Enlever le fichier</label><input type="checkbox" name="enlever_fichier" <?php if ($res[0]['fichier'] == '1') echo "checked='false'";?>/>
+                <?php } ?>
                 <br /><br />
 				<b>Resolution du graphe :</b><br />
 				<div id='button_group'>

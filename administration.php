@@ -117,9 +117,9 @@ if (!isset($_SESSION['login'])) {
 				<input type="hidden" name="MAX_FILE_SIZE" value="10097152">     
 				<input type="file" name="image_exo"> <br/>
 				<span id="image_info"></span>
-                <label>Importer un fichier</label>
+                <label>Importer un fichier de correction</label>
 				<input type="hidden" name="MAX_FILE_SIZE" value="10097152">     
-				<input type="file" name="fichier_exo"> <br/>
+				<input type="file" name="fichier_exo"> <br/><br/>
 				<label>Niveau de difficulté</label>
 				<select name='difficulte'>
 					<option value="+++">+++</option>
