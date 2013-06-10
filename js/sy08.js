@@ -34,7 +34,7 @@ function compareVector(v1,v2)
 
 	for(var i=0;i<v1.length;i++)
 	{
-		if(v1[i]!=v2[i])
+		if(v1[i]!=v2[i] && v1[i]!='w' && v2[i]!='w')
 			return false;
 
 	}
@@ -74,7 +74,7 @@ function getComposanteW(v1,v2)
 		if(parseInt(v1[i],10)>parseInt(v2[i],10))
 			res.push(i);
 		else if(parseInt(v2[i],10)>parseInt(v1[i],10))
-			return false;
+			return [];
 
 
 	}
@@ -374,10 +374,8 @@ function arbreDeCouverture(idElementAffichage)
 	$('#tree').append("sauf</br>");
 */
 	// A Vérifier
-	console.log("len");
-	console.log(transitionsFranchies.length);
-	console.log(model.transitions.length);
-	console.log(transitionsFranchies.length != model.transitions.length);
+
+
 	//$('#tree').append("</br>Le réseau est ");
 	if(transitionsFranchies.length != model.transitions.length) {
 		//$('#tree').append("non ");
@@ -403,18 +401,20 @@ function makeMeATree(model,level, idElementAffichage)
 	var oldMarquage = getMarquage(model);
 
 	if(level==0)
-		$(idElementAffichage).append(oldMarquage+"</br>");
+		$(idElementAffichage).append(oldMarquage);
 
 	if(trFranchissables.length==0)
 	{
-		$(idElementAffichage).append("Blocage");
-		bloquage=true;
+		$(idElementAffichage).append(" Blocage");
+		blocage=true;
 	}
 	for(var i=0; i<trFranchissables.length; i++) {
 		if(transitionsFranchies.indexOf(trFranchissables[i])==-1)
 			transitionsFranchies.push(trFranchissables[i]);
 		if(level==0)
 			predecesseurs.splice(1,predecesseurs.length);
+			
+		var mqs = jQuery.extend(true, [], marquages);
 		resModel = franchirTransition(jQuery.extend(true, {}, model),trFranchissables[i]);
 
 		if(resModel!=false)
@@ -424,10 +424,9 @@ function makeMeATree(model,level, idElementAffichage)
 			for(var j=0;j<4*level;j++)
 				$(idElementAffichage).append("&nbsp;");
 			$(idElementAffichage).append("|___");
-			$(idElementAffichage).append(newMarquage+" (T"+trFranchissables[i]+1+")");
+			$(idElementAffichage).append(newMarquage+" (T"+(parseInt(trFranchissables[i],10)+1)+")");
 			
-			
-			if(isNotOld(newMarquage))
+			if(isNotOld(newMarquage,mqs))
 				makeMeATree(resModel,level+1, idElementAffichage);
 		}
 	}
@@ -440,16 +439,15 @@ function checkIfNonBorne(newMarquage)
 	var returnValue = jQuery.extend(true, [], newMarquage);
 	for(var i=0; i<predecesseurs.length; i++) {
 
-		var res = getComposanteW(newMarquage,predecesseurs[i]) 
-		if(res!=false)
+		var res = getComposanteW(newMarquage,predecesseurs[i]);		
+		if(res.length>0)
 		{
-			console.log(res);
 			for(var j=0;j<res.length;j++)
 			{
 				returnValue[res[j]]="w";
 			}
 		}
-		return returnValue;
+		//return returnValue;
 
 
 	}
@@ -458,7 +456,7 @@ function checkIfNonBorne(newMarquage)
 }
 
 
-function isNotOld(newMarquage)
+function isNotOld(newMarquage,marquages)
 {
 
 	for(var i=0; i<marquages.length; i++) {
@@ -534,14 +532,8 @@ function getTransitionsFranchissables(model)
 	for(var i =0;i<getNbColumns(oMoins);i++)
 	{
 		var okPre = true;
-		var okPre2 = false;
-		var okPost = false;
 		for(var j =0;j<getNbRows(oMoins);j++)
 		{
-			//if(oPlus[j][i]!=0)
-			//	okPost=true;
-			//if(oMoins[j][i]!=0)
-			//	okPre2=true;
 			if(model.places[j].properties['marking']!="w")
 			{
 				if(model.places[j].properties['marking']<oMoins[j][i] )
@@ -552,12 +544,11 @@ function getTransitionsFranchissables(model)
 			}
 
 		}
-		if(okPre )
+		if(okPre)
 			res.push(i);
 
 
 	}
-
 	return res;
 
 
@@ -1092,15 +1083,6 @@ $(window).load(function(){
 
 
 
-	//Calcul des P invariants :
-	//console.log(Pinvariants());
-
-	//Calcul des T invariants :
-	//console.log(Tinvariants());
-
-	//console.log(omegaMoins(model));
-	//console.log(omegaPlus(model));
-
 	resetAccesCorrection();
 
 	$( "#dialog-modal" ).dialog({
@@ -1160,7 +1142,7 @@ function editProperty()
 	redrawAll();
 	refreshEveryMatrixResults();
 	printMatricesInvariants();
-	//console.log(model.places);
+
 }
 
 
