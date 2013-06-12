@@ -1322,12 +1322,18 @@ function mouseEventCallBack() {
 			return;
 		if(kindOfAdd == 0 || kindOfAdd == 1) {
 			if(kindOfAdd == 0){
-				createPlace(event.pageX-posx,event.pageY-posy,0);
+				if(model.places.length < 10)
+					createPlace(event.pageX-posx,event.pageY-posy,0);
+				else
+					alert('Impossible de mettre plus de 10 places');
 				//redrawPlaces();
 				//redrawAll();
 			}
 			else if(kindOfAdd == 1) {
-				createTransition(event.pageX-posx,event.pageY-posy);
+				if(model.transitions.length < 10)
+					createTransition(event.pageX-posx,event.pageY-posy);
+				else
+					alert('Impossible de mettre plus de 10 transitions');
 				//redrawTransitions();
 				//redrawAll();
 			}
