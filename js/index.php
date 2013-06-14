@@ -38,7 +38,7 @@
 		<?php
 			require_once(dirname(__FILE__).'/base/DB.class.php');
 			DB::Init();
-    			$req = "SELECT * FROM sy08_exercice ORDER BY difficulte ASC";
+            $req = "SELECT * FROM sy08_exercice ORDER BY date DESC";
 			$res = DB::SqlToArray($req);
             DB::Close();
             $nb_ex = 0;
