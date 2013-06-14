@@ -1322,12 +1322,18 @@ function mouseEventCallBack() {
 			return;
 		if(kindOfAdd == 0 || kindOfAdd == 1) {
 			if(kindOfAdd == 0){
-				createPlace(event.pageX-posx,event.pageY-posy,0);
+				if(model.places.length < 10)
+					createPlace(event.pageX-posx,event.pageY-posy,0);
+				else
+					alert('Impossible de mettre plus de 10 places');
 				//redrawPlaces();
 				//redrawAll();
 			}
 			else if(kindOfAdd == 1) {
-				createTransition(event.pageX-posx,event.pageY-posy);
+				if(model.transitions.length < 10)
+					createTransition(event.pageX-posx,event.pageY-posy);
+				else
+					alert('Impossible de mettre plus de 10 transitions');
 				//redrawTransitions();
 				//redrawAll();
 			}
@@ -1674,87 +1680,8 @@ function controlerProprietes() {
 
 	if (!(formu_prop.rdpborne[0].checked || formu_prop.rdpborne[1].checked) ||
 		!(formu_prop.rdpSauf[0].checked || formu_prop.rdpSauf[1].checked) ||
-		!(formu_prop.rdpQuasiVivant[0].checked || formu_prop.rdpQuasiVivant[1].checked)) {
-
-		document.getElementById("proprietes_astuces_comp2").style.display = 'none';
-		document.getElementById("proprietes_astuces").style.backgroundColor = "#DD1111";
-		document.getElementById("proprietes_astuces").style.visibility = "visible";
-		document.getElementById("proprietes_astuces_comp").innerHTML = "Veuillez renseigner l'ensemble des propriétés !";		
-	}
-	else {
-		document.getElementById("proprietes_astuces_comp2").style.display = 'inherit';
-		var saufTMP = false;
-		var borneTMP = false;
-		var quasivivantTMP = false;
-		var allIsCorrect = true;
-
-		if(formu_prop.rdpborne[0].checked)
-			var borneTMP = true;
-		if(formu_prop.rdpSauf[0].checked)
-			var saufTMP = true;
-		if(formu_prop.rdpQuasiVivant[0].checked)
-			var quasivivantTMP = true;
-
-		arbreDeCouverture("#tree");
-		if(borne != borneTMP) {
-			if(borne)
-				astuce += "Incorrect : le rdp est borné !<br/>";
-			else
-				astuce += "Incorrect : Le rdp est non borné.<br/>";
-			allIsCorrect = false;
-		}
-		else {
-			if(borne)
-				astuce += "Correct : Le rdp est bien borné.<br/>";
-			else
-				astuce += "Correct : Le rdp est bien non borné.<br/>";
-		}
-		if(sauf != saufTMP) {
-			if(sauf)
-				astuce += "Incorrect : le rdp est sauf !<br/>";
-			else
-				astuce += "Incorrect : Le rdp est non sauf.<br/>";
-			allIsCorrect = false;
-		}
-		else {
-			if(sauf)
-				astuce += "Correct : Le rdp est bien sauf.<br/>";
-			else
-				astuce += "Correct : Le rdp est bien non sauf.<br/>";
-		}
-		if(quasivivant != quasivivantTMP) {
-			if(quasivivant)
-				astuce += "Incorrect : le rdp est quasi vivant !<br/>";
-			else
-				astuce += "Incorrect : Le rdp est non quasi vivant.<br/>";
-			allIsCorrect = false;
-		}
-		else{
-			if(quasivivant)
-				astuce += "Correct : Le rdp est bien quasi vivant.<br/>";
-			else
-				astuce += "Correct : Le rdp est bien non quasi vivant.<br/>";
-		}
-
-		if(allIsCorrect) {
-			document.getElementById("proprietes_astuces").style.backgroundColor = "#119911";
-			tabAccesCorrection[5] = true;
-		}
-		else
-			document.getElementById("proprietes_astuces").style.backgroundColor = "#DD1111";
-		document.getElementById("proprietes_astuces").style.visibility = "visible";
-		document.getElementById("proprietes_astuces_comp").innerHTML = astuce;
-	}
-}
-
-function controlerProprietesCorrection() {
-	var astuce = "";
-
-	if (!(formu_prop.rdpborne[0].checked || formu_prop.rdpborne[1].checked) ||
-		!(formu_prop.rdpSauf[0].checked || formu_prop.rdpSauf[1].checked) ||
 		!(formu_prop.rdpQuasiVivant[0].checked || formu_prop.rdpQuasiVivant[1].checked) ||
-		!(formu_prop.rdpBlocage[0].checked || formu_prop.rdpBlocage[1].checked )) {
-
+		!(formu_prop.rdpBlocage[0].checked || formu_prop.rdpBlocage[1].checked)) {
 		document.getElementById("proprietes_astuces_comp2").style.display = 'none';
 		document.getElementById("proprietes_astuces").style.backgroundColor = "#DD1111";
 		document.getElementById("proprietes_astuces").style.visibility = "visible";
@@ -1765,7 +1692,6 @@ function controlerProprietesCorrection() {
 		var saufTMP = false;
 		var borneTMP = false;
 		var quasivivantTMP = false;
-		var blocageTMP = false;
 		var allIsCorrect = true;
 
 		if(formu_prop.rdpborne[0].checked)
@@ -1825,7 +1751,7 @@ function controlerProprietesCorrection() {
 			allIsCorrect = false;
 		}
 		else{
-			if(quasivivant)
+			if(blocage)
 				astuce += "Correct : Le rdp est bien en situation de blocage.<br/>";
 			else
 				astuce += "Correct : Le rdp est bien en situation de non blocage.<br/>";
@@ -1841,6 +1767,7 @@ function controlerProprietesCorrection() {
 		document.getElementById("proprietes_astuces_comp").innerHTML = astuce;
 	}
 }
+
 
 function controlerProprietesCorrection() {
 	var astuce = "";
@@ -1869,7 +1796,7 @@ function controlerProprietesCorrection() {
 			var saufTMP = true;
 		if(formu_prop_cor.rdpQuasiVivant_cor[0].checked)
 			var quasivivantTMP = true;
-		if(formu_prop.rdpBlocage_cor[0].checked)
+		if(formu_prop_cor.rdpBlocage_cor[0].checked)
 			var blocageTMP = true;
 
 		arbreDeCouverture("#treeCorrection");
@@ -1920,7 +1847,7 @@ function controlerProprietesCorrection() {
 			allIsCorrect = false;
 		}
 		else{
-			if(quasivivant)
+			if(blocage)
 				astuce += "Correct : Le rdp est bien en situation de blocage.<br/>";
 			else
 				astuce += "Correct : Le rdp est bien en situation de non blocage.<br/>";
@@ -2120,6 +2047,11 @@ function insertionCode() {
 	"<td style=\"min-width:200px;\">Le RdP est-il quasi vivant ?</td>"+
 	"<td><input type=\"radio\" class=\"disable radio_button\" name=\"rdpQuasiVivant_cor\" value=\"oui\">Oui</td>"+
 	"<td><input type=\"radio\" class=\"disable radio_button\" name=\"rdpQuasiVivant_cor\" value=\"non\">Non</td>"+				
+	"</tr>"+
+	"<tr>"+
+	"<td style=\"min-width:200px;\">Existe-t-il au moins une situation de blocage ?</td>"+
+	"<td><input type=\"radio\" class=\"disable radio_button\" name=\"rdpBlocage_cor\" value=\"oui\">Oui</td>"+
+	"<td><input type=\"radio\" class=\"disable radio_button\" name=\"rdpBlocage_cor\" value=\"non\">Non</td>"+				
 	"</tr>"+
 	"</table>"+
 	"</form>"+

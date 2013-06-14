@@ -267,7 +267,7 @@ fieldset.fieldset_form_connexion
 
 .matrices_input {
 	float: left;
-	width: 400px;
+	width: 428px;
 }
 
 .RDP_prop {
@@ -281,7 +281,7 @@ fieldset.fieldset_form_connexion
 
 .control_button_div {
 	float: left;
-	width: 99px;
+	width: 71px;
 	padding-top: auto;
 	text-align:center;
 }
@@ -290,7 +290,7 @@ fieldset.fieldset_form_connexion
 	padding: 15px;
 	text-align: justify;
 	min-height: 100px;
-	width: 400px;
+	width: 420px;
 	background-color: #119911;
 	border:1px solid black;
 	visibility:hidden;
