@@ -1109,18 +1109,13 @@ $(window).load(function(){
 	
 
 	
-	$( "#dialog-modal" ).dialog({
-		close: function( event, ui ) {
-			$( "#dialog-modal" ).html('');
-		}
-	});
+
 
 
 
 })
 
 $(window).resize(function(){
-alert(window.innerWidth/2);
     $( "#dialog-modal" ).dialog({
 		position : [window.innerWidth/2-250,window.innerHeight/2-100]
 	});
@@ -1163,6 +1158,7 @@ function editProperty()
 				model.arcs[idSelected].properties[$(this).attr('id').replace("value_","")]=parseInt($(this).val(),10);
 		});
 	}
+	$( "#dialog-modal" ).html('');
 	$( "#dialog-modal" ).dialog("close" );
 	redrawAll();
 	refreshEveryMatrixResults();
