@@ -1719,15 +1719,16 @@ function controlerProprietes() {
 		var borneTMP = false;
 		var quasivivantTMP = false;
 		var allIsCorrect = true;
+		blocageTMP = false;
 
 		if(formu_prop.rdpborne[0].checked)
-			var borneTMP = true;
+			borneTMP = true;
 		if(formu_prop.rdpSauf[0].checked)
-			var saufTMP = true;
+			saufTMP = true;
 		if(formu_prop.rdpQuasiVivant[0].checked)
-			var quasivivantTMP = true;
+			quasivivantTMP = true;
 		if(formu_prop.rdpBlocage[0].checked)
-			var blocageTMP = true;
+			blocageTMP = true;
 
 		arbreDeCouverture("#tree");
 		if(borne != borneTMP) {
