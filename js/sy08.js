@@ -1147,16 +1147,21 @@ function displayProperties(Json,editable)
 
 function editProperty()
 {
+	
 	if($( "#dialog-modal" ).dialog( "isOpen" ))
 	{
-		$(".value_edit").each(function(){
-			if(kindOfSelected==1)
-				model.places[idSelected].properties[$(this).attr('id').replace("value_","")]=parseInt($(this).val(),10);
-			if(kindOfSelected==2)
-				model.transitions[idSelected].properties[$(this).attr('id').replace("value_","")]=parseInt($(this).val(),10);
-			if(kindOfSelected==3)
-				model.arcs[idSelected].properties[$(this).attr('id').replace("value_","")]=parseInt($(this).val(),10);
-		});
+		
+			$(".value_edit").each(function(){
+			if(!isNaN(parseInt($(this).val(),10)))
+			{
+				if(kindOfSelected==1)
+					model.places[idSelected].properties[$(this).attr('id').replace("value_","")]=parseInt($(this).val(),10);
+				if(kindOfSelected==2)
+					model.transitions[idSelected].properties[$(this).attr('id').replace("value_","")]=parseInt($(this).val(),10);
+				if(kindOfSelected==3)
+					model.arcs[idSelected].properties[$(this).attr('id').replace("value_","")]=parseInt($(this).val(),10);
+			}
+			});
 	}
 	$( "#dialog-modal" ).html('');
 	$( "#dialog-modal" ).dialog("close" );
