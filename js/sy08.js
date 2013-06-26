@@ -34,7 +34,7 @@ function compareVector(v1,v2)
 
 	for(var i=0;i<v1.length;i++)
 	{
-		if(v1[i]!=v2[i] && v1[i]!='w' && v2[i]!='w')
+		if(v1[i]!=v2[i])
 			return false;
 
 	}
@@ -111,9 +111,14 @@ var kindOfSelected = -1; //1 pour places, 2 pour transitions et 3 pour arcs
 
 function createPlace(x,y,m)
 {
+	var newY = y < 40 ? 40 : y;
+	var newX = x < 40 ? 40 : x;
+			
+	newY = newY > 400-40 ? 400-40 : newY;
+	newX = newX > 600-40 ? 600-40 : newX;
 	var res = {
-			coordx: x,
-			coordy: y,
+			coordx: newX,
+			coordy: newY,
 			properties : {
 				marking : m
 			}
@@ -125,9 +130,14 @@ function createPlace(x,y,m)
 
 function createTransition(x,y)
 {
+	var newY = y < 40 ? 40 : y;
+	var newX = x < 40 ? 40 : x;
+			
+	newY = newY > 400-40 ? 400-40 : newY;
+	newX = newX > 600-40 ? 600-40 : newX;
 	var res = {
-			coordx: x,
-			coordy: y
+			coordx: newX,
+			coordy: newY
 	}
 	model.transitions.push(res);
 
@@ -401,7 +411,7 @@ function makeMeATree(model,level, idElementAffichage)
 	var oldMarquage = getMarquage(model);
 
 	if(level==0)
-		$(idElementAffichage).append(oldMarquage);
+		$(idElementAffichage).append(oldMarquage+"");
 
 	if(trFranchissables.length==0)
 	{
@@ -428,6 +438,8 @@ function makeMeATree(model,level, idElementAffichage)
 			
 			if(isNotOld(newMarquage,mqs))
 				makeMeATree(resModel,level+1, idElementAffichage);
+			else
+				$(idElementAffichage).append(" (vieux)");
 		}
 	}
 
@@ -1085,13 +1097,18 @@ $(window).load(function(){
 
 	resetAccesCorrection();
 
+	
 	$( "#dialog-modal" ).dialog({
 		height: 200,
 		width:500,
 		modal: true,
-		autoOpen: false
+		autoOpen: false,
+		position : [window.innerWidth/2-250,window.innerHeight/2-100]
 	});
+	
+	
 
+	
 	$( "#dialog-modal" ).dialog({
 		close: function( event, ui ) {
 			$( "#dialog-modal" ).html('');
@@ -1102,6 +1119,14 @@ $(window).load(function(){
 
 })
 
+$(window).resize(function(){
+alert(window.innerWidth/2);
+    $( "#dialog-modal" ).dialog({
+		position : [window.innerWidth/2-250,window.innerHeight/2-100]
+	});
+	posx=$('#container').findPos().x;
+	posy=$('#container').findPos().y;
+	});
 
 
 function displayProperties(Json,editable) 
