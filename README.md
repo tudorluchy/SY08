@@ -1,8 +1,8 @@
 LO18
 ====
 
-Auteurs: Sebastien FRADCOURT, Nicolas LELEU, Tudor LUCHIANCENCO 
+Projet LO18 : Exercices interactifs
 
-Projet LO18 - Exercices interactifs 
+Auteurs : LUCHIANCENCO Tudor, FRADCOURT Sebastien, LELEU Nicolas
 
-Lancement du projet sur Git: 24/03/2013
+Lancement du projet sur Git : 24/03/2013
